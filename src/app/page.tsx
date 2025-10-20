@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { Clock, Film, Heart, Play, Sparkles, Star, Tv } from "lucide-react";
 import Link from "next/link";
@@ -39,42 +39,7 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-violet-50 via-white to-orange-50">
-      {/* Header */}
-      <header className="container mx-auto px-4 py-6">
-        <nav className="flex items-center justify-between">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center space-x-2"
-          >
-            <div className="w-10 h-10 bg-linear-to-br from-primary to-orange-500 rounded-xl flex items-center justify-center">
-              <Play className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold bg-linear-to-r from-primary to-orange-500 bg-clip-text text-transparent">
-              REKO
-            </span>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center space-x-4"
-          >
-            <Link href="/explore">
-              <Button variant="outline" className="hidden sm:inline-flex">
-                Explorer
-              </Button>
-            </Link>
-            <Link href="/watchlist">
-              <Button variant="ghost" className="hidden sm:inline-flex">
-                Ma Liste
-              </Button>
-            </Link>
-          </motion.div>
-        </nav>
-      </header>
-
+    <div>
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-16 text-center">
         <motion.div
@@ -104,7 +69,7 @@ const LandingPage = () => {
             <Link href="/explore">
               <Button
                 size="lg"
-                className="bg-linear-to-r from-primary to-orange-500 text-white px-8 py-4 text-lg"
+                className="bg-linear-to-r from-primary to-orange-500 text-white px-8 py-4 text-lg hover:scale-105"
               >
                 <Sparkles className="w-5 h-5 mr-2" />
                 Commencer l'exploration
@@ -215,9 +180,10 @@ const LandingPage = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
+            className="h-full"
           >
-            <Card className="p-8 transition-all hover:-translate-y-1 hover:shadow-xl border-0 shadow-lg bg-linear-to-br from-violet-50 to-violet-100">
-              <CardContent className="pt-0">
+            <Card className="h-full p-8 transition-all hover:-translate-y-1 hover:shadow-xl border-0 shadow-lg bg-linear-to-br from-violet-50 to-violet-100">
+              <CardContent className="pt-0 h-hull">
                 <div className="flex items-center mb-4">
                   <Film className="w-8 h-8 text-violet-600 mr-3" />
                   <h3 className="text-2xl font-bold text-violet-800">Films</h3>
@@ -227,11 +193,13 @@ const LandingPage = () => {
                   cinématographiques qui correspondent parfaitement à votre état
                   d'esprit.
                 </p>
-                <div className="flex items-center text-sm text-violet-600">
+              </CardContent>
+                <CardFooter>
+                  <div className="flex items-center text-sm text-violet-600">
                   <Star className="w-4 h-4 mr-1" />
                   <span>Recommandations personnalisées</span>
                 </div>
-              </CardContent>
+                </CardFooter>
             </Card>
           </motion.div>
 
@@ -240,9 +208,10 @@ const LandingPage = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
+            className="h-full"
           >
-            <Card className="p-8 transition-all hover:-translate-y-1 hover:shadow-xl border-0 shadow-lg bg-linear-to-br from-orange-50 to-orange-100">
-              <CardContent className="pt-0">
+            <Card className="h-full p-8 transition-all hover:-translate-y-1 hover:shadow-xl border-0 shadow-lg bg-linear-to-br from-orange-50 to-orange-100">
+              <CardContent className="pt-0 h-full">
                 <div className="flex items-center mb-4">
                   <Tv className="w-8 h-8 text-orange-500 mr-3" />
                   <h3 className="text-2xl font-bold text-orange-800">Séries</h3>
@@ -252,11 +221,12 @@ const LandingPage = () => {
                   soigneusement sélectionnées selon votre temps disponible et
                   vos envies.
                 </p>
-                <div className="flex items-center text-sm text-orange-500">
+
+              </CardContent>
+          <CardFooter>                <div className="flex items-center text-sm text-orange-500">
                   <Clock className="w-4 h-4 mr-1" />
                   <span>Adaptées à votre planning</span>
-                </div>
-              </CardContent>
+                </div></CardFooter>
             </Card>
           </motion.div>
         </div>
@@ -303,7 +273,7 @@ const LandingPage = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <p>&copy; 2024 REKO. Découvrez, regardez, recommencez.</p>
+          <p>&copy; 2025 REKO. Découvrez, regardez, recommencez. Créé par <span className="text-primary font-bold">Baptiste LECHAT</span></p>
         </motion.div>
       </footer>
     </div>

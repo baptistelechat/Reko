@@ -129,7 +129,7 @@ export default function MovieDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
           <p className="text-lg font-medium text-gray-700">
@@ -142,7 +142,7 @@ export default function MovieDetailPage() {
 
   if (error || !movie) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="text-center space-y-4 max-w-md">
           <div className="text-red-500 text-6xl">⚠️</div>
           <h2 className="text-2xl font-bold text-gray-900">Film introuvable</h2>
@@ -160,7 +160,7 @@ export default function MovieDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5">
+    <div>
       {/* Header avec image de fond */}
       <div
         className="relative h-96 bg-cover bg-center bg-no-repeat"
