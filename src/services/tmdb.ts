@@ -28,7 +28,7 @@ class TMDBService {
 
   private async fetchFromTMDB<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
     const url = new URL(`${TMDB_BASE_URL}${endpoint}`);
-    url.searchParams.append('api_key', this.apiKey);
+    // Utilisation de l'en-tête Authorization au lieu du paramètre api_key
     url.searchParams.append('language', 'fr-FR');
     
     Object.entries(params).forEach(([key, value]) => {
@@ -36,9 +36,16 @@ class TMDBService {
     });
 
     try {
-      const response = await fetch(url.toString());
+      const response = await fetch(url.toString(), {
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
       
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('TMDB API error details:', errorData);
         throw new Error(`TMDB API error: ${response.status} ${response.statusText}`);
       }
 

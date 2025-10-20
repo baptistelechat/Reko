@@ -1,7 +1,7 @@
+import Navigation from "@/components/Navigation";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "REKO - Recommandations Films & Séries",
-  description: "Découvrez des films et séries personnalisés selon votre humeur et votre temps libre",
+  description:
+    "Découvrez des films et séries personnalisés selon votre humeur et votre temps libre",
   keywords: "films, séries, recommandations, streaming, TMDB",
   authors: [{ name: "REKO Team" }],
   viewport: "width=device-width, initial-scale=1",
@@ -33,9 +34,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navigation />
-        <main className="min-h-screen">
-          {children}
-        </main>
+        <main className="min-h-screen pt-12">{children}</main>
       </body>
     </html>
   );
