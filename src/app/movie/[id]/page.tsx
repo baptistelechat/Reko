@@ -1,46 +1,46 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useAppStore } from '@/store/useAppStore';
-import { MovieDetails } from '@/types';
-import { tmdbService } from '@/services/tmdb';
-import { 
-  ArrowLeft, 
-  Star, 
-  Calendar, 
-  Clock, 
-  Heart, 
-  Plus, 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { tmdbService } from "@/services/tmdb";
+import { useAppStore } from "@/store/useAppStore";
+import { MovieDetails } from "@/types";
+import { motion } from "framer-motion";
+import {
+  ArrowLeft,
+  Calendar,
   Check,
+  Clock,
+  Heart,
+  Plus,
   Share2,
-  Users
-} from 'lucide-react';
+  Star,
+  Users,
+} from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function MovieDetailPage() {
   const params = useParams();
   const router = useRouter();
   const movieId = parseInt(params.id as string);
-  
-  const { 
-    addToWatchlist, 
-    addToFavorites, 
+
+  const {
+    addToWatchlist,
+    addToFavorites,
     removeFromWatchlist,
     removeFromFavorites,
-    isInWatchlist, 
-    isInFavorites 
+    isInWatchlist,
+    isInFavorites,
   } = useAppStore();
 
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const inWatchlist = isInWatchlist(movieId, 'movie');
-  const inFavorites = isInFavorites(movieId, 'movie');
+  const inWatchlist = isInWatchlist(movieId, "movie");
+  const inFavorites = isInFavorites(movieId, "movie");
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -49,8 +49,8 @@ export default function MovieDetailPage() {
         const movieData = await tmdbService.getMovieDetails(movieId);
         setMovie(movieData);
       } catch (err) {
-        setError('Impossible de charger les détails du film');
-        console.error('Error fetching movie details:', err);
+        setError("Impossible de charger les détails du film");
+        console.error("Error fetching movie details:", err);
       } finally {
         setIsLoading(false);
       }
@@ -63,19 +63,19 @@ export default function MovieDetailPage() {
 
   const handleAddToWatchlist = () => {
     if (!movie) return;
-    
+
     const watchlistItem = {
       id: movie.id,
       title: movie.title,
-      type: 'movie' as const,
+      type: "movie" as const,
       poster_path: movie.poster_path,
       release_date: movie.release_date,
       vote_average: movie.vote_average,
-      addedAt: new Date().toISOString()
+      addedAt: new Date().toISOString(),
     };
 
     if (inWatchlist) {
-      removeFromWatchlist(movie.id, 'movie');
+      removeFromWatchlist(movie.id, "movie");
     } else {
       addToWatchlist(watchlistItem);
     }
@@ -83,41 +83,44 @@ export default function MovieDetailPage() {
 
   const handleAddToFavorites = () => {
     if (!movie) return;
-    
+
     const favoriteItem = {
       id: movie.id,
       title: movie.title,
-      type: 'movie' as const,
+      type: "movie" as const,
       poster_path: movie.poster_path,
       release_date: movie.release_date,
       vote_average: movie.vote_average,
-      addedAt: new Date().toISOString()
+      addedAt: new Date().toISOString(),
     };
 
     if (inFavorites) {
-      removeFromFavorites(movie.id, 'movie');
+      removeFromFavorites(movie.id, "movie");
     } else {
       addToFavorites(favoriteItem);
     }
   };
 
-  const getImageUrl = (path: string | null, size: 'w500' | 'w780' | 'original' = 'w500') => {
-    if (!path) return '/placeholder-poster.jpg';
+  const getImageUrl = (
+    path: string | null,
+    size: "w500" | "w780" | "original" = "w500"
+  ) => {
+    if (!path) return "/placeholder-poster.jpg";
     return `https://image.tmdb.org/t/p/${size}${path}`;
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
     });
   };
 
   const formatRuntime = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return `${hours}h${remainingMinutes > 0 ? ` ${remainingMinutes}min` : ''}`;
+    return `${hours}h${remainingMinutes > 0 ? ` ${remainingMinutes}min` : ""}`;
   };
 
   const formatRating = (rating: number) => {
@@ -126,10 +129,12 @@ export default function MovieDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-reko-primary/5 to-reko-secondary/5 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5 flex items-center justify-center">
         <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-reko-primary mx-auto"></div>
-          <p className="text-lg font-medium text-gray-700">Chargement des détails...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="text-lg font-medium text-gray-700">
+            Chargement des détails...
+          </p>
         </div>
       </div>
     );
@@ -137,12 +142,15 @@ export default function MovieDetailPage() {
 
   if (error || !movie) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-reko-primary/5 to-reko-secondary/5 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5 flex items-center justify-center">
         <div className="text-center space-y-4 max-w-md">
           <div className="text-red-500 text-6xl">⚠️</div>
           <h2 className="text-2xl font-bold text-gray-900">Film introuvable</h2>
           <p className="text-gray-600">{error}</p>
-          <Button onClick={() => router.back()} className="bg-reko-primary hover:bg-reko-primary/90">
+          <Button
+            onClick={() => router.back()}
+            className="bg-primary hover:bg-primary/90"
+          >
             <ArrowLeft size={20} className="mr-2" />
             Retour
           </Button>
@@ -152,18 +160,21 @@ export default function MovieDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-reko-primary/5 to-reko-secondary/5">
+    <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5">
       {/* Header avec image de fond */}
-      <div 
+      <div
         className="relative h-96 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: movie.backdrop_path 
-            ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(${getImageUrl(movie.backdrop_path, 'original')})`
-            : 'linear-gradient(135deg, #8B5CF6, #1E293B)'
+          backgroundImage: movie.backdrop_path
+            ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(${getImageUrl(
+                movie.backdrop_path,
+                "original"
+              )})`
+            : "linear-gradient(135deg, #8B5CF6, #1E293B)",
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
-        
+
         {/* Navigation */}
         <div className="relative z-10 p-4">
           <Button
@@ -185,14 +196,14 @@ export default function MovieDetailPage() {
               className="flex flex-col md:flex-row gap-6 items-end"
             >
               {/* Poster */}
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <img
                   src={getImageUrl(movie.poster_path)}
                   alt={movie.title}
                   className="w-48 h-72 object-cover rounded-lg shadow-2xl"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = '/placeholder-poster.jpg';
+                    target.src = "/placeholder-poster.jpg";
                   }}
                 />
               </div>
@@ -202,7 +213,9 @@ export default function MovieDetailPage() {
                 <div>
                   <h1 className="text-4xl font-bold mb-2">{movie.title}</h1>
                   {movie.tagline && (
-                    <p className="text-xl text-gray-200 italic">{movie.tagline}</p>
+                    <p className="text-xl text-gray-200 italic">
+                      {movie.tagline}
+                    </p>
                   )}
                 </div>
 
@@ -211,7 +224,9 @@ export default function MovieDetailPage() {
                   <div className="flex items-center gap-1">
                     <Star className="text-yellow-400" size={16} />
                     <span>{formatRating(movie.vote_average)}/5</span>
-                    <span className="text-gray-300">({movie.vote_count} votes)</span>
+                    <span className="text-gray-300">
+                      ({movie.vote_count} votes)
+                    </span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Calendar size={16} />
@@ -226,7 +241,11 @@ export default function MovieDetailPage() {
                 {/* Genres */}
                 <div className="flex flex-wrap gap-2">
                   {movie.genres.map((genre) => (
-                    <Badge key={genre.id} variant="secondary" className="bg-white/20 text-white">
+                    <Badge
+                      key={genre.id}
+                      variant="secondary"
+                      className="bg-white/20 text-white"
+                    >
                       {genre.name}
                     </Badge>
                   ))}
@@ -240,16 +259,21 @@ export default function MovieDetailPage() {
                     className="flex items-center gap-2"
                   >
                     {inWatchlist ? <Check size={20} /> : <Plus size={20} />}
-                    {inWatchlist ? 'Dans la watchlist' : 'Ajouter à la watchlist'}
+                    {inWatchlist
+                      ? "Dans la watchlist"
+                      : "Ajouter à la watchlist"}
                   </Button>
-                  
+
                   <Button
                     onClick={handleAddToFavorites}
                     variant={inFavorites ? "secondary" : "outline"}
                     className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20"
                   >
-                    <Heart size={20} className={inFavorites ? 'fill-current' : ''} />
-                    {inFavorites ? 'Favori' : 'Favoris'}
+                    <Heart
+                      size={20}
+                      className={inFavorites ? "fill-current" : ""}
+                    />
+                    {inFavorites ? "Favori" : "Favoris"}
                   </Button>
 
                   <Button
@@ -277,9 +301,11 @@ export default function MovieDetailPage() {
               transition={{ delay: 0.2 }}
             >
               <Card className="p-6">
-                <h2 className="text-2xl font-bold mb-4 text-gray-900">Synopsis</h2>
+                <h2 className="text-2xl font-bold mb-4 text-gray-900">
+                  Synopsis
+                </h2>
                 <p className="text-gray-700 leading-relaxed text-lg">
-                  {movie.overview || 'Aucun synopsis disponible.'}
+                  {movie.overview || "Aucun synopsis disponible."}
                 </p>
               </Card>
             </motion.div>
@@ -300,16 +326,18 @@ export default function MovieDetailPage() {
                     {movie.credits.cast.slice(0, 6).map((actor) => (
                       <div key={actor.id} className="text-center">
                         <img
-                          src={getImageUrl(actor.profile_path, 'w500')}
+                          src={getImageUrl(actor.profile_path, "w500")}
                           alt={actor.name}
                           className="w-20 h-20 rounded-full object-cover mx-auto mb-2"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            target.src = '/placeholder-avatar.jpg';
+                            target.src = "/placeholder-avatar.jpg";
                           }}
                         />
                         <p className="font-semibold text-sm">{actor.name}</p>
-                        <p className="text-xs text-gray-600">{actor.character}</p>
+                        <p className="text-xs text-gray-600">
+                          {actor.character}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -327,58 +355,84 @@ export default function MovieDetailPage() {
               transition={{ delay: 0.4 }}
             >
               <Card className="p-6">
-                <h3 className="text-xl font-bold mb-4 text-gray-900">Informations</h3>
+                <h3 className="text-xl font-bold mb-4 text-gray-900">
+                  Informations
+                </h3>
                 <div className="space-y-3 text-sm">
                   <div>
-                    <span className="font-semibold text-gray-600">Titre original :</span>
+                    <span className="font-semibold text-gray-600">
+                      Titre original :
+                    </span>
                     <p>{movie.original_title}</p>
                   </div>
                   <div>
-                    <span className="font-semibold text-gray-600">Statut :</span>
+                    <span className="font-semibold text-gray-600">
+                      Statut :
+                    </span>
                     <p>{movie.status}</p>
                   </div>
                   <div>
-                    <span className="font-semibold text-gray-600">Langue originale :</span>
+                    <span className="font-semibold text-gray-600">
+                      Langue originale :
+                    </span>
                     <p>{movie.original_language?.toUpperCase()}</p>
                   </div>
                   <div>
-                    <span className="font-semibold text-gray-600">Budget :</span>
-                    <p>{movie.budget > 0 ? `$${movie.budget.toLocaleString()}` : 'Non communiqué'}</p>
+                    <span className="font-semibold text-gray-600">
+                      Budget :
+                    </span>
+                    <p>
+                      {movie.budget > 0
+                        ? `$${movie.budget.toLocaleString()}`
+                        : "Non communiqué"}
+                    </p>
                   </div>
                   <div>
-                    <span className="font-semibold text-gray-600">Recettes :</span>
-                    <p>{movie.revenue > 0 ? `$${movie.revenue.toLocaleString()}` : 'Non communiqué'}</p>
+                    <span className="font-semibold text-gray-600">
+                      Recettes :
+                    </span>
+                    <p>
+                      {movie.revenue > 0
+                        ? `$${movie.revenue.toLocaleString()}`
+                        : "Non communiqué"}
+                    </p>
                   </div>
                 </div>
               </Card>
             </motion.div>
 
             {/* Sociétés de production */}
-            {movie.production_companies && movie.production_companies.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                <Card className="p-6">
-                  <h3 className="text-xl font-bold mb-4 text-gray-900">Production</h3>
-                  <div className="space-y-2">
-                    {movie.production_companies.slice(0, 3).map((company) => (
-                      <div key={company.id} className="flex items-center gap-3">
-                        {company.logo_path && (
-                          <img
-                            src={getImageUrl(company.logo_path, 'w500')}
-                            alt={company.name}
-                            className="w-8 h-8 object-contain"
-                          />
-                        )}
-                        <span className="text-sm">{company.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-              </motion.div>
-            )}
+            {movie.production_companies &&
+              movie.production_companies.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <Card className="p-6">
+                    <h3 className="text-xl font-bold mb-4 text-gray-900">
+                      Production
+                    </h3>
+                    <div className="space-y-2">
+                      {movie.production_companies.slice(0, 3).map((company) => (
+                        <div
+                          key={company.id}
+                          className="flex items-center gap-3"
+                        >
+                          {company.logo_path && (
+                            <img
+                              src={getImageUrl(company.logo_path, "w500")}
+                              alt={company.name}
+                              className="w-8 h-8 object-contain"
+                            />
+                          )}
+                          <span className="text-sm">{company.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                </motion.div>
+              )}
           </div>
         </div>
       </div>

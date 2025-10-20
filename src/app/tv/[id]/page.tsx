@@ -1,47 +1,47 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useAppStore } from '@/store/useAppStore';
-import { TVShowDetails } from '@/types';
-import { tmdbService } from '@/services/tmdb';
-import { 
-  ArrowLeft, 
-  Star, 
-  Calendar, 
-  Clock, 
-  Heart, 
-  Plus, 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { tmdbService } from "@/services/tmdb";
+import { useAppStore } from "@/store/useAppStore";
+import { TVShowDetails } from "@/types";
+import { motion } from "framer-motion";
+import {
+  ArrowLeft,
+  Calendar,
   Check,
+  Clock,
+  Heart,
+  Plus,
   Share2,
+  Star,
+  Tv,
   Users,
-  Tv
-} from 'lucide-react';
+} from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function TVShowDetailPage() {
   const params = useParams();
   const router = useRouter();
   const tvId = parseInt(params.id as string);
-  
-  const { 
-    addToWatchlist, 
-    addToFavorites, 
+
+  const {
+    addToWatchlist,
+    addToFavorites,
     removeFromWatchlist,
     removeFromFavorites,
-    isInWatchlist, 
-    isInFavorites 
+    isInWatchlist,
+    isInFavorites,
   } = useAppStore();
 
   const [tvShow, setTVShow] = useState<TVShowDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const inWatchlist = isInWatchlist(tvId, 'tv');
-  const inFavorites = isInFavorites(tvId, 'tv');
+  const inWatchlist = isInWatchlist(tvId, "tv");
+  const inFavorites = isInFavorites(tvId, "tv");
 
   useEffect(() => {
     const fetchTVShowDetails = async () => {
@@ -50,8 +50,8 @@ export default function TVShowDetailPage() {
         const tvData = await tmdbService.getTVShowDetails(tvId);
         setTVShow(tvData);
       } catch (err) {
-        setError('Impossible de charger les détails de la série');
-        console.error('Error fetching TV show details:', err);
+        setError("Impossible de charger les détails de la série");
+        console.error("Error fetching TV show details:", err);
       } finally {
         setIsLoading(false);
       }
@@ -64,19 +64,19 @@ export default function TVShowDetailPage() {
 
   const handleAddToWatchlist = () => {
     if (!tvShow) return;
-    
+
     const watchlistItem = {
       id: tvShow.id,
       title: tvShow.name,
-      type: 'tv' as const,
+      type: "tv" as const,
       poster_path: tvShow.poster_path,
       release_date: tvShow.first_air_date,
       vote_average: tvShow.vote_average,
-      addedAt: new Date().toISOString()
+      addedAt: new Date().toISOString(),
     };
 
     if (inWatchlist) {
-      removeFromWatchlist(tvShow.id, 'tv');
+      removeFromWatchlist(tvShow.id, "tv");
     } else {
       addToWatchlist(watchlistItem);
     }
@@ -84,40 +84,45 @@ export default function TVShowDetailPage() {
 
   const handleAddToFavorites = () => {
     if (!tvShow) return;
-    
+
     const favoriteItem = {
       id: tvShow.id,
       title: tvShow.name,
-      type: 'tv' as const,
+      type: "tv" as const,
       poster_path: tvShow.poster_path,
       release_date: tvShow.first_air_date,
       vote_average: tvShow.vote_average,
-      addedAt: new Date().toISOString()
+      addedAt: new Date().toISOString(),
     };
 
     if (inFavorites) {
-      removeFromFavorites(tvShow.id, 'tv');
+      removeFromFavorites(tvShow.id, "tv");
     } else {
       addToFavorites(favoriteItem);
     }
   };
 
-  const getImageUrl = (path: string | null, size: 'w500' | 'w780' | 'original' = 'w500') => {
-    if (!path) return '/placeholder-poster.jpg';
+  const getImageUrl = (
+    path: string | null,
+    size: "w500" | "w780" | "original" = "w500"
+  ) => {
+    if (!path) return "/placeholder-poster.jpg";
     return `https://image.tmdb.org/t/p/${size}${path}`;
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
     });
   };
 
   const formatEpisodeRuntime = (runtimes: number[]) => {
-    if (!runtimes || runtimes.length === 0) return 'Non spécifié';
-    const avgRuntime = Math.round(runtimes.reduce((a, b) => a + b, 0) / runtimes.length);
+    if (!runtimes || runtimes.length === 0) return "Non spécifié";
+    const avgRuntime = Math.round(
+      runtimes.reduce((a, b) => a + b, 0) / runtimes.length
+    );
     return `~${avgRuntime} min/épisode`;
   };
 
@@ -127,21 +132,23 @@ export default function TVShowDetailPage() {
 
   const getStatusLabel = (status: string) => {
     const statusLabels = {
-      'Returning Series': 'En cours',
-      'Ended': 'Terminée',
-      'Canceled': 'Annulée',
-      'In Production': 'En production',
-      'Pilot': 'Pilote'
+      "Returning Series": "En cours",
+      Ended: "Terminée",
+      Canceled: "Annulée",
+      "In Production": "En production",
+      Pilot: "Pilote",
     };
     return statusLabels[status as keyof typeof statusLabels] || status;
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-reko-primary/5 to-reko-secondary/5 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5 flex items-center justify-center">
         <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-reko-primary mx-auto"></div>
-          <p className="text-lg font-medium text-gray-700">Chargement des détails...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="text-lg font-medium text-gray-700">
+            Chargement des détails...
+          </p>
         </div>
       </div>
     );
@@ -149,12 +156,17 @@ export default function TVShowDetailPage() {
 
   if (error || !tvShow) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-reko-primary/5 to-reko-secondary/5 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5 flex items-center justify-center">
         <div className="text-center space-y-4 max-w-md">
           <div className="text-red-500 text-6xl">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900">Série introuvable</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Série introuvable
+          </h2>
           <p className="text-gray-600">{error}</p>
-          <Button onClick={() => router.back()} className="bg-reko-primary hover:bg-reko-primary/90">
+          <Button
+            onClick={() => router.back()}
+            className="bg-primary hover:bg-primary/90"
+          >
             <ArrowLeft size={20} className="mr-2" />
             Retour
           </Button>
@@ -164,7 +176,7 @@ export default function TVShowDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-reko-primary/5 to-reko-secondary/5">
+    <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5">
       {/* Header avec image de fond */}
       <div
         className="relative h-96 bg-cover bg-center bg-no-repeat"

@@ -1,25 +1,35 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useAppStore } from '@/store/useAppStore';
-import { ArrowLeft, Trash2, Star, Calendar, Film, Tv, Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useAppStore } from "@/store/useAppStore";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowLeft,
+  Calendar,
+  Film,
+  Search,
+  Star,
+  Trash2,
+  Tv,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function WatchlistPage() {
   const router = useRouter();
   const { watchlist, removeFromWatchlist } = useAppStore();
-  
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'movie' | 'tv'>('all');
-  const [sortBy, setSortBy] = useState<'added' | 'rating' | 'title' | 'year'>('added');
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState<"all" | "movie" | "tv">("all");
+  const [sortBy, setSortBy] = useState<"added" | "rating" | "title" | "year">(
+    "added"
+  );
 
   const getImageUrl = (path: string | null) => {
-    if (!path) return '/placeholder-poster.jpg';
+    if (!path) return "/placeholder-poster.jpg";
     return `https://image.tmdb.org/t/p/w500${path}`;
   };
 
@@ -32,68 +42,72 @@ export default function WatchlistPage() {
   };
 
   const formatAddedDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
     });
   };
 
   // Filtrage et tri
   const filteredAndSortedWatchlist = watchlist
-    .filter(item => {
-      const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesType = filterType === 'all' || item.type === filterType;
+    .filter((item) => {
+      const matchesSearch = item.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesType = filterType === "all" || item.type === filterType;
       return matchesSearch && matchesType;
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case 'added':
+        case "added":
           return new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime();
-        case 'rating':
+        case "rating":
           return b.vote_average - a.vote_average;
-        case 'title':
+        case "title":
           return a.title.localeCompare(b.title);
-        case 'year':
-          return new Date(b.release_date || '').getTime() - new Date(a.release_date || '').getTime();
+        case "year":
+          return (
+            new Date(b.release_date || "").getTime() -
+            new Date(a.release_date || "").getTime()
+          );
         default:
           return 0;
       }
     });
 
-  const handleRemove = (id: number, type: 'movie' | 'tv') => {
+  const handleRemove = (id: number, type: "movie" | "tv") => {
     removeFromWatchlist(id, type);
   };
 
-  const getTypeLabel = (type: 'movie' | 'tv') => {
-    return type === 'movie' ? 'Film' : 'Série';
+  const getTypeLabel = (type: "movie" | "tv") => {
+    return type === "movie" ? "Film" : "Série";
   };
 
-  const getTypeIcon = (type: 'movie' | 'tv') => {
-    return type === 'movie' ? Film : Tv;
+  const getTypeIcon = (type: "movie" | "tv") => {
+    return type === "movie" ? Film : Tv;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-reko-primary/5 to-reko-secondary/5">
+    <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <Button
             variant="ghost"
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
             className="flex items-center gap-2"
           >
             <ArrowLeft size={20} />
             Accueil
           </Button>
-
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900">Ma Watchlist</h1>
             <p className="text-gray-600">
-              {watchlist.length} élément{watchlist.length > 1 ? 's' : ''} à regarder
+              {watchlist.length} élément{watchlist.length > 1 ? "s" : ""} à
+              regarder
             </p>
           </div>
-
           <div className="w-20" /> {/* Spacer */}
         </div>
 
@@ -102,7 +116,10 @@ export default function WatchlistPage() {
           <div className="flex flex-col md:flex-row gap-4">
             {/* Recherche */}
             <div className="relative flex-1">
-              <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search
+                size={20}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              />
               <Input
                 placeholder="Rechercher dans ma watchlist..."
                 value={searchTerm}
@@ -114,25 +131,25 @@ export default function WatchlistPage() {
             {/* Filtres */}
             <div className="flex gap-2">
               <Button
-                variant={filterType === 'all' ? 'default' : 'outline'}
+                variant={filterType === "all" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setFilterType('all')}
+                onClick={() => setFilterType("all")}
               >
                 Tout
               </Button>
               <Button
-                variant={filterType === 'movie' ? 'default' : 'outline'}
+                variant={filterType === "movie" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setFilterType('movie')}
+                onClick={() => setFilterType("movie")}
                 className="flex items-center gap-1"
               >
                 <Film size={16} />
                 Films
               </Button>
               <Button
-                variant={filterType === 'tv' ? 'default' : 'outline'}
+                variant={filterType === "tv" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setFilterType('tv')}
+                onClick={() => setFilterType("tv")}
                 className="flex items-center gap-1"
               >
                 <Tv size={16} />
@@ -143,7 +160,11 @@ export default function WatchlistPage() {
             {/* Tri */}
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as 'added' | 'rating' | 'title' | 'year')}
+              onChange={(e) =>
+                setSortBy(
+                  e.target.value as "added" | "rating" | "title" | "year"
+                )
+              }
               className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white"
             >
               <option value="added">Ajouté récemment</option>
@@ -156,17 +177,33 @@ export default function WatchlistPage() {
           {/* Statistiques */}
           <div className="flex gap-4 text-sm text-gray-600">
             <span>
-              {filteredAndSortedWatchlist.filter(item => item.type === 'movie').length} films
+              {
+                filteredAndSortedWatchlist.filter(
+                  (item) => item.type === "movie"
+                ).length
+              }{" "}
+              films
             </span>
             <span>
-              {filteredAndSortedWatchlist.filter(item => item.type === 'tv').length} séries
+              {
+                filteredAndSortedWatchlist.filter((item) => item.type === "tv")
+                  .length
+              }{" "}
+              séries
             </span>
             <span>
-              Note moyenne: {
-                filteredAndSortedWatchlist.length > 0
-                  ? (filteredAndSortedWatchlist.reduce((acc, item) => acc + item.vote_average, 0) / filteredAndSortedWatchlist.length / 2).toFixed(1)
-                  : '0'
-              }/5
+              Note moyenne:{" "}
+              {filteredAndSortedWatchlist.length > 0
+                ? (
+                    filteredAndSortedWatchlist.reduce(
+                      (acc, item) => acc + item.vote_average,
+                      0
+                    ) /
+                    filteredAndSortedWatchlist.length /
+                    2
+                  ).toFixed(1)
+                : "0"}
+              /5
             </span>
           </div>
         </div>
@@ -176,17 +213,18 @@ export default function WatchlistPage() {
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">📺</div>
             <h2 className="text-xl font-semibold text-gray-700 mb-2">
-              {watchlist.length === 0 ? 'Votre watchlist est vide' : 'Aucun résultat trouvé'}
+              {watchlist.length === 0
+                ? "Votre watchlist est vide"
+                : "Aucun résultat trouvé"}
             </h2>
             <p className="text-gray-500 mb-6">
-              {watchlist.length === 0 
-                ? 'Découvrez de nouveaux films et séries à ajouter à votre liste'
-                : 'Essayez avec d\'autres termes de recherche ou filtres'
-              }
+              {watchlist.length === 0
+                ? "Découvrez de nouveaux films et séries à ajouter à votre liste"
+                : "Essayez avec d'autres termes de recherche ou filtres"}
             </p>
-            <Button 
-              onClick={() => router.push('/explore')} 
-              className="bg-reko-primary hover:bg-reko-primary/90"
+            <Button
+              onClick={() => router.push("/explore")}
+              className="bg-primary hover:bg-primary/90"
             >
               Découvrir du contenu
             </Button>
@@ -200,7 +238,7 @@ export default function WatchlistPage() {
             <AnimatePresence>
               {filteredAndSortedWatchlist.map((item, index) => {
                 const TypeIcon = getTypeIcon(item.type);
-                
+
                 return (
                   <motion.div
                     key={item.id}
@@ -213,17 +251,17 @@ export default function WatchlistPage() {
                   >
                     <Card className="overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-300">
                       {/* Poster */}
-                      <div className="relative aspect-[2/3] overflow-hidden">
+                      <div className="relative aspect-2/3 overflow-hidden">
                         <img
                           src={getImageUrl(item.poster_path)}
                           alt={item.title}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            target.src = '/placeholder-poster.jpg';
+                            target.src = "/placeholder-poster.jpg";
                           }}
                         />
-                        
+
                         {/* Overlay avec action de suppression */}
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                           <Button
@@ -238,8 +276,8 @@ export default function WatchlistPage() {
 
                         {/* Badge type */}
                         <div className="absolute top-2 left-2">
-                          <Badge 
-                            variant="secondary" 
+                          <Badge
+                            variant="secondary"
                             className="bg-black/70 text-white border-none flex items-center gap-1"
                           >
                             <TypeIcon size={12} />
@@ -250,7 +288,10 @@ export default function WatchlistPage() {
                         {/* Note */}
                         <div className="absolute top-2 right-2">
                           <div className="bg-black/70 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                            <Star size={12} className="fill-yellow-400 text-yellow-400" />
+                            <Star
+                              size={12}
+                              className="fill-yellow-400 text-yellow-400"
+                            />
                             {formatRating(item.vote_average)}
                           </div>
                         </div>
@@ -265,14 +306,16 @@ export default function WatchlistPage() {
 
                       {/* Informations */}
                       <div className="p-4 space-y-2">
-                        <h3 className="font-semibold text-sm line-clamp-2 text-gray-900 group-hover:text-reko-primary transition-colors">
+                        <h3 className="font-semibold text-sm line-clamp-2 text-gray-900 group-hover:text-primary transition-colors">
                           {item.title}
                         </h3>
-                        
+
                         <div className="flex items-center justify-between text-xs text-gray-500">
                           <div className="flex items-center gap-1">
                             <Calendar size={12} />
-                            {item.release_date ? formatDate(item.release_date) : 'N/A'}
+                            {item.release_date
+                              ? formatDate(item.release_date)
+                              : "N/A"}
                           </div>
                         </div>
                       </div>
@@ -289,7 +332,7 @@ export default function WatchlistPage() {
           <div className="mt-12 text-center space-y-4">
             <div className="space-x-4">
               <Button
-                onClick={() => router.push('/favorites')}
+                onClick={() => router.push("/favorites")}
                 variant="outline"
                 className="flex items-center gap-2"
               >
@@ -297,8 +340,8 @@ export default function WatchlistPage() {
                 Mes Favoris
               </Button>
               <Button
-                onClick={() => router.push('/explore')}
-                className="bg-reko-primary hover:bg-reko-primary/90 flex items-center gap-2"
+                onClick={() => router.push("/explore")}
+                className="bg-primary hover:bg-primary/90 flex items-center gap-2"
               >
                 <Search size={20} />
                 Découvrir plus

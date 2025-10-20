@@ -1,46 +1,116 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
-import { Badge } from '@/components/ui/badge';
-import { useAppStore } from '@/store/useAppStore';
-import { Mood, FreeTime, ContentType } from '@/types';
-import { ArrowLeft, ArrowRight, Film, Tv, Clock, Heart, Zap, Coffee, Moon, Sun } from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { useAppStore } from "@/store/useAppStore";
+import { ContentType, FreeTime, Mood } from "@/types";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Clock,
+  Coffee,
+  Film,
+  Heart,
+  Moon,
+  Sun,
+  Tv,
+  Zap,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const MOODS = [
-  { id: 'happy' as Mood, label: 'Joyeux', icon: Sun, color: 'bg-yellow-500', description: 'Envie de rire et de bonne humeur' },
-  { id: 'sad' as Mood, label: 'Mélancolique', icon: Moon, color: 'bg-blue-500', description: 'Besoin d\'émotions profondes' },
-  { id: 'excited' as Mood, label: 'Excité', icon: Zap, color: 'bg-orange-500', description: 'Soif d\'action et d\'aventure' },
-  { id: 'romantic' as Mood, label: 'Romantique', icon: Heart, color: 'bg-pink-500', description: 'Envie d\'amour et de tendresse' },
-  { id: 'chill' as Mood, label: 'Détendu', icon: Coffee, color: 'bg-green-500', description: 'Moment de relaxation' }
+  {
+    id: "happy" as Mood,
+    label: "Joyeux",
+    icon: Sun,
+    color: "bg-yellow-500",
+    description: "Envie de rire et de bonne humeur",
+  },
+  {
+    id: "sad" as Mood,
+    label: "Mélancolique",
+    icon: Moon,
+    color: "bg-blue-500",
+    description: "Besoin d'émotions profondes",
+  },
+  {
+    id: "excited" as Mood,
+    label: "Excité",
+    icon: Zap,
+    color: "bg-orange-600",
+    description: "Soif d'action et d'aventure",
+  },
+  {
+    id: "romantic" as Mood,
+    label: "Romantique",
+    icon: Heart,
+    color: "bg-pink-500",
+    description: "Envie d'amour et de tendresse",
+  },
+  {
+    id: "chill" as Mood,
+    label: "Détendu",
+    icon: Coffee,
+    color: "bg-green-500",
+    description: "Moment de relaxation",
+  },
 ];
 
 const FREE_TIME_OPTIONS = [
-  { id: 'short' as FreeTime, label: 'Court', duration: '< 2h', description: 'Un épisode ou un film court' },
-  { id: 'medium' as FreeTime, label: 'Moyen', duration: '2-3h', description: 'Un bon film ou quelques épisodes' },
-  { id: 'long' as FreeTime, label: 'Long', duration: '> 3h', description: 'Une soirée complète ou un marathon' }
+  {
+    id: "short" as FreeTime,
+    label: "Court",
+    duration: "< 2h",
+    description: "Un épisode ou un film court",
+  },
+  {
+    id: "medium" as FreeTime,
+    label: "Moyen",
+    duration: "2-3h",
+    description: "Un bon film ou quelques épisodes",
+  },
+  {
+    id: "long" as FreeTime,
+    label: "Long",
+    duration: "> 3h",
+    description: "Une soirée complète ou un marathon",
+  },
 ];
 
 const CONTENT_TYPES = [
-  { id: 'movie' as ContentType, label: 'Films', icon: Film, description: 'Histoires complètes en une séance' },
-  { id: 'tv' as ContentType, label: 'Séries', icon: Tv, description: 'Aventures à suivre épisode par épisode' }
+  {
+    id: "movie" as ContentType,
+    label: "Films",
+    icon: Film,
+    description: "Histoires complètes en une séance",
+  },
+  {
+    id: "tv" as ContentType,
+    label: "Séries",
+    icon: Tv,
+    description: "Aventures à suivre épisode par épisode",
+  },
 ];
 
 export default function ExplorePage() {
   const router = useRouter();
-  const { setMood, setFreeTime, setContentType, fetchRecommendations } = useAppStore();
-  
+  const { setMood, setFreeTime, setContentType, fetchRecommendations } =
+    useAppStore();
+
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedMood, setSelectedMood] = useState<Mood | null>(null);
-  const [selectedFreeTime, setSelectedFreeTime] = useState<FreeTime | null>(null);
-  const [selectedContentType, setSelectedContentType] = useState<ContentType | null>(null);
+  const [selectedFreeTime, setSelectedFreeTime] = useState<FreeTime | null>(
+    null
+  );
+  const [selectedContentType, setSelectedContentType] =
+    useState<ContentType | null>(null);
   const [customDuration, setCustomDuration] = useState([120]);
 
-  const steps = ['Humeur', 'Temps libre', 'Type de contenu'];
+  const steps = ["Humeur", "Temps libre", "Type de contenu"];
   const totalSteps = steps.length;
 
   const handleNext = () => {
@@ -62,18 +132,22 @@ export default function ExplorePage() {
       setMood(selectedMood);
       setFreeTime(selectedFreeTime);
       setContentType(selectedContentType);
-      
+
       await fetchRecommendations();
-      router.push('/results');
+      router.push("/results");
     }
   };
 
   const canProceed = () => {
     switch (currentStep) {
-      case 0: return selectedMood !== null;
-      case 1: return selectedFreeTime !== null;
-      case 2: return selectedContentType !== null;
-      default: return false;
+      case 0:
+        return selectedMood !== null;
+      case 1:
+        return selectedFreeTime !== null;
+      case 2:
+        return selectedContentType !== null;
+      default:
+        return false;
     }
   };
 
@@ -85,10 +159,14 @@ export default function ExplorePage() {
       className="space-y-6"
     >
       <div className="text-center space-y-2">
-        <h2 className="text-3xl font-bold text-gray-900">Comment vous sentez-vous ?</h2>
-        <p className="text-gray-600">Choisissez l'humeur qui correspond à votre état d'esprit</p>
+        <h2 className="text-3xl font-bold text-gray-900">
+          Comment vous sentez-vous ?
+        </h2>
+        <p className="text-gray-600">
+          Choisissez l'humeur qui correspond à votre état d'esprit
+        </p>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {MOODS.map((mood) => {
           const Icon = mood.icon;
@@ -101,8 +179,8 @@ export default function ExplorePage() {
               <Card
                 className={`p-6 cursor-pointer transition-all duration-200 ${
                   selectedMood === mood.id
-                    ? 'ring-2 ring-reko-primary bg-reko-primary/5'
-                    : 'hover:shadow-lg'
+                    ? "ring-2 ring-primary bg-primary/5"
+                    : "hover:shadow-lg"
                 }`}
                 onClick={() => setSelectedMood(mood.id)}
               >
@@ -111,7 +189,9 @@ export default function ExplorePage() {
                     <Icon size={24} />
                   </div>
                   <h3 className="font-semibold text-lg">{mood.label}</h3>
-                  <p className="text-sm text-gray-600 text-center">{mood.description}</p>
+                  <p className="text-sm text-gray-600 text-center">
+                    {mood.description}
+                  </p>
                 </div>
               </Card>
             </motion.div>
@@ -129,10 +209,12 @@ export default function ExplorePage() {
       className="space-y-6"
     >
       <div className="text-center space-y-2">
-        <h2 className="text-3xl font-bold text-gray-900">Combien de temps avez-vous ?</h2>
+        <h2 className="text-3xl font-bold text-gray-900">
+          Combien de temps avez-vous ?
+        </h2>
         <p className="text-gray-600">Sélectionnez la durée qui vous convient</p>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {FREE_TIME_OPTIONS.map((option) => (
           <motion.div
@@ -143,28 +225,30 @@ export default function ExplorePage() {
             <Card
               className={`p-6 cursor-pointer transition-all duration-200 ${
                 selectedFreeTime === option.id
-                  ? 'ring-2 ring-reko-primary bg-reko-primary/5'
-                  : 'hover:shadow-lg'
+                  ? "ring-2 ring-primary bg-primary/5"
+                  : "hover:shadow-lg"
               }`}
               onClick={() => setSelectedFreeTime(option.id)}
             >
               <div className="flex flex-col items-center space-y-3">
-                <div className="p-3 rounded-full bg-reko-secondary text-white">
+                <div className="p-3 rounded-full bg-orange-600 text-white">
                   <Clock size={24} />
                 </div>
                 <h3 className="font-semibold text-lg">{option.label}</h3>
                 <Badge variant="secondary">{option.duration}</Badge>
-                <p className="text-sm text-gray-600 text-center">{option.description}</p>
+                <p className="text-sm text-gray-600 text-center">
+                  {option.description}
+                </p>
               </div>
             </Card>
           </motion.div>
         ))}
       </div>
 
-      {selectedFreeTime === 'medium' && (
+      {selectedFreeTime === "medium" && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
+          animate={{ opacity: 1, height: "auto" }}
           className="bg-gray-50 rounded-lg p-6 space-y-4"
         >
           <h4 className="font-semibold text-center">Durée personnalisée</h4>
@@ -179,7 +263,12 @@ export default function ExplorePage() {
             />
             <div className="flex justify-between text-sm text-gray-600">
               <span>1h</span>
-              <span className="font-semibold">{Math.floor(customDuration[0] / 60)}h{customDuration[0] % 60 > 0 ? ` ${customDuration[0] % 60}min` : ''}</span>
+              <span className="font-semibold">
+                {Math.floor(customDuration[0] / 60)}h
+                {customDuration[0] % 60 > 0
+                  ? ` ${customDuration[0] % 60}min`
+                  : ""}
+              </span>
               <span>5h</span>
             </div>
           </div>
@@ -196,10 +285,12 @@ export default function ExplorePage() {
       className="space-y-6"
     >
       <div className="text-center space-y-2">
-        <h2 className="text-3xl font-bold text-gray-900">Que voulez-vous regarder ?</h2>
+        <h2 className="text-3xl font-bold text-gray-900">
+          Que voulez-vous regarder ?
+        </h2>
         <p className="text-gray-600">Choisissez entre films et séries</p>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
         {CONTENT_TYPES.map((type) => {
           const Icon = type.icon;
@@ -212,17 +303,19 @@ export default function ExplorePage() {
               <Card
                 className={`p-8 cursor-pointer transition-all duration-200 ${
                   selectedContentType === type.id
-                    ? 'ring-2 ring-reko-primary bg-reko-primary/5'
-                    : 'hover:shadow-lg'
+                    ? "ring-2 ring-primary bg-primary/5"
+                    : "hover:shadow-lg"
                 }`}
                 onClick={() => setSelectedContentType(type.id)}
               >
                 <div className="flex flex-col items-center space-y-4">
-                  <div className="p-4 rounded-full bg-gradient-to-r from-reko-primary to-reko-secondary text-white">
+                  <div className="p-4 rounded-full bg-linear-to-r from-primary to-orange-600 text-white">
                     <Icon size={32} />
                   </div>
                   <h3 className="font-semibold text-xl">{type.label}</h3>
-                  <p className="text-gray-600 text-center">{type.description}</p>
+                  <p className="text-gray-600 text-center">
+                    {type.description}
+                  </p>
                 </div>
               </Card>
             </motion.div>
@@ -234,15 +327,19 @@ export default function ExplorePage() {
 
   const renderCurrentStep = () => {
     switch (currentStep) {
-      case 0: return renderMoodStep();
-      case 1: return renderFreeTimeStep();
-      case 2: return renderContentTypeStep();
-      default: return null;
+      case 0:
+        return renderMoodStep();
+      case 1:
+        return renderFreeTimeStep();
+      case 2:
+        return renderContentTypeStep();
+      default:
+        return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-reko-primary/5 to-reko-secondary/5">
+    <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5">
       <div className="container mx-auto px-4 py-8">
         {/* Header avec progression */}
         <div className="max-w-4xl mx-auto mb-8">
@@ -267,7 +364,7 @@ export default function ExplorePage() {
           {/* Barre de progression */}
           <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
             <motion.div
-              className="bg-linear-to-r from-reko-primary to-reko-secondary h-2 rounded-full"
+              className="bg-linear-to-r from-primary to-orange-600 h-2 rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
               transition={{ duration: 0.3 }}
@@ -280,13 +377,13 @@ export default function ExplorePage() {
               <div
                 key={step}
                 className={`flex items-center space-x-2 ${
-                  index <= currentStep ? "text-reko-primary" : "text-gray-400"
+                  index <= currentStep ? "text-primary" : "text-gray-400"
                 }`}
               >
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
                     index <= currentStep
-                      ? "bg-reko-primary text-white"
+                      ? "bg-primary text-white"
                       : "bg-gray-200 text-gray-400"
                   }`}
                 >
@@ -319,7 +416,7 @@ export default function ExplorePage() {
             <Button
               onClick={handleNext}
               disabled={!canProceed()}
-              className="flex items-center gap-2 bg-linear-to-r from-reko-primary to-reko-secondary hover:from-reko-primary/90 hover:to-reko-secondary/90"
+              className="flex items-center gap-2 bg-linear-to-r from-primary to-orange-600 hover:from-primary/90 hover:to-orange-600/90"
             >
               {currentStep === totalSteps - 1 ? "Découvrir" : "Suivant"}
               <ArrowRight size={20} />
