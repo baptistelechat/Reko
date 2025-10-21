@@ -108,6 +108,7 @@ export default function ExplorePage() {
   );
   const [selectedContentType, setSelectedContentType] =
     useState<ContentType | null>(null);
+  const [isCustomDuration, setIsCustomDuration] = useState(false);
 
   const [customDurationRange, setCustomDurationRange] = useState<number[]>([
     FREE_TIME_TO_DURATION["short"].min,
@@ -132,9 +133,16 @@ export default function ExplorePage() {
   };
 
   const handleSubmit = async () => {
-    if (selectedMood && selectedFreeTime && selectedContentType) {
+    if (selectedMood && (selectedFreeTime || isCustomDuration) && selectedContentType) {
       setMood(selectedMood);
-      setFreeTime(selectedFreeTime);
+      
+      // Si c'est une durée personnalisée, on utilise la classification basée sur la plage
+      if (isCustomDuration) {
+        setFreeTime(classifyRange(customDurationRange));
+      } else {
+        setFreeTime(selectedFreeTime!);
+      }
+      
       setContentType(selectedContentType);
 
       await fetchRecommendations();
@@ -147,7 +155,7 @@ export default function ExplorePage() {
       case 0:
         return selectedMood !== null;
       case 1:
-        return selectedFreeTime !== null;
+        return selectedFreeTime !== null || isCustomDuration;
       case 2:
         return selectedContentType !== null;
       default:
@@ -234,6 +242,7 @@ export default function ExplorePage() {
               }`}
               onClick={() => {
                 setSelectedFreeTime(option.id);
+                setIsCustomDuration(false);
                 setCustomDurationRange([
                   FREE_TIME_TO_DURATION[option.id].min,
                   Math.min(FREE_TIME_TO_DURATION[option.id].max, 300),
@@ -258,16 +267,23 @@ export default function ExplorePage() {
       <motion.div
         initial={{ opacity: 0, height: 0 }}
         animate={{ opacity: 1, height: "auto" }}
-        className="bg-gray-50 rounded-lg p-6 space-y-4"
+        className={`rounded-lg p-6 space-y-4 bg-gray-50 ${
+          isCustomDuration ? "outline-2 outline-primary" : ""
+        }`}
       >
-        <h4 className="font-semibold text-center">Durée personnalisée</h4>
+        <h4 className="font-semibold text-center">
+          {isCustomDuration
+            ? "Durée personnalisée sélectionnée"
+            : "Durée personnalisée"}
+        </h4>
         <div className="space-y-2">
           <Slider
             value={customDurationRange}
             onValueChange={(val) => {
               const range = val as number[];
               setCustomDurationRange(range);
-              setSelectedFreeTime(classifyRange(range));
+              setSelectedFreeTime(null);
+              setIsCustomDuration(true);
             }}
             max={300}
             min={0}
