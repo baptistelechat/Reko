@@ -136,7 +136,8 @@ export type Mood =
   | 'sad' 
   | 'excited' 
   | 'romantic' 
-  | 'chill';
+  | 'chill'
+  | 'thriller';
 
 export type FreeTime = 'short' | 'medium' | 'long';
 
@@ -172,7 +173,8 @@ export const MOOD_TO_GENRES: Record<Mood, number[]> = {
   sad: [18, 10749], // Drama, Romance
   excited: [28, 12, 53], // Action, Adventure, Thriller
   romantic: [10749, 35], // Romance, Comedy
-  chill: [99, 10402, 10770] // Documentary, Music, TV Movie
+  chill: [99, 10402, 10770], // Documentary, Music, TV Movie
+  thriller: [27, 53, 9648] // Horror, Thriller, Mystery
 };
 
 // Mapping du temps libre vers la durée

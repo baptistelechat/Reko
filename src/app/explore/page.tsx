@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
+import { MOODS_ARRAY } from "@/constants/moods";
 import { useAppStore } from "@/store/useAppStore";
 import { ContentType, FREE_TIME_TO_DURATION, FreeTime, Mood } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
@@ -11,54 +12,13 @@ import {
   ArrowLeft,
   ArrowRight,
   Clock,
-  Coffee,
   Film,
-  Heart,
-  Moon,
-  Sun,
   Tv,
-  Zap,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const MOODS = [
-  {
-    id: "happy" as Mood,
-    label: "Joyeux",
-    icon: Sun,
-    color: "bg-yellow-500",
-    description: "Envie de rire et de bonne humeur",
-  },
-  {
-    id: "sad" as Mood,
-    label: "Mélancolique",
-    icon: Moon,
-    color: "bg-blue-500",
-    description: "Besoin d'émotions profondes",
-  },
-  {
-    id: "excited" as Mood,
-    label: "Excité",
-    icon: Zap,
-    color: "bg-orange-600",
-    description: "Soif d'action et d'aventure",
-  },
-  {
-    id: "romantic" as Mood,
-    label: "Romantique",
-    icon: Heart,
-    color: "bg-pink-500",
-    description: "Envie d'amour et de tendresse",
-  },
-  {
-    id: "chill" as Mood,
-    label: "Détendu",
-    icon: Coffee,
-    color: "bg-green-500",
-    description: "Moment de relaxation",
-  },
-];
+const MOODS = MOODS_ARRAY;
 
 const FREE_TIME_OPTIONS = [
   {

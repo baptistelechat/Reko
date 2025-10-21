@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { MOODS_ARRAY } from "@/constants/moods";
 import { motion } from "framer-motion";
 import { Clock, Film, Heart, Play, Sparkles, Star, Tv } from "lucide-react";
 import Link from "next/link";
@@ -29,14 +30,11 @@ const LandingPage = () => {
     },
   ];
 
-  const moods = [
-    { emoji: "😊", name: "Joyeux", color: "bg-yellow-100 text-yellow-800" },
-    { emoji: "😢", name: "Mélancolique", color: "bg-blue-100 text-blue-800" },
-    { emoji: "🚀", name: "Aventureux", color: "bg-green-100 text-green-800" },
-    { emoji: "😴", name: "Détendu", color: "bg-purple-100 text-purple-800" },
-    { emoji: "💕", name: "Romantique", color: "bg-pink-100 text-pink-800" },
-    { emoji: "😱", name: "Frissons", color: "bg-red-100 text-red-800" },
-  ];
+  const moods = MOODS_ARRAY.map(mood => ({
+    emoji: mood.emoji,
+    name: mood.label,
+    color: mood.bgColor
+  }));
 
   return (
     <div>
@@ -93,7 +91,7 @@ const LandingPage = () => {
           <p className="text-gray-500 mb-6">
             Choisissez votre humeur du moment
           </p>
-          <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto">
+          <div className="grid grid-cols-3 gap-3 max-w-lg mx-auto">
             {moods.map((mood, index) => (
               <motion.div
                 key={mood.name}
@@ -103,7 +101,7 @@ const LandingPage = () => {
               >
                 <Badge
                   variant="secondary"
-                  className={`${mood.color} px-4 py-2 text-sm cursor-pointer hover:scale-105 transition-transform`}
+                  className={`${mood.color} px-4 py-2 text-sm cursor-pointer hover:scale-105 transition-transform w-full justify-center`}
                 >
                   <span className="mr-2">{mood.emoji}</span>
                   {mood.name}
