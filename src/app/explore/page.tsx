@@ -296,14 +296,14 @@ export default function ExplorePage() {
               whileTap={{ scale: 0.98 }}
             >
               <Card
-                className={`p-8 cursor-pointer transition-all duration-200 ${
+                className={`p-8 cursor-pointer transition-all duration-200 h-full ${
                   selectedContentType === type.id
                     ? "ring-2 ring-primary bg-primary/5"
                     : "hover:shadow-lg"
                 }`}
                 onClick={() => setSelectedContentType(type.id)}
               >
-                <div className="flex flex-col items-center space-y-4">
+                <div className="flex flex-col items-center space-y-4 h-full justify-center">
                   <div className="p-4 rounded-full bg-linear-to-r from-primary to-orange-600 text-white">
                     <Icon size={32} />
                   </div>
