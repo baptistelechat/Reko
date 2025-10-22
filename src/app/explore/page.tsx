@@ -8,13 +8,7 @@ import { MOODS_ARRAY } from "@/constants/moods";
 import { useAppStore } from "@/store/useAppStore";
 import { ContentType, FREE_TIME_TO_DURATION, FreeTime, Mood } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Clock,
-  Film,
-  Tv,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Film, Tv } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -93,16 +87,20 @@ export default function ExplorePage() {
   };
 
   const handleSubmit = async () => {
-    if (selectedMood && (selectedFreeTime || isCustomDuration) && selectedContentType) {
+    if (
+      selectedMood &&
+      (selectedFreeTime || isCustomDuration) &&
+      selectedContentType
+    ) {
       setMood(selectedMood);
-      
+
       // Si c'est une durée personnalisée, on utilise la classification basée sur la plage
       if (isCustomDuration) {
         setFreeTime(classifyRange(customDurationRange));
       } else {
         setFreeTime(selectedFreeTime!);
       }
-      
+
       setContentType(selectedContentType);
 
       await fetchRecommendations();
@@ -230,6 +228,10 @@ export default function ExplorePage() {
         className={`rounded-lg p-6 space-y-4 bg-gray-50 ${
           isCustomDuration ? "outline-2 outline-primary" : ""
         }`}
+        onClick={() => {
+          setIsCustomDuration(true);
+          setSelectedFreeTime(null);
+        }}
       >
         <h4 className="font-semibold text-center">
           {isCustomDuration
