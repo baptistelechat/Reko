@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { MOODS_CONFIG } from "@/constants/moods";
 import { useAppStore } from "@/store/useAppStore";
 import { Movie, TVShow } from "@/types";
 import { motion } from "framer-motion";
@@ -87,17 +88,6 @@ export default function ResultsPage() {
     return (rating / 2).toFixed(1);
   };
 
-  const getMoodLabel = (mood: string) => {
-    const moodLabels = {
-      happy: "Joyeux",
-      sad: "Mélancolique",
-      excited: "Excité",
-      romantic: "Romantique",
-      chill: "Détendu",
-    };
-    return moodLabels[mood as keyof typeof moodLabels] || mood;
-  };
-
   const getContentTypeLabel = (type: string) => {
     return type === "movie" ? "Films" : "Séries";
   };
@@ -164,8 +154,8 @@ export default function ResultsPage() {
               Vos recommandations
             </h1>
             <div className="flex items-center justify-center gap-2 mt-1">
-              <Badge variant="secondary">
-                {getMoodLabel(preferences.mood!)}
+              <Badge className={MOODS_CONFIG[preferences.mood!]?.bgColor || ""}>
+                {MOODS_CONFIG[preferences.mood!]?.label || preferences.mood}
               </Badge>
               <Badge variant="secondary">
                 {getContentTypeLabel(preferences.contentType!)}
