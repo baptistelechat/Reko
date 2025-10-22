@@ -9,6 +9,8 @@ interface ProgressHeaderProps {
   totalSteps: number;
   steps: string[];
   onBack: () => void;
+  onStepClick?: (stepIndex: number) => void;
+  isStepValid?: (stepIndex: number) => boolean;
 }
 
 export const ProgressHeader = ({
@@ -16,6 +18,8 @@ export const ProgressHeader = ({
   totalSteps,
   steps,
   onBack,
+  onStepClick,
+  isStepValid,
 }: ProgressHeaderProps) => {
   return (
     <div className="max-w-4xl mx-auto mb-8">
@@ -49,25 +53,48 @@ export const ProgressHeader = ({
 
       {/* Indicateurs d'étapes */}
       <div className="flex justify-center space-x-8 mb-8">
-        {steps.map((step, index) => (
-          <div
-            key={step}
-            className={`flex items-center space-x-2 ${
-              index <= currentStep ? "text-primary" : "text-gray-400"
-            }`}
-          >
+        {steps.map((step, index) => {
+          // Permettre de cliquer sur toutes les étapes précédentes et les étapes suivantes si toutes les étapes intermédiaires sont valides
+          let isClickable = false;
+          if (onStepClick) {
+            if (index <= currentStep) {
+              // Étapes précédentes et actuelle : toujours cliquables
+              isClickable = true;
+            } else if (index > currentStep && isStepValid) {
+              // Étapes futures : vérifier que toutes les étapes intermédiaires sont valides
+              let allIntermediateStepsValid = true;
+              for (let i = currentStep; i < index; i++) {
+                if (!isStepValid(i)) {
+                  allIntermediateStepsValid = false;
+                  break;
+                }
+              }
+              isClickable = allIntermediateStepsValid;
+            }
+          }
+          const canClick = isClickable;
+          
+          return (
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                index <= currentStep
-                  ? "bg-primary text-white"
-                  : "bg-gray-200 text-gray-400"
-              }`}
+              key={step}
+              className={`flex items-center space-x-2 transition-colors duration-200 ${
+                index <= currentStep ? "text-primary" : "text-gray-400"
+              } ${canClick ? "cursor-pointer hover:text-primary/80" : ""}`}
+              onClick={() => canClick && onStepClick(index)}
             >
-              {index + 1}
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
+                  index <= currentStep
+                    ? "bg-primary text-white"
+                    : "bg-gray-200 text-gray-400"
+                }`}
+              >
+                {index + 1}
+              </div>
+              <span className="hidden md:block font-medium">{step}</span>
             </div>
-            <span className="hidden md:block font-medium">{step}</span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

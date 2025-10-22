@@ -77,8 +77,8 @@ export default function ExplorePage() {
     }
   };
 
-  const canProceed = () => {
-    switch (currentStep) {
+  const isStepValid = (stepIndex: number) => {
+    switch (stepIndex) {
       case 0:
         return selectedMood !== null;
       case 1:
@@ -88,6 +88,10 @@ export default function ExplorePage() {
       default:
         return false;
     }
+  };
+
+  const canProceed = () => {
+    return isStepValid(currentStep);
   };
 
   const handleFreeTimeSelect = (freeTime: FreeTime) => {
@@ -102,6 +106,26 @@ export default function ExplorePage() {
   const handleCustomDurationToggle = () => {
     setIsCustomDuration(true);
     setSelectedFreeTime(null);
+  };
+
+  const handleStepClick = (stepIndex: number) => {
+    // Permettre de naviguer vers n'importe quelle étape si toutes les étapes intermédiaires sont valides
+    if (stepIndex <= currentStep) {
+      // Navigation vers les étapes précédentes : toujours autorisée
+      setCurrentStep(stepIndex);
+    } else if (stepIndex > currentStep) {
+      // Navigation vers les étapes futures : vérifier que toutes les étapes intermédiaires sont valides
+      let canNavigate = true;
+      for (let i = currentStep; i < stepIndex; i++) {
+        if (!isStepValid(i)) {
+          canNavigate = false;
+          break;
+        }
+      }
+      if (canNavigate) {
+        setCurrentStep(stepIndex);
+      }
+    }
   };
 
   const handleCustomDurationChange = (range: number[]) => {
@@ -150,6 +174,8 @@ export default function ExplorePage() {
         totalSteps={totalSteps}
         steps={steps}
         onBack={() => router.push("/")}
+        onStepClick={handleStepClick}
+        isStepValid={isStepValid}
       />
 
       {/* Contenu de l'étape */}
