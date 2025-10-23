@@ -144,8 +144,8 @@ export default function TVShowDetailPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+        <div className="space-y-4 text-center">
+          <div className="border-primary mx-auto size-12 animate-spin rounded-full border-b-2"></div>
           <p className="text-lg font-medium text-gray-700">
             Chargement des détails...
           </p>
@@ -157,8 +157,8 @@ export default function TVShowDetailPage() {
   if (error || !tvShow) {
     return (
       <div className="flex items-center justify-center">
-        <div className="text-center space-y-4 max-w-md">
-          <div className="text-red-500 text-6xl">⚠️</div>
+        <div className="max-w-md space-y-4 text-center">
+          <div className="text-6xl text-red-500">⚠️</div>
           <h2 className="text-2xl font-bold text-gray-900">
             Série introuvable
           </h2>
@@ -176,7 +176,7 @@ export default function TVShowDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5">
+    <div className="from-primary/5 min-h-screen bg-linear-to-br to-orange-600/5">
       {/* Header avec image de fond */}
       <div
         className="relative h-96 bg-cover bg-center bg-no-repeat"
@@ -204,19 +204,19 @@ export default function TVShowDetailPage() {
         </div>
 
         {/* Informations principales */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+        <div className="absolute right-0 bottom-0 left-0 p-6 text-white">
           <div className="container mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col md:flex-row gap-6 items-end"
+              className="flex flex-col items-end gap-6 md:flex-row"
             >
               {/* Poster */}
               <div className="shrink-0">
                 <img
                   src={getImageUrl(tvShow.poster_path)}
                   alt={tvShow.name}
-                  className="w-48 h-72 object-cover rounded-lg shadow-2xl"
+                  className="h-72 w-48 rounded-lg object-cover shadow-2xl"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = "/placeholder-poster.jpg";
@@ -227,7 +227,7 @@ export default function TVShowDetailPage() {
               {/* Informations */}
               <div className="flex-1 space-y-4">
                 <div>
-                  <h1 className="text-4xl font-bold mb-2">{tvShow.name}</h1>
+                  <h1 className="mb-2 text-4xl font-bold">{tvShow.name}</h1>
                   {tvShow.tagline && (
                     <p className="text-xl text-gray-200 italic">
                       {tvShow.tagline}
@@ -309,7 +309,7 @@ export default function TVShowDetailPage() {
                   <Button
                     onClick={handleAddToFavorites}
                     variant={inFavorites ? "secondary" : "outline"}
-                    className="flex items-center gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20"
+                    className="flex items-center gap-2 border-white/20 bg-white/10 text-white hover:bg-white/20"
                   >
                     <Heart
                       size={20}
@@ -320,7 +320,7 @@ export default function TVShowDetailPage() {
 
                   <Button
                     variant="outline"
-                    className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                    className="border-white/20 bg-white/10 text-white hover:bg-white/20"
                   >
                     <Share2 size={20} />
                   </Button>
@@ -333,9 +333,9 @@ export default function TVShowDetailPage() {
 
       {/* Contenu détaillé */}
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Colonne principale */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="space-y-8 lg:col-span-2">
             {/* Synopsis */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -343,10 +343,10 @@ export default function TVShowDetailPage() {
               transition={{ delay: 0.2 }}
             >
               <Card className="p-6">
-                <h2 className="text-2xl font-bold mb-4 text-gray-900">
+                <h2 className="mb-4 text-2xl font-bold text-gray-900">
                   Synopsis
                 </h2>
-                <p className="text-gray-700 leading-relaxed text-lg">
+                <p className="text-lg leading-relaxed text-gray-700">
                   {tvShow.overview || "Aucun synopsis disponible."}
                 </p>
               </Card>
@@ -360,7 +360,7 @@ export default function TVShowDetailPage() {
                 transition={{ delay: 0.3 }}
               >
                 <Card className="p-6">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+                  <h2 className="mb-4 flex items-center gap-2 text-2xl font-bold text-gray-900">
                     <Tv size={24} />
                     Saisons ({tvShow.number_of_seasons})
                   </h2>
@@ -371,12 +371,12 @@ export default function TVShowDetailPage() {
                       .map((season) => (
                         <div
                           key={season.id}
-                          className="flex gap-4 p-4 bg-gray-50 rounded-lg"
+                          className="flex gap-4 rounded-lg bg-gray-50 p-4"
                         >
                           <img
                             src={getImageUrl(season.poster_path)}
                             alt={season.name}
-                            className="w-16 h-24 object-cover rounded"
+                            className="h-24 w-16 rounded object-cover"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
                               target.src = "/placeholder-poster.jpg";
@@ -384,14 +384,14 @@ export default function TVShowDetailPage() {
                           />
                           <div className="flex-1">
                             <h3 className="font-semibold">{season.name}</h3>
-                            <p className="text-sm text-gray-600 mb-2">
+                            <p className="mb-2 text-sm text-gray-600">
                               {season.episode_count} épisode
                               {season.episode_count > 1 ? "s" : ""}
                               {season.air_date &&
                                 ` • ${formatDate(season.air_date)}`}
                             </p>
                             {season.overview && (
-                              <p className="text-sm text-gray-700 line-clamp-2">
+                              <p className="line-clamp-2 text-sm text-gray-700">
                                 {season.overview}
                               </p>
                             )}
@@ -411,23 +411,23 @@ export default function TVShowDetailPage() {
                 transition={{ delay: 0.4 }}
               >
                 <Card className="p-6">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+                  <h2 className="mb-4 flex items-center gap-2 text-2xl font-bold text-gray-900">
                     <Users size={24} />
                     Casting principal
                   </h2>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                     {tvShow.credits.cast.slice(0, 6).map((actor) => (
                       <div key={actor.id} className="text-center">
                         <img
                           src={getImageUrl(actor.profile_path, "w500")}
                           alt={actor.name}
-                          className="w-20 h-20 rounded-full object-cover mx-auto mb-2"
+                          className="mx-auto mb-2 size-20 rounded-full object-cover"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.src = "/placeholder-avatar.jpg";
                           }}
                         />
-                        <p className="font-semibold text-sm">{actor.name}</p>
+                        <p className="text-sm font-semibold">{actor.name}</p>
                         <p className="text-xs text-gray-600">
                           {actor.character}
                         </p>
@@ -448,7 +448,7 @@ export default function TVShowDetailPage() {
               transition={{ delay: 0.5 }}
             >
               <Card className="p-6">
-                <h3 className="text-xl font-bold mb-4 text-gray-900">
+                <h3 className="mb-4 text-xl font-bold text-gray-900">
                   Informations
                 </h3>
                 <div className="space-y-3 text-sm">
@@ -502,7 +502,7 @@ export default function TVShowDetailPage() {
                 transition={{ delay: 0.6 }}
               >
                 <Card className="p-6">
-                  <h3 className="text-xl font-bold mb-4 text-gray-900">
+                  <h3 className="mb-4 text-xl font-bold text-gray-900">
                     Diffusion
                   </h3>
                   <div className="space-y-2">
@@ -512,7 +512,7 @@ export default function TVShowDetailPage() {
                           <img
                             src={getImageUrl(network.logo_path, "w500")}
                             alt={network.name}
-                            className="w-8 h-8 object-contain"
+                            className="size-8 object-contain"
                           />
                         )}
                         <span className="text-sm">{network.name}</span>
@@ -532,7 +532,7 @@ export default function TVShowDetailPage() {
                   transition={{ delay: 0.7 }}
                 >
                   <Card className="p-6">
-                    <h3 className="text-xl font-bold mb-4 text-gray-900">
+                    <h3 className="mb-4 text-xl font-bold text-gray-900">
                       Production
                     </h3>
                     <div className="space-y-2">
@@ -547,7 +547,7 @@ export default function TVShowDetailPage() {
                               <img
                                 src={getImageUrl(company.logo_path, "w500")}
                                 alt={company.name}
-                                className="w-8 h-8 object-contain"
+                                className="size-8 object-contain"
                               />
                             )}
                             <span className="text-sm">{company.name}</span>

@@ -70,18 +70,18 @@ export default function Navigation() {
   return (
     <>
       {/* Navigation Desktop */}
-      <nav className="hidden md:block fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-sm border-b border-gray-200">
+      <nav className="fixed top-0 right-0 left-0 z-50 hidden border-b border-gray-200 bg-white/10 backdrop-blur-sm md:block">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <div
-              className="flex items-center space-x-2 cursor-pointer"
+              className="flex cursor-pointer items-center space-x-2"
               onClick={() => handleNavigation("/")}
             >
-              <div className="w-8 h-8 bg-linear-to-r from-primary to-orange-500 rounded-lg flex items-center justify-center">
+              <div className="from-primary flex size-8 items-center justify-center rounded-lg bg-linear-to-r to-orange-500">
                 <Film className="text-white" size={20} />
               </div>
-              <span className="text-xl font-bold bg-linear-to-r from-primary to-orange-500 bg-clip-text text-transparent">
+              <span className="from-primary bg-linear-to-r to-orange-500 bg-clip-text text-xl font-bold text-transparent">
                 REKO
               </span>
             </div>
@@ -97,7 +97,7 @@ export default function Navigation() {
                     onClick={() => handleNavigation(item.href)}
                     className={`relative flex items-center gap-2 ${
                       item.active
-                        ? "bg-linear-to-r from-primary to-orange-500 text-white"
+                        ? "from-primary bg-linear-to-r to-orange-500 text-white"
                         : "hover:bg-gray-100"
                     }`}
                   >
@@ -106,7 +106,7 @@ export default function Navigation() {
                     {item.badge && item.badge > 0 && (
                       <Badge
                         variant="secondary"
-                        className="ml-1 bg-orange-500 text-white text-xs"
+                        className="ml-1 bg-orange-500 text-xs text-white"
                       >
                         {item.badge}
                       </Badge>
@@ -121,17 +121,17 @@ export default function Navigation() {
       {/* Navigation Mobile */}
       <div className="md:hidden">
         {/* Header Mobile */}
-        <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
-          <div className="flex items-center justify-between h-16 px-4">
+        <header className="fixed top-0 right-0 left-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur-sm">
+          <div className="flex h-16 items-center justify-between px-4">
             {/* Logo */}
             <div
-              className="flex items-center space-x-2 cursor-pointer"
+              className="flex cursor-pointer items-center space-x-2"
               onClick={() => handleNavigation("/")}
             >
-              <div className="w-8 h-8 bg-linear-to-r from-primary to-orange-500 rounded-lg flex items-center justify-center">
+              <div className="from-primary flex size-8 items-center justify-center rounded-lg bg-linear-to-r to-orange-500">
                 <Film className="text-white" size={20} />
               </div>
-              <span className="text-xl font-bold bg-linear-to-r from-primary to-orange-500 bg-clip-text text-transparent">
+              <span className="from-primary bg-linear-to-r to-orange-500 bg-clip-text text-xl font-bold text-transparent">
                 REKO
               </span>
             </div>
@@ -166,8 +166,8 @@ export default function Navigation() {
           transition={{ type: "tween", duration: 0.3 }}
           className="fixed top-16 right-0 bottom-0 z-50 w-80 bg-white shadow-xl"
         >
-          <div className="p-6 space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">
+          <div className="space-y-4 p-6">
+            <h2 className="mb-6 text-lg font-semibold text-gray-900">
               Navigation
             </h2>
 
@@ -178,9 +178,9 @@ export default function Navigation() {
                   key={item.href}
                   variant={item.active ? "default" : "ghost"}
                   onClick={() => handleNavigation(item.href)}
-                  className={`w-full justify-start gap-3 h-12 ${
+                  className={`h-12 w-full justify-start gap-3 ${
                     item.active
-                      ? "bg-linear-to-r from-primary to-orange-500 text-white"
+                      ? "from-primary bg-linear-to-r to-orange-500 text-white"
                       : "hover:bg-gray-100"
                   }`}
                 >
@@ -199,18 +199,18 @@ export default function Navigation() {
             })}
 
             {/* Statistiques */}
-            <div className="mt-8 pt-6 border-t border-gray-200 space-y-3">
+            <div className="mt-8 space-y-3 border-t border-gray-200 pt-6">
               <h3 className="text-sm font-medium text-gray-700">
                 Statistiques
               </h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <div className="text-lg font-semibold text-primary">
+                <div className="rounded-lg bg-gray-50 p-3 text-center">
+                  <div className="text-primary text-lg font-semibold">
                     {watchlist.length}
                   </div>
                   <div className="text-xs text-gray-600">À regarder</div>
                 </div>
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
+                <div className="rounded-lg bg-gray-50 p-3 text-center">
                   <div className="text-lg font-semibold text-orange-500">
                     {favorites.length}
                   </div>
@@ -222,15 +222,15 @@ export default function Navigation() {
         </motion.div>
       </div>
       {/* Bottom Navigation Mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200">
-        <div className="grid grid-cols-4 h-16">
+      <nav className="fixed right-0 bottom-0 left-0 z-40 border-t border-gray-200 bg-white md:hidden">
+        <div className="grid h-16 grid-cols-4">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             return (
               <button
                 key={item.href}
                 onClick={() => handleNavigation(item.href)}
-                className={`flex flex-col items-center justify-center space-y-1 relative ${
+                className={`relative flex flex-col items-center justify-center space-y-1 ${
                   item.active
                     ? "text-primary"
                     : "text-gray-500 hover:text-gray-700"
@@ -239,12 +239,12 @@ export default function Navigation() {
                 <Icon size={20} />
                 <span className="text-xs font-medium">{item.label}</span>
                 {item.badge && item.badge > 0 && (
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
+                  <div className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-orange-500 text-xs text-white">
                     {item.badge > 99 ? "99+" : item.badge}
                   </div>
                 )}
                 {item.active && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-linear-to-r from-primary to-orange-500 rounded-b-full" />
+                  <div className="from-primary absolute top-0 left-1/2 h-1 w-8 -translate-x-1/2 transform rounded-b-full bg-linear-to-r to-orange-500" />
                 )}
               </button>
             );
@@ -254,3 +254,4 @@ export default function Navigation() {
     </>
   );
 }
+

@@ -36,14 +36,14 @@ export const ContentTypeStep = ({
       exit={{ opacity: 0, y: -20 }}
       className="space-y-6"
     >
-      <div className="text-center space-y-2">
+      <div className="space-y-2 text-center">
         <h2 className="text-3xl font-bold text-gray-900">
           Que voulez-vous regarder ?
         </h2>
         <p className="text-gray-600">Choisissez entre films et séries</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+      <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 md:grid-cols-2">
         {CONTENT_TYPES.map((type) => {
           const Icon = type.icon;
           return (
@@ -53,19 +53,19 @@ export const ContentTypeStep = ({
               whileTap={{ scale: 0.98 }}
             >
               <Card
-                className={`p-8 cursor-pointer transition-all duration-200 h-full ${
+                className={`h-full cursor-pointer p-8 transition-all duration-200 ${
                   selectedContentType === type.id
-                    ? "ring-2 ring-primary bg-primary/5"
+                    ? "ring-primary bg-primary/5 ring-2"
                     : "hover:shadow-lg"
                 }`}
                 onClick={() => onContentTypeSelect(type.id)}
               >
-                <div className="flex flex-col items-center space-y-4 h-full justify-center">
-                  <div className="p-4 rounded-full bg-linear-to-r from-primary to-orange-600 text-white">
+                <div className="flex h-full flex-col items-center justify-center space-y-4">
+                  <div className="from-primary rounded-full bg-linear-to-r to-orange-600 p-4 text-white">
                     <Icon size={32} />
                   </div>
-                  <h3 className="font-semibold text-xl">{type.label}</h3>
-                  <p className="text-gray-600 text-center">
+                  <h3 className="text-xl font-semibold">{type.label}</h3>
+                  <p className="text-center text-gray-600">
                     {type.description}
                   </p>
                 </div>

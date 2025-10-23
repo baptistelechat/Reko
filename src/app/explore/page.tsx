@@ -179,7 +179,7 @@ export default function ExplorePage() {
       />
 
       {/* Contenu de l'étape */}
-      <div className="max-w-4xl mx-auto">
+      <div className="mx-auto max-w-4xl">
         <AnimatePresence mode="wait">{renderCurrentStep()}</AnimatePresence>
       </div>
 

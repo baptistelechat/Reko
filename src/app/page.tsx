@@ -11,29 +11,29 @@ import Link from "next/link";
 const LandingPage = () => {
   const features = [
     {
-      icon: <Sparkles className="w-8 h-8" />,
+      icon: <Sparkles className="size-8" />,
       title: "Recommandations Intelligentes",
       description:
         "Découvrez des films et séries parfaitement adaptés à votre humeur du moment",
     },
     {
-      icon: <Clock className="w-8 h-8" />,
+      icon: <Clock className="size-8" />,
       title: "Adapté à Votre Temps",
       description:
         "Trouvez le contenu idéal selon le temps libre dont vous disposez",
     },
     {
-      icon: <Heart className="w-8 h-8" />,
+      icon: <Heart className="size-8" />,
       title: "Watchlist Personnalisée",
       description:
         "Sauvegardez vos découvertes et créez votre liste de favoris",
     },
   ];
 
-  const moods = MOODS_ARRAY.map(mood => ({
+  const moods = MOODS_ARRAY.map((mood) => ({
     emoji: mood.emoji,
     name: mood.label,
-    color: mood.bgColor
+    color: mood.bgColor,
   }));
 
   return (
@@ -44,16 +44,16 @@ const LandingPage = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto"
+          className="mx-auto max-w-4xl"
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">
+          <h1 className="mb-6 text-5xl font-bold md:text-7xl">
             Découvrez votre{" "}
-            <span className="bg-linear-to-r  from-primary to-orange-500 bg-clip-text text-transparent">
+            <span className="from-primary  bg-linear-to-r to-orange-500 bg-clip-text text-transparent">
               prochaine obsession
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="mx-auto mb-8 max-w-2xl text-xl text-gray-600 md:text-2xl">
             REKO vous recommande des films et séries basés sur votre humeur,
             votre temps libre et vos préférences du moment.
           </p>
@@ -62,20 +62,20 @@ const LandingPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            className="flex flex-col items-center justify-center gap-4 sm:flex-row"
           >
             <Link href="/explore">
               <Button
                 size="lg"
-                className="bg-linear-to-r from-primary to-orange-500 text-white px-8 py-4 text-lg hover:scale-105"
+                className="from-primary bg-linear-to-r to-orange-500 px-8 py-4 text-lg text-white hover:scale-105"
               >
-                <Sparkles className="w-5 h-5 mr-2" />
+                <Sparkles className="mr-2 size-5" />
                 Commencer l'exploration
               </Button>
             </Link>
 
             <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
-              <Play className="w-5 h-5 mr-2" />
+              <Play className="mr-2 size-5" />
               Voir la démo
             </Button>
           </motion.div>
@@ -88,10 +88,10 @@ const LandingPage = () => {
           transition={{ delay: 0.6, duration: 0.8 }}
           className="mt-16"
         >
-          <p className="text-gray-500 mb-6">
+          <p className="mb-6 text-gray-500">
             Choisissez votre humeur du moment
           </p>
-          <div className="grid grid-cols-3 gap-3 max-w-lg mx-auto">
+          <div className="mx-auto grid max-w-lg grid-cols-3 gap-3">
             {moods.map((mood, index) => (
               <motion.div
                 key={mood.name}
@@ -101,7 +101,7 @@ const LandingPage = () => {
               >
                 <Badge
                   variant="secondary"
-                  className={`${mood.color} px-4 py-2 text-sm cursor-pointer hover:scale-105 transition-transform w-full justify-center`}
+                  className={`${mood.color} w-full cursor-pointer justify-center px-4 py-2 text-sm transition-transform hover:scale-105`}
                 >
                   <span className="mr-2">{mood.emoji}</span>
                   {mood.name}
@@ -119,18 +119,18 @@ const LandingPage = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="mb-12 text-center"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="mb-4 text-3xl font-bold md:text-4xl">
             Comment ça marche ?
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-xl text-gray-600">
             Trois étapes simples pour découvrir votre prochaine pépite
             cinématographique
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -139,12 +139,12 @@ const LandingPage = () => {
               transition={{ delay: index * 0.2, duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <Card className="text-center p-6 h-full transition-all hover:-translate-y-1 hover:shadow-xl border-0 shadow-lg">
+              <Card className="h-full border-0 p-6 text-center shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl">
                 <CardContent className="pt-6">
-                  <div className="w-16 h-16 bg-linear-to-br  from-primary to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white">
+                  <div className="from-primary mx-auto mb-4  flex size-16 items-center justify-center rounded-full bg-linear-to-br to-orange-500 text-white">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">
+                  <h3 className="mb-3 text-xl font-semibold">
                     {feature.title}
                   </h3>
                   <p className="text-gray-600">{feature.description}</p>
@@ -162,17 +162,17 @@ const LandingPage = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="mb-12 text-center"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="mb-4 text-3xl font-bold md:text-4xl">
             Films &amp; Séries
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-xl text-gray-600">
             Explorez une vaste collection de contenus adaptés à tous les goûts
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -180,24 +180,24 @@ const LandingPage = () => {
             viewport={{ once: true }}
             className="h-full"
           >
-            <Card className="h-full p-8 transition-all hover:-translate-y-1 hover:shadow-xl border-0 shadow-lg bg-linear-to-br from-violet-50 to-violet-100">
-              <CardContent className="pt-0 h-hull">
-                <div className="flex items-center mb-4">
-                  <Film className="w-8 h-8 text-violet-600 mr-3" />
+            <Card className="h-full border-0 bg-linear-to-br from-violet-50 to-violet-100 p-8 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl">
+              <CardContent className="h-hull pt-0">
+                <div className="mb-4 flex items-center">
+                  <Film className="mr-3 size-8 text-violet-600" />
                   <h3 className="text-2xl font-bold text-violet-800">Films</h3>
                 </div>
-                <p className="text-violet-700 mb-4">
+                <p className="mb-4 text-violet-700">
                   Des blockbusters aux films d'auteur, découvrez des œuvres
                   cinématographiques qui correspondent parfaitement à votre état
                   d'esprit.
                 </p>
               </CardContent>
-                <CardFooter>
-                  <div className="flex items-center text-sm text-violet-600">
-                  <Star className="w-4 h-4 mr-1" />
+              <CardFooter>
+                <div className="flex items-center text-sm text-violet-600">
+                  <Star className="mr-1 size-4" />
                   <span>Recommandations personnalisées</span>
                 </div>
-                </CardFooter>
+              </CardFooter>
             </Card>
           </motion.div>
 
@@ -208,23 +208,25 @@ const LandingPage = () => {
             viewport={{ once: true }}
             className="h-full"
           >
-            <Card className="h-full p-8 transition-all hover:-translate-y-1 hover:shadow-xl border-0 shadow-lg bg-linear-to-br from-orange-50 to-orange-100">
-              <CardContent className="pt-0 h-full">
-                <div className="flex items-center mb-4">
-                  <Tv className="w-8 h-8 text-orange-500 mr-3" />
+            <Card className="h-full border-0 bg-linear-to-br from-orange-50 to-orange-100 p-8 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl">
+              <CardContent className="h-full pt-0">
+                <div className="mb-4 flex items-center">
+                  <Tv className="mr-3 size-8 text-orange-500" />
                   <h3 className="text-2xl font-bold text-orange-800">Séries</h3>
                 </div>
-                <p className="text-orange-500 mb-4">
+                <p className="mb-4 text-orange-500">
                   Plongez dans des univers captivants avec des séries
                   soigneusement sélectionnées selon votre temps disponible et
                   vos envies.
                 </p>
-
               </CardContent>
-          <CardFooter>                <div className="flex items-center text-sm text-orange-500">
-                  <Clock className="w-4 h-4 mr-1" />
+              <CardFooter>
+                {" "}
+                <div className="flex items-center text-sm text-orange-500">
+                  <Clock className="mr-1 size-4" />
                   <span>Adaptées à votre planning</span>
-                </div></CardFooter>
+                </div>
+              </CardFooter>
             </Card>
           </motion.div>
         </div>
@@ -239,12 +241,12 @@ const LandingPage = () => {
           viewport={{ once: true }}
           className="text-center"
         >
-          <Card className="max-w-2xl mx-auto p-8 bg-linear-to-br  from-primary to-orange-500 text-white border-0 shadow-2xl">
+          <Card className="from-primary mx-auto max-w-2xl border-0  bg-linear-to-br to-orange-500 p-8 text-white shadow-2xl">
             <CardContent className="pt-0">
-              <h2 className="text-3xl font-bold mb-4">
+              <h2 className="mb-4 text-3xl font-bold">
                 Prêt à découvrir votre prochaine obsession ?
               </h2>
-              <p className="text-lg mb-6 opacity-90">
+              <p className="mb-6 text-lg opacity-90">
                 Rejoignez des milliers d'utilisateurs qui ont déjà trouvé leurs
                 films et séries préférés grâce à REKO.
               </p>
@@ -254,7 +256,7 @@ const LandingPage = () => {
                   variant="secondary"
                   className="px-8 py-4 text-lg font-semibold"
                 >
-                  <Sparkles className="w-5 h-5 mr-2" />
+                  <Sparkles className="mr-2 size-5" />
                   Commencer maintenant
                 </Button>
               </Link>
@@ -271,7 +273,10 @@ const LandingPage = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <p>&copy; 2025 REKO. Découvrez, regardez, recommencez. Créé par <span className="text-primary font-bold">Baptiste LECHAT</span></p>
+          <p>
+            &copy; 2025 REKO. Découvrez, regardez, recommencez. Créé par{" "}
+            <span className="text-primary font-bold">Baptiste LECHAT</span>
+          </p>
         </motion.div>
       </footer>
     </div>

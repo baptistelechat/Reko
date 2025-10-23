@@ -91,7 +91,7 @@ export default function WatchlistPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="mb-8 flex items-center justify-between">
         <Button
           variant="ghost"
           onClick={() => router.push("/")}
@@ -112,12 +112,12 @@ export default function WatchlistPage() {
 
       {/* Filtres et recherche */}
       <div className="mb-8 space-y-4">
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col gap-4 md:flex-row">
           {/* Recherche */}
           <div className="relative flex-1">
             <Search
               size={20}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute top-1/2 left-3 -translate-y-1/2 transform text-gray-400"
             />
             <Input
               placeholder="Rechercher dans ma watchlist..."
@@ -162,7 +162,7 @@ export default function WatchlistPage() {
             onChange={(e) =>
               setSortBy(e.target.value as "added" | "rating" | "title" | "year")
             }
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white"
+            className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
           >
             <option value="added">Ajouté récemment</option>
             <option value="rating">Note</option>
@@ -206,14 +206,14 @@ export default function WatchlistPage() {
 
       {/* Liste */}
       {filteredAndSortedWatchlist.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-gray-400 text-6xl mb-4">📺</div>
-          <h2 className="text-xl font-semibold text-gray-700 mb-2">
+        <div className="py-12 text-center">
+          <div className="mb-4 text-6xl text-gray-400">📺</div>
+          <h2 className="mb-2 text-xl font-semibold text-gray-700">
             {watchlist.length === 0
               ? "Votre watchlist est vide"
               : "Aucun résultat trouvé"}
           </h2>
-          <p className="text-gray-500 mb-6">
+          <p className="mb-6 text-gray-500">
             {watchlist.length === 0
               ? "Découvrez de nouveaux films et séries à ajouter à votre liste"
               : "Essayez avec d'autres termes de recherche ou filtres"}
@@ -229,7 +229,7 @@ export default function WatchlistPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
         >
           <AnimatePresence>
             {filteredAndSortedWatchlist.map((item, index) => {
@@ -245,13 +245,13 @@ export default function WatchlistPage() {
                   whileHover={{ y: -5 }}
                   className="group"
                 >
-                  <Card className="overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Card className="overflow-hidden bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
                     {/* Poster */}
                     <div className="relative aspect-2/3 overflow-hidden">
                       <img
                         src={getImageUrl(item.poster_path)}
                         alt={item.title}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.src = "/placeholder-poster.jpg";
@@ -259,7 +259,7 @@ export default function WatchlistPage() {
                       />
 
                       {/* Overlay avec action de suppression */}
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         <Button
                           size="sm"
                           variant="destructive"
@@ -274,7 +274,7 @@ export default function WatchlistPage() {
                       <div className="absolute top-2 left-2">
                         <Badge
                           variant="secondary"
-                          className="bg-black/70 text-white border-none flex items-center gap-1"
+                          className="flex items-center gap-1 border-none bg-black/70 text-white"
                         >
                           <TypeIcon size={12} />
                           {getTypeLabel(item.type)}
@@ -283,7 +283,7 @@ export default function WatchlistPage() {
 
                       {/* Note */}
                       <div className="absolute top-2 right-2">
-                        <div className="bg-black/70 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                        <div className="flex items-center gap-1 rounded-full bg-black/70 px-2 py-1 text-xs font-semibold text-white">
                           <Star
                             size={12}
                             className="fill-yellow-400 text-yellow-400"
@@ -294,15 +294,15 @@ export default function WatchlistPage() {
 
                       {/* Date d'ajout */}
                       <div className="absolute bottom-2 left-2">
-                        <div className="bg-black/70 text-white px-2 py-1 rounded text-xs">
+                        <div className="rounded bg-black/70 px-2 py-1 text-xs text-white">
                           Ajouté le {formatAddedDate(item.addedAt)}
                         </div>
                       </div>
                     </div>
 
                     {/* Informations */}
-                    <div className="p-4 space-y-2">
-                      <h3 className="font-semibold text-sm line-clamp-2 text-gray-900 group-hover:text-primary transition-colors">
+                    <div className="space-y-2 p-4">
+                      <h3 className="group-hover:text-primary line-clamp-2 text-sm font-semibold text-gray-900 transition-colors">
                         {item.title}
                       </h3>
 
@@ -325,7 +325,7 @@ export default function WatchlistPage() {
 
       {/* Actions en bas */}
       {watchlist.length > 0 && (
-        <div className="mt-12 text-center space-y-4">
+        <div className="mt-12 space-y-4 text-center">
           <div className="space-x-4">
             <Button
               onClick={() => router.push("/favorites")}

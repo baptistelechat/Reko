@@ -95,8 +95,8 @@ export default function ResultsPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+        <div className="space-y-4 text-center">
+          <div className="border-primary mx-auto size-12 animate-spin rounded-full border-b-2"></div>
           <p className="text-lg font-medium text-gray-700">
             Recherche de recommandations...
           </p>
@@ -111,8 +111,8 @@ export default function ResultsPage() {
   if (error) {
     return (
       <div className="flex items-center justify-center">
-        <div className="text-center space-y-4 max-w-md">
-          <div className="text-red-500 text-6xl">⚠️</div>
+        <div className="max-w-md space-y-4 text-center">
+          <div className="text-6xl text-red-500">⚠️</div>
           <h2 className="text-2xl font-bold text-gray-900">
             Oups ! Une erreur est survenue
           </h2>
@@ -136,10 +136,10 @@ export default function ResultsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-primary/5 to-orange-600/5">
+    <div className="from-primary/5 min-h-screen bg-linear-to-br to-orange-600/5">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="mb-8 flex items-center justify-between">
           <Button
             variant="ghost"
             onClick={() => router.push("/explore")}
@@ -153,7 +153,7 @@ export default function ResultsPage() {
             <h1 className="text-2xl font-bold text-gray-900">
               Vos recommandations
             </h1>
-            <div className="flex items-center justify-center gap-2 mt-1">
+            <div className="mt-1 flex items-center justify-center gap-2">
               <Badge className={MOODS_CONFIG[preferences.mood!]?.bgColor || ""}>
                 {MOODS_CONFIG[preferences.mood!]?.label || preferences.mood}
               </Badge>
@@ -175,12 +175,12 @@ export default function ResultsPage() {
 
         {/* Résultats */}
         {recommendations.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">🎬</div>
-            <h2 className="text-xl font-semibold text-gray-700 mb-2">
+          <div className="py-12 text-center">
+            <div className="mb-4 text-6xl text-gray-400">🎬</div>
+            <h2 className="mb-2 text-xl font-semibold text-gray-700">
               Aucune recommandation trouvée
             </h2>
-            <p className="text-gray-500 mb-6">
+            <p className="mb-6 text-gray-500">
               Essayez avec d'autres préférences
             </p>
             <Button
@@ -194,7 +194,7 @@ export default function ResultsPage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
           >
             {recommendations.map((content, index) => {
               const title = "title" in content ? content.title : content.name;
@@ -213,13 +213,13 @@ export default function ResultsPage() {
                   whileHover={{ y: -5 }}
                   className="group"
                 >
-                  <Card className="overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Card className="overflow-hidden bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
                     {/* Poster */}
                     <div className="relative aspect-2/3 overflow-hidden">
                       <img
                         src={getImageUrl(content.poster_path)}
                         alt={title}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.src = "/placeholder-poster.jpg";
@@ -227,7 +227,7 @@ export default function ResultsPage() {
                       />
 
                       {/* Overlay avec actions */}
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         <div className="flex space-x-2">
                           <Button
                             size="sm"
@@ -237,7 +237,7 @@ export default function ResultsPage() {
                               content.id,
                               "title" in content ? "movie" : "tv"
                             )}
-                            className="bg-white/90 hover:bg-white text-gray-900"
+                            className="bg-white/90 text-gray-900 hover:bg-white"
                           >
                             {isInWatchlist(
                               content.id,
@@ -256,7 +256,7 @@ export default function ResultsPage() {
                               content.id,
                               "title" in content ? "movie" : "tv"
                             )}
-                            className="bg-white/90 hover:bg-white text-gray-900"
+                            className="bg-white/90 text-gray-900 hover:bg-white"
                           >
                             <Heart
                               size={16}
@@ -277,7 +277,7 @@ export default function ResultsPage() {
                       <div className="absolute top-2 left-2">
                         <Badge
                           variant="secondary"
-                          className="bg-black/70 text-white border-none"
+                          className="border-none bg-black/70 text-white"
                         >
                           {isMovie ? "Film" : "Série"}
                         </Badge>
@@ -285,7 +285,7 @@ export default function ResultsPage() {
 
                       {/* Note */}
                       <div className="absolute top-2 right-2">
-                        <div className="bg-black/70 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                        <div className="flex items-center gap-1 rounded-full bg-black/70 px-2 py-1 text-xs font-semibold text-white">
                           <Star
                             size={12}
                             className="fill-yellow-400 text-yellow-400"
@@ -296,8 +296,8 @@ export default function ResultsPage() {
                     </div>
 
                     {/* Informations */}
-                    <div className="p-4 space-y-2">
-                      <h3 className="font-semibold text-sm line-clamp-2 text-gray-900 group-hover:text-primary transition-colors">
+                    <div className="space-y-2 p-4">
+                      <h3 className="group-hover:text-primary line-clamp-2 text-sm font-semibold text-gray-900 transition-colors">
                         {title}
                       </h3>
 
@@ -317,7 +317,7 @@ export default function ResultsPage() {
 
                       {/* Description courte */}
                       {content.overview && (
-                        <p className="text-xs text-gray-600 line-clamp-3">
+                        <p className="line-clamp-3 text-xs text-gray-600">
                           {content.overview}
                         </p>
                       )}
@@ -331,7 +331,7 @@ export default function ResultsPage() {
 
         {/* Actions en bas */}
         {recommendations.length > 0 && (
-          <div className="mt-12 text-center space-y-4">
+          <div className="mt-12 space-y-4 text-center">
             <p className="text-gray-600">
               {recommendations.length} recommandation
               {recommendations.length > 1 ? "s" : ""} trouvée

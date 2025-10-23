@@ -19,7 +19,7 @@ export const StepNavigation = ({
   onNext,
 }: StepNavigationProps) => {
   return (
-    <div className="max-w-4xl mx-auto mt-12">
+    <div className="mx-auto mt-12 max-w-4xl">
       <div className="flex justify-between">
         <Button
           variant="outline"
@@ -34,7 +34,7 @@ export const StepNavigation = ({
         <Button
           onClick={onNext}
           disabled={!canProceed}
-          className="flex items-center gap-2 bg-linear-to-r from-primary to-orange-600 hover:from-primary/90 hover:to-orange-600/90"
+          className="from-primary hover:from-primary/90 flex items-center gap-2 bg-linear-to-r to-orange-600 hover:to-orange-600/90"
         >
           {currentStep === totalSteps - 1 ? "Découvrir" : "Suivant"}
           <ArrowRight size={20} />

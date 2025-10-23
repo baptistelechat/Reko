@@ -52,14 +52,14 @@ export const FreeTimeStep = ({
       exit={{ opacity: 0, y: -20 }}
       className="space-y-6"
     >
-      <div className="text-center space-y-2">
+      <div className="space-y-2 text-center">
         <h2 className="text-3xl font-bold text-gray-900">
           Combien de temps avez-vous ?
         </h2>
         <p className="text-gray-600">Sélectionnez la durée qui vous convient</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {FREE_TIME_OPTIONS.map((option) => (
           <motion.div
             key={option.id}
@@ -67,20 +67,20 @@ export const FreeTimeStep = ({
             whileTap={{ scale: 0.98 }}
           >
             <Card
-              className={`p-6 cursor-pointer transition-all duration-200 ${
+              className={`cursor-pointer p-6 transition-all duration-200 ${
                 selectedFreeTime === option.id
-                  ? "ring-2 ring-primary bg-primary/5"
+                  ? "ring-primary bg-primary/5 ring-2"
                   : "hover:shadow-lg"
               }`}
               onClick={() => onFreeTimeSelect(option.id)}
             >
               <div className="flex flex-col items-center space-y-3">
-                <div className="p-3 rounded-full bg-orange-600 text-white">
+                <div className="rounded-full bg-orange-600 p-3 text-white">
                   <Clock size={24} />
                 </div>
-                <h3 className="font-semibold text-lg">{option.label}</h3>
+                <h3 className="text-lg font-semibold">{option.label}</h3>
                 <Badge variant="secondary">{option.duration}</Badge>
-                <p className="text-sm text-gray-600 text-center">
+                <p className="text-center text-sm text-gray-600">
                   {option.description}
                 </p>
               </div>
@@ -92,12 +92,12 @@ export const FreeTimeStep = ({
       <motion.div
         initial={{ opacity: 0, height: 0 }}
         animate={{ opacity: 1, height: "auto" }}
-        className={`rounded-lg p-6 space-y-4 bg-gray-50 ${
-          isCustomDuration ? "outline-2 outline-primary" : ""
+        className={`space-y-4 rounded-lg bg-gray-50 p-6 ${
+          isCustomDuration ? "outline-primary outline-2" : ""
         }`}
         onClick={onCustomDurationToggle}
       >
-        <h4 className="font-semibold text-center">
+        <h4 className="text-center font-semibold">
           {isCustomDuration
             ? "Durée personnalisée sélectionnée"
             : "Durée personnalisée"}

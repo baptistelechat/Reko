@@ -18,7 +18,7 @@ export const MoodStep = ({ selectedMood, onMoodSelect }: MoodStepProps) => {
       exit={{ opacity: 0, y: -20 }}
       className="space-y-6"
     >
-      <div className="text-center space-y-2">
+      <div className="space-y-2 text-center">
         <h2 className="text-3xl font-bold text-gray-900">
           Comment vous sentez-vous ?
         </h2>
@@ -27,7 +27,7 @@ export const MoodStep = ({ selectedMood, onMoodSelect }: MoodStepProps) => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {MOODS_ARRAY.map((mood) => {
           const Icon = mood.icon;
           return (
@@ -37,19 +37,19 @@ export const MoodStep = ({ selectedMood, onMoodSelect }: MoodStepProps) => {
               whileTap={{ scale: 0.98 }}
             >
               <Card
-                className={`p-6 cursor-pointer transition-all duration-200 ${
+                className={`cursor-pointer p-6 transition-all duration-200 ${
                   selectedMood === mood.id
-                    ? "ring-2 ring-primary bg-primary/5"
+                    ? "ring-primary bg-primary/5 ring-2"
                     : "hover:shadow-lg"
                 }`}
                 onClick={() => onMoodSelect(mood.id)}
               >
                 <div className="flex flex-col items-center space-y-3">
-                  <div className={`p-3 rounded-full ${mood.color} text-white`}>
+                  <div className={`rounded-full p-3 ${mood.color} text-white`}>
                     <Icon size={24} />
                   </div>
-                  <h3 className="font-semibold text-lg">{mood.label}</h3>
-                  <p className="text-sm text-gray-600 text-center">
+                  <h3 className="text-lg font-semibold">{mood.label}</h3>
+                  <p className="text-center text-sm text-gray-600">
                     {mood.description}
                   </p>
                 </div>
