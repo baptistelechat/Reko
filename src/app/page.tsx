@@ -7,8 +7,10 @@ import { MOODS_ARRAY } from "@/constants/moods";
 import { motion } from "framer-motion";
 import { Clock, Film, Heart, Play, Sparkles, Star, Tv } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const LandingPage = () => {
+  const router = useRouter();
   const features = [
     {
       icon: <Sparkles className="size-8" />,
@@ -34,7 +36,12 @@ const LandingPage = () => {
     emoji: mood.emoji,
     name: mood.label,
     color: mood.bgColor,
+    id: mood.id,
   }));
+
+  const handleMoodClick = (moodId: string) => {
+    router.push(`/explore?mood=${moodId}&step=1`);
+  };
 
   return (
     <div>
@@ -102,6 +109,7 @@ const LandingPage = () => {
                 <Badge
                   variant="secondary"
                   className={`${mood.color} w-full cursor-pointer justify-center px-4 py-2 text-sm transition-transform hover:scale-105`}
+                  onClick={() => handleMoodClick(mood.id)}
                 >
                   <span className="mr-2">{mood.emoji}</span>
                   {mood.name}

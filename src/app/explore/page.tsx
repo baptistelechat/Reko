@@ -1,15 +1,15 @@
 "use client";
 
+import { ProgressHeader } from "@/app/explore/components/ProgressHeader";
 import { ContentTypeStep } from "@/app/explore/components/step/ContentTypeStep";
 import { FreeTimeStep } from "@/app/explore/components/step/FreeTimeStep";
 import { MoodStep } from "@/app/explore/components/step/MoodStep";
-import { ProgressHeader } from "@/app/explore/components/ProgressHeader";
 import { StepNavigation } from "@/app/explore/components/StepNavigation";
 import { useAppStore } from "@/store/useAppStore";
 import { ContentType, FREE_TIME_TO_DURATION, FreeTime, Mood } from "@/types";
 import { AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const classifyRange = (range: number[]): FreeTime => {
   const [min, max] = range;
@@ -21,6 +21,7 @@ const classifyRange = (range: number[]): FreeTime => {
 
 export default function ExplorePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { setMood, setFreeTime, setContentType, fetchRecommendations } =
     useAppStore();
 
@@ -40,6 +41,23 @@ export default function ExplorePage() {
 
   const steps = ["Humeur", "Temps libre", "Type de contenu"];
   const totalSteps = steps.length;
+
+  // Handle URL parameters on component mount
+  useEffect(() => {
+    const moodParam = searchParams.get("mood");
+    const stepParam = searchParams.get("step");
+
+    if (moodParam) {
+      setSelectedMood(moodParam as Mood);
+    }
+
+    if (stepParam) {
+      const stepIndex = parseInt(stepParam, 10);
+      if (stepIndex >= 0 && stepIndex < totalSteps) {
+        setCurrentStep(stepIndex);
+      }
+    }
+  }, [searchParams, totalSteps]);
 
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
