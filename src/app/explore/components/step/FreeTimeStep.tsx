@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { FreeTime } from "@/types";
 import { motion } from "framer-motion";
-import { Clock } from "lucide-react";
+import { Clock10, Clock2, Clock4 } from "lucide-react";
 
 const FREE_TIME_OPTIONS = [
   {
@@ -13,18 +13,21 @@ const FREE_TIME_OPTIONS = [
     label: "Court",
     duration: "< 2h",
     description: "Un épisode ou un film court",
+    icon: Clock2,
   },
   {
     id: "medium" as FreeTime,
     label: "Moyen",
     duration: "2-3h",
     description: "Un bon film ou quelques épisodes",
+    icon: Clock4,
   },
   {
     id: "long" as FreeTime,
     label: "Long",
     duration: "> 3h",
     description: "Une soirée complète ou un marathon",
+    icon: Clock10,
   },
 ];
 
@@ -76,7 +79,7 @@ export const FreeTimeStep = ({
             >
               <div className="flex flex-col items-center space-y-3">
                 <div className="rounded-full bg-orange-600 p-3 text-white">
-                  <Clock size={24} />
+                  <option.icon size={24} />
                 </div>
                 <h3 className="text-lg font-semibold">{option.label}</h3>
                 <Badge variant="secondary">{option.duration}</Badge>
