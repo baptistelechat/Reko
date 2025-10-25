@@ -22,14 +22,16 @@ import { useEffect } from "react";
 export default function ResultsPage() {
   const router = useRouter();
   const {
+    preferences,
     currentRecommendations: recommendations,
+    fetchRecommendations,
     isLoading,
     error,
-    preferences,
-    fetchRecommendations,
     addToWatchlist,
-    addToFavorites,
+    removeFromWatchlist,
     isInWatchlist,
+    addToFavorites,
+    removeFromFavorites,
     isInFavorites,
   } = useAppStore();
 
@@ -41,6 +43,10 @@ export default function ResultsPage() {
 
   const handleRefresh = async () => {
     await fetchRecommendations();
+  };
+
+  const handleNewSearch = () => {
+    router.push("/explore");
   };
 
   const handleAddToWatchlist = (content: Movie | TVShow) => {
@@ -142,7 +148,7 @@ export default function ResultsPage() {
         <div className="mb-8 flex items-center justify-between">
           <Button
             variant="ghost"
-            onClick={() => router.push("/explore")}
+            onClick={handleNewSearch}
             className="flex items-center gap-2"
           >
             <ArrowLeft size={20} />
@@ -184,7 +190,7 @@ export default function ResultsPage() {
               Essayez avec d'autres préférences
             </p>
             <Button
-              onClick={() => router.push("/explore")}
+              onClick={handleNewSearch}
               className="bg-primary hover:bg-primary/90"
             >
               Nouvelle recherche

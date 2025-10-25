@@ -16,26 +16,39 @@ export default function ExplorePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { currentStep, setCurrentStep, setSelectedMood } = useAppStore();
+  const { currentStep, setCurrentStep, setSelectedMood, resetExploreForm } =
+    useAppStore();
 
   const totalSteps = STEPS.length;
-  
-  // Handle URL parameters on component mount
+
+  // Handle URL parameters on component mount and reset form if no specific params
   useEffect(() => {
     const moodParam = searchParams.get("mood");
     const stepParam = searchParams.get("step");
 
-    if (moodParam) {
-      setSelectedMood(moodParam as Mood);
-    }
+    // Si aucun paramètre URL spécifique, réinitialiser le formulaire
+    if (!moodParam && !stepParam) {
+      resetExploreForm();
+    } else {
+      // Sinon, appliquer les paramètres URL
+      if (moodParam) {
+        setSelectedMood(moodParam as Mood);
+      }
 
-    if (stepParam) {
-      const stepIndex = parseInt(stepParam, 10);
-      if (stepIndex >= 0 && stepIndex < totalSteps) {
-        setCurrentStep(stepIndex);
+      if (stepParam) {
+        const stepIndex = parseInt(stepParam, 10);
+        if (stepIndex >= 0 && stepIndex < totalSteps) {
+          setCurrentStep(stepIndex);
+        }
       }
     }
-  }, [searchParams, totalSteps, setSelectedMood, setCurrentStep]);
+  }, [
+    searchParams,
+    totalSteps,
+    setSelectedMood,
+    setCurrentStep,
+    resetExploreForm,
+  ]);
 
   const renderCurrentStep = () => {
     switch (currentStep) {
