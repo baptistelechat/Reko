@@ -2,7 +2,7 @@ import { FreeTime } from "@/types";
 import { Clock10, Clock2, Clock4, LucideProps } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
-interface FreeTimeOptions {
+interface FreeTimeOption {
   id: FreeTime;
   label: string;
   duration: string;
@@ -12,7 +12,7 @@ interface FreeTimeOptions {
   >;
 }
 
-export const FREE_TIME_OPTIONS = [
+export const FREE_TIME_OPTIONS: FreeTimeOption[] = [
   {
     id: "short" as FreeTime,
     label: "Court",

@@ -1,6 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { useAppStore } from "@/store/useAppStore";
 import { ContentType } from "@/types";
 import { motion } from "framer-motion";
 import { Film, Tv } from "lucide-react";
@@ -20,15 +21,9 @@ const CONTENT_TYPES = [
   },
 ];
 
-interface ContentTypeStepProps {
-  selectedContentType: ContentType | null;
-  onContentTypeSelect: (contentType: ContentType) => void;
-}
+export const ContentTypeStep = () => {
+  const { selectedContentType, setSelectedContentType } = useAppStore();
 
-export const ContentTypeStep = ({
-  selectedContentType,
-  onContentTypeSelect,
-}: ContentTypeStepProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -58,7 +53,7 @@ export const ContentTypeStep = ({
                     ? "ring-primary bg-primary/5 ring-2"
                     : "hover:shadow-lg"
                 }`}
-                onClick={() => onContentTypeSelect(type.id)}
+                onClick={() => setSelectedContentType(type.id)}
               >
                 <div className="flex h-full flex-col items-center justify-center space-y-4">
                   <div className="from-primary rounded-full bg-linear-to-r to-orange-600 p-4 text-white">

@@ -2,15 +2,12 @@
 
 import { Card } from "@/components/ui/card";
 import { MOODS_ARRAY } from "@/constants/moods";
-import { Mood } from "@/types";
+import { useAppStore } from "@/store/useAppStore";
 import { motion } from "framer-motion";
 
-interface MoodStepProps {
-  selectedMood: Mood | null;
-  onMoodSelect: (mood: Mood) => void;
-}
+export const MoodStep = () => {
+  const { selectedMood, setSelectedMood } = useAppStore();
 
-export const MoodStep = ({ selectedMood, onMoodSelect }: MoodStepProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -42,7 +39,7 @@ export const MoodStep = ({ selectedMood, onMoodSelect }: MoodStepProps) => {
                     ? "ring-primary bg-primary/5 ring-2"
                     : "hover:shadow-lg"
                 }`}
-                onClick={() => onMoodSelect(mood.id)}
+                onClick={() => setSelectedMood(mood.id)}
               >
                 <div className="flex flex-col items-center space-y-3">
                   <div className={`rounded-full p-3 ${mood.color} text-white`}>

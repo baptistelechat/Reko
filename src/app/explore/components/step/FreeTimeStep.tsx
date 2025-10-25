@@ -4,31 +4,35 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { FREE_TIME_OPTIONS } from "@/constants/freeTime";
-import { MOODS_ARRAY, MOODS_CONFIG } from "@/constants/moods";
-import { FreeTime, Mood } from "@/types";
+import { MOODS_ARRAY } from "@/constants/moods";
+import { useAppStore } from "@/store/useAppStore";
+import { FreeTime } from "@/types";
 import { motion } from "framer-motion";
 
-interface FreeTimeStepProps {
-  selectedMood: Mood | null;
-  selectedFreeTime: FreeTime | null;
-  isCustomDuration: boolean;
-  customDurationRange: number[];
-  onFreeTimeSelect: (freeTime: FreeTime) => void;
-  onCustomDurationToggle: () => void;
-  onCustomDurationChange: (range: number[]) => void;
-}
-
-export const FreeTimeStep = ({
-  selectedMood,
-  selectedFreeTime,
-  isCustomDuration,
-  customDurationRange,
-  onFreeTimeSelect,
-  onCustomDurationToggle,
-  onCustomDurationChange,
-}: FreeTimeStepProps) => {
+export const FreeTimeStep = () => {
+  const {
+    selectedMood,
+    selectedFreeTime,
+    isCustomDuration,
+    customDurationRange,
+    setSelectedFreeTime,
+    setIsCustomDuration,
+    setCustomDurationRange,
+  } = useAppStore();
 
   const mood = MOODS_ARRAY.find((mood) => mood.id === selectedMood);
+
+  const handleFreeTimeSelect = (freeTimeId: string) => {
+    setSelectedFreeTime(freeTimeId as FreeTime);
+  };
+
+  const handleCustomDurationToggle = () => {
+    setIsCustomDuration(true);
+  };
+
+  const handleCustomDurationChange = (range: number[]) => {
+    setCustomDurationRange(range);
+  };
 
   return (
     <motion.div
@@ -45,7 +49,7 @@ export const FreeTimeStep = ({
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {FREE_TIME_OPTIONS.map((option, index) => (
+        {FREE_TIME_OPTIONS.map((option) => (
           <motion.div
             key={option.id}
             whileHover={{ scale: 1.02 }}
@@ -57,11 +61,13 @@ export const FreeTimeStep = ({
                   ? "ring-primary bg-primary/5 ring-2"
                   : "hover:shadow-lg"
               }`}
-              onClick={() => onFreeTimeSelect(option.id)}
+              onClick={() => handleFreeTimeSelect(option.id)}
             >
               <div className="flex flex-col items-center space-y-3">
                 <div
-                  className={`rounded-full p-3 text-white ${mood?.colorFreeTime[option.id]}`}
+                  className={`rounded-full p-3 text-white ${
+                    mood?.colorFreeTime[option.id]
+                  }`}
                 >
                   <option.icon size={24} />
                 </div>
@@ -82,7 +88,7 @@ export const FreeTimeStep = ({
         className={`space-y-4 rounded-lg bg-gray-50 p-6 ${
           isCustomDuration ? "outline-primary outline-2" : ""
         }`}
-        onClick={onCustomDurationToggle}
+        onClick={handleCustomDurationToggle}
       >
         <h4 className="text-center font-semibold">
           {isCustomDuration
@@ -92,7 +98,7 @@ export const FreeTimeStep = ({
         <div className="space-y-2">
           <Slider
             value={customDurationRange}
-            onValueChange={onCustomDurationChange}
+            onValueChange={handleCustomDurationChange}
             max={300}
             min={0}
             step={15}

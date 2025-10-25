@@ -5,11 +5,12 @@ import { ContentTypeStep } from "@/app/explore/components/step/ContentTypeStep";
 import { FreeTimeStep } from "@/app/explore/components/step/FreeTimeStep";
 import { MoodStep } from "@/app/explore/components/step/MoodStep";
 import { StepNavigation } from "@/app/explore/components/StepNavigation";
+import { STEPS } from "@/constants/steps";
 import { useAppStore } from "@/store/useAppStore";
-import { ContentType, FREE_TIME_TO_DURATION, FreeTime, Mood } from "@/types";
+import { FreeTime, Mood } from "@/types";
 import { AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const classifyRange = (range: number[]): FreeTime => {
   const [min, max] = range;
@@ -22,25 +23,23 @@ const classifyRange = (range: number[]): FreeTime => {
 export default function ExplorePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setMood, setFreeTime, setContentType, fetchRecommendations } =
-    useAppStore();
 
-  const [currentStep, setCurrentStep] = useState(0);
-  const [selectedMood, setSelectedMood] = useState<Mood | null>(null);
-  const [selectedFreeTime, setSelectedFreeTime] = useState<FreeTime | null>(
-    null
-  );
-  const [selectedContentType, setSelectedContentType] =
-    useState<ContentType | null>(null);
-  const [isCustomDuration, setIsCustomDuration] = useState(false);
+  const {
+    currentStep,
+    selectedMood,
+    selectedFreeTime,
+    selectedContentType,
+    isCustomDuration,
+    customDurationRange,
+    setCurrentStep,
+    setSelectedMood,
+    setMood,
+    setFreeTime,
+    setContentType,
+    fetchRecommendations,
+  } = useAppStore();
 
-  const [customDurationRange, setCustomDurationRange] = useState<number[]>([
-    FREE_TIME_TO_DURATION["short"].min,
-    FREE_TIME_TO_DURATION["short"].max,
-  ]);
-
-  const steps = ["Humeur", "Temps libre", "Type de contenu"];
-  const totalSteps = steps.length;
+  const totalSteps = STEPS.length;
 
   // Handle URL parameters on component mount
   useEffect(() => {
@@ -57,7 +56,7 @@ export default function ExplorePage() {
         setCurrentStep(stepIndex);
       }
     }
-  }, [searchParams, totalSteps]);
+  }, [searchParams, totalSteps, setSelectedMood, setCurrentStep]);
 
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
@@ -112,20 +111,6 @@ export default function ExplorePage() {
     return isStepValid(currentStep);
   };
 
-  const handleFreeTimeSelect = (freeTime: FreeTime) => {
-    setSelectedFreeTime(freeTime);
-    setIsCustomDuration(false);
-    setCustomDurationRange([
-      FREE_TIME_TO_DURATION[freeTime].min,
-      Math.min(FREE_TIME_TO_DURATION[freeTime].max, 300),
-    ]);
-  };
-
-  const handleCustomDurationToggle = () => {
-    setIsCustomDuration(true);
-    setSelectedFreeTime(null);
-  };
-
   const handleStepClick = (stepIndex: number) => {
     // Permettre de naviguer vers n'importe quelle étape si toutes les étapes intermédiaires sont valides
     if (stepIndex <= currentStep) {
@@ -146,40 +131,14 @@ export default function ExplorePage() {
     }
   };
 
-  const handleCustomDurationChange = (range: number[]) => {
-    setCustomDurationRange(range);
-    setSelectedFreeTime(null);
-    setIsCustomDuration(true);
-  };
-
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 0:
-        return (
-          <MoodStep
-            selectedMood={selectedMood}
-            onMoodSelect={setSelectedMood}
-          />
-        );
+        return <MoodStep />;
       case 1:
-        return (
-          <FreeTimeStep
-            selectedMood={selectedMood}
-            selectedFreeTime={selectedFreeTime}
-            isCustomDuration={isCustomDuration}
-            customDurationRange={customDurationRange}
-            onFreeTimeSelect={handleFreeTimeSelect}
-            onCustomDurationToggle={handleCustomDurationToggle}
-            onCustomDurationChange={handleCustomDurationChange}
-          />
-        );
+        return <FreeTimeStep />;
       case 2:
-        return (
-          <ContentTypeStep
-            selectedContentType={selectedContentType}
-            onContentTypeSelect={setSelectedContentType}
-          />
-        );
+        return <ContentTypeStep />;
       default:
         return null;
     }
@@ -191,7 +150,7 @@ export default function ExplorePage() {
       <ProgressHeader
         currentStep={currentStep}
         totalSteps={totalSteps}
-        steps={steps}
+        steps={STEPS}
         onBack={() => router.push("/")}
         onStepClick={handleStepClick}
         isStepValid={isStepValid}

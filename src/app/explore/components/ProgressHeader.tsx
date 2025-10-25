@@ -91,7 +91,10 @@ export const ProgressHeader = ({
               >
                 {index + 1}
               </div>
-              <span className="hidden font-medium md:block">{step}</span>
+              <span className="hidden font-medium md:block">
+                {step}
+                {}
+              </span>
             </div>
           );
         })}

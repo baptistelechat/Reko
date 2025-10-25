@@ -9,21 +9,6 @@ import {
   Zap,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
-import colors from "tailwindcss/colors";
-
-// Types basés sur les couleurs officielles Tailwind CSS
-type TailwindColor = keyof typeof colors;
-
-// Helper function pour générer les couleurs
-const createColorConfig = (baseColor: TailwindColor) => ({
-  color: `bg-${baseColor}-500` as const,
-  bgColor: `bg-${baseColor}-100 text-${baseColor}-800` as const,
-  colorFreeTime: {
-    short: `bg-${baseColor}-500` as const,
-    medium: `bg-${baseColor}-700` as const,
-    long: `bg-${baseColor}-950` as const,
-  } as Record<FreeTime, string>,
-});
 
 export interface MoodConfig {
   id: Mood;
@@ -44,7 +29,13 @@ export const MOODS_CONFIG: Record<Mood, MoodConfig> = {
     label: "Joyeux",
     emoji: "😊",
     icon: Sun,
-    ...createColorConfig("yellow"),
+    color: "bg-yellow-500",
+    bgColor: "bg-yellow-100 text-yellow-800",
+    colorFreeTime: {
+      short: "bg-yellow-500",
+      medium: "bg-yellow-700",
+      long: "bg-yellow-950",
+    },
     description: "Envie de rire et de bonne humeur",
   },
   sad: {
@@ -52,7 +43,13 @@ export const MOODS_CONFIG: Record<Mood, MoodConfig> = {
     label: "Mélancolique",
     emoji: "😢",
     icon: Moon,
-    ...createColorConfig("blue"),
+    color: "bg-blue-500",
+    bgColor: "bg-blue-100 text-blue-800",
+    colorFreeTime: {
+      short: "bg-blue-500",
+      medium: "bg-blue-700",
+      long: "bg-blue-950",
+    },
     description: "Besoin d'émotions profondes",
   },
   excited: {
@@ -60,7 +57,13 @@ export const MOODS_CONFIG: Record<Mood, MoodConfig> = {
     label: "Aventureux",
     emoji: "🚀",
     icon: Zap,
-    ...createColorConfig("green"),
+    color: "bg-green-500",
+    bgColor: "bg-green-100 text-green-800",
+    colorFreeTime: {
+      short: "bg-green-500",
+      medium: "bg-green-700",
+      long: "bg-green-950",
+    },
     description: "Soif d'action et d'aventure",
   },
   romantic: {
@@ -68,7 +71,13 @@ export const MOODS_CONFIG: Record<Mood, MoodConfig> = {
     label: "Romantique",
     emoji: "💕",
     icon: Heart,
-    ...createColorConfig("pink"),
+    color: "bg-pink-500",
+    bgColor: "bg-pink-100 text-pink-800",
+    colorFreeTime: {
+      short: "bg-pink-500",
+      medium: "bg-pink-700",
+      long: "bg-pink-950",
+    },
     description: "Envie d'amour et de tendresse",
   },
   chill: {
@@ -76,7 +85,13 @@ export const MOODS_CONFIG: Record<Mood, MoodConfig> = {
     label: "Détendu",
     emoji: "😴",
     icon: Coffee,
-    ...createColorConfig("purple"),
+    color: "bg-purple-500",
+    bgColor: "bg-purple-100 text-purple-800",
+    colorFreeTime: {
+      short: "bg-purple-500",
+      medium: "bg-purple-700",
+      long: "bg-purple-950",
+    },
     description: "Moment de relaxation",
   },
   thriller: {
@@ -84,7 +99,13 @@ export const MOODS_CONFIG: Record<Mood, MoodConfig> = {
     label: "Frissons",
     emoji: "😱",
     icon: Skull,
-    ...createColorConfig("red"),
+    color: "bg-red-500",
+    bgColor: "bg-red-100 text-red-800",
+    colorFreeTime: {
+      short: "bg-red-500",
+      medium: "bg-red-700",
+      long: "bg-red-950",
+    },
     description: "Sensations fortes et suspense",
   },
 };
