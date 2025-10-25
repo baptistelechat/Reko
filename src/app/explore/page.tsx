@@ -7,40 +7,19 @@ import { MoodStep } from "@/app/explore/components/step/MoodStep";
 import { StepNavigation } from "@/app/explore/components/StepNavigation";
 import { STEPS } from "@/constants/steps";
 import { useAppStore } from "@/store/useAppStore";
-import { FreeTime, Mood } from "@/types";
+import { Mood } from "@/types";
 import { AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-
-const classifyRange = (range: number[]): FreeTime => {
-  const [min, max] = range;
-  const center = (min + max) / 2;
-  if (center <= 120) return "short";
-  if (center <= 180) return "medium";
-  return "long";
-};
 
 export default function ExplorePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const {
-    currentStep,
-    selectedMood,
-    selectedFreeTime,
-    selectedContentType,
-    isCustomDuration,
-    customDurationRange,
-    setCurrentStep,
-    setSelectedMood,
-    setMood,
-    setFreeTime,
-    setContentType,
-    fetchRecommendations,
-  } = useAppStore();
+  const { currentStep, setCurrentStep, setSelectedMood } = useAppStore();
 
   const totalSteps = STEPS.length;
-
+  
   // Handle URL parameters on component mount
   useEffect(() => {
     const moodParam = searchParams.get("mood");
@@ -58,79 +37,6 @@ export default function ExplorePage() {
     }
   }, [searchParams, totalSteps, setSelectedMood, setCurrentStep]);
 
-  const handleNext = () => {
-    if (currentStep < totalSteps - 1) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      handleSubmit();
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (
-      selectedMood &&
-      (selectedFreeTime || isCustomDuration) &&
-      selectedContentType
-    ) {
-      setMood(selectedMood);
-
-      // Si c'est une durée personnalisée, on utilise la classification basée sur la plage
-      if (isCustomDuration) {
-        setFreeTime(classifyRange(customDurationRange));
-      } else {
-        setFreeTime(selectedFreeTime!);
-      }
-
-      setContentType(selectedContentType);
-
-      await fetchRecommendations();
-      router.push("/results");
-    }
-  };
-
-  const isStepValid = (stepIndex: number) => {
-    switch (stepIndex) {
-      case 0:
-        return selectedMood !== null;
-      case 1:
-        return selectedFreeTime !== null || isCustomDuration;
-      case 2:
-        return selectedContentType !== null;
-      default:
-        return false;
-    }
-  };
-
-  const canProceed = () => {
-    return isStepValid(currentStep);
-  };
-
-  const handleStepClick = (stepIndex: number) => {
-    // Permettre de naviguer vers n'importe quelle étape si toutes les étapes intermédiaires sont valides
-    if (stepIndex <= currentStep) {
-      // Navigation vers les étapes précédentes : toujours autorisée
-      setCurrentStep(stepIndex);
-    } else if (stepIndex > currentStep) {
-      // Navigation vers les étapes futures : vérifier que toutes les étapes intermédiaires sont valides
-      let canNavigate = true;
-      for (let i = currentStep; i < stepIndex; i++) {
-        if (!isStepValid(i)) {
-          canNavigate = false;
-          break;
-        }
-      }
-      if (canNavigate) {
-        setCurrentStep(stepIndex);
-      }
-    }
-  };
-
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 0:
@@ -147,14 +53,7 @@ export default function ExplorePage() {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header avec progression */}
-      <ProgressHeader
-        currentStep={currentStep}
-        totalSteps={totalSteps}
-        steps={STEPS}
-        onBack={() => router.push("/")}
-        onStepClick={handleStepClick}
-        isStepValid={isStepValid}
-      />
+      <ProgressHeader onBack={() => router.push("/")} />
 
       {/* Contenu de l'étape */}
       <div className="mx-auto max-w-4xl">
@@ -162,13 +61,7 @@ export default function ExplorePage() {
       </div>
 
       {/* Navigation */}
-      <StepNavigation
-        currentStep={currentStep}
-        totalSteps={totalSteps}
-        canProceed={canProceed()}
-        onPrevious={handlePrevious}
-        onNext={handleNext}
-      />
+      <StepNavigation />
     </div>
   );
 }

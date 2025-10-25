@@ -1,32 +1,75 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { STEPS } from "@/constants/steps";
+import { useAppStore } from "@/store/useAppStore";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface ProgressHeaderProps {
-  currentStep: number;
-  totalSteps: number;
-  steps: string[];
-  onBack: () => void;
-  onStepClick?: (stepIndex: number) => void;
-  isStepValid?: (stepIndex: number) => boolean;
+  onBack?: () => void;
 }
 
-export const ProgressHeader = ({
-  currentStep,
-  totalSteps,
-  steps,
-  onBack,
-  onStepClick,
-  isStepValid,
-}: ProgressHeaderProps) => {
+export const ProgressHeader = ({ onBack }: ProgressHeaderProps) => {
+  const router = useRouter();
+  const {
+    currentStep,
+    selectedMood,
+    selectedFreeTime,
+    selectedContentType,
+    isCustomDuration,
+    setCurrentStep,
+  } = useAppStore();
+
+  const totalSteps = STEPS.length;
+
+  const isStepValid = (stepIndex: number) => {
+    switch (stepIndex) {
+      case 0:
+        return selectedMood !== null;
+      case 1:
+        return selectedFreeTime !== null || isCustomDuration;
+      case 2:
+        return selectedContentType !== null;
+      default:
+        return false;
+    }
+  };
+
+  const handleStepClick = (stepIndex: number) => {
+    // Permettre de naviguer vers n'importe quelle étape si toutes les étapes intermédiaires sont valides
+    if (stepIndex <= currentStep) {
+      // Navigation vers les étapes précédentes : toujours autorisée
+      setCurrentStep(stepIndex);
+    } else if (stepIndex > currentStep) {
+      // Navigation vers les étapes futures : vérifier que toutes les étapes intermédiaires sont valides
+      let canNavigate = true;
+      for (let i = currentStep; i < stepIndex; i++) {
+        if (!isStepValid(i)) {
+          canNavigate = false;
+          break;
+        }
+      }
+      if (canNavigate) {
+        setCurrentStep(stepIndex);
+      }
+    }
+  };
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.push("/");
+    }
+  };
   return (
     <div className="mx-auto mb-8 max-w-4xl">
       <div className="mb-6 flex items-center justify-between">
         <Button
           variant="ghost"
-          onClick={onBack}
+          onClick={handleBack}
           className="flex items-center gap-2"
         >
           <ArrowLeft size={20} />
@@ -53,24 +96,22 @@ export const ProgressHeader = ({
 
       {/* Indicateurs d'étapes */}
       <div className="mb-8 flex justify-center space-x-8">
-        {steps.map((step, index) => {
+        {STEPS.map((step, index) => {
           // Permettre de cliquer sur toutes les étapes précédentes et les étapes suivantes si toutes les étapes intermédiaires sont valides
           let isClickable = false;
-          if (onStepClick) {
-            if (index <= currentStep) {
-              // Étapes précédentes et actuelle : toujours cliquables
-              isClickable = true;
-            } else if (index > currentStep && isStepValid) {
-              // Étapes futures : vérifier que toutes les étapes intermédiaires sont valides
-              let allIntermediateStepsValid = true;
-              for (let i = currentStep; i < index; i++) {
-                if (!isStepValid(i)) {
-                  allIntermediateStepsValid = false;
-                  break;
-                }
+          if (index <= currentStep) {
+            // Étapes précédentes et actuelle : toujours cliquables
+            isClickable = true;
+          } else if (index > currentStep) {
+            // Étapes futures : vérifier que toutes les étapes intermédiaires sont valides
+            let allIntermediateStepsValid = true;
+            for (let i = currentStep; i < index; i++) {
+              if (!isStepValid(i)) {
+                allIntermediateStepsValid = false;
+                break;
               }
-              isClickable = allIntermediateStepsValid;
             }
+            isClickable = allIntermediateStepsValid;
           }
           const canClick = isClickable;
 
@@ -80,7 +121,7 @@ export const ProgressHeader = ({
               className={`flex items-center space-x-2 transition-colors duration-200 ${
                 index <= currentStep ? "text-primary" : "text-gray-400"
               } ${canClick ? "hover:text-primary/80 cursor-pointer" : ""}`}
-              onClick={() => canClick && onStepClick && onStepClick(index)}
+              onClick={() => canClick && handleStepClick(index)}
             >
               <div
                 className={`flex size-8 items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 ${
