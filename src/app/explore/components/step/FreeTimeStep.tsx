@@ -3,35 +3,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { FreeTime } from "@/types";
+import { FREE_TIME_OPTIONS } from "@/constants/freeTime";
+import { MOODS_ARRAY, MOODS_CONFIG } from "@/constants/moods";
+import { FreeTime, Mood } from "@/types";
 import { motion } from "framer-motion";
-import { Clock10, Clock2, Clock4 } from "lucide-react";
-
-const FREE_TIME_OPTIONS = [
-  {
-    id: "short" as FreeTime,
-    label: "Court",
-    duration: "< 2h",
-    description: "Un épisode ou un film court",
-    icon: Clock2,
-  },
-  {
-    id: "medium" as FreeTime,
-    label: "Moyen",
-    duration: "2-3h",
-    description: "Un bon film ou quelques épisodes",
-    icon: Clock4,
-  },
-  {
-    id: "long" as FreeTime,
-    label: "Long",
-    duration: "> 3h",
-    description: "Une soirée complète ou un marathon",
-    icon: Clock10,
-  },
-];
 
 interface FreeTimeStepProps {
+  selectedMood: Mood | null;
   selectedFreeTime: FreeTime | null;
   isCustomDuration: boolean;
   customDurationRange: number[];
@@ -41,6 +19,7 @@ interface FreeTimeStepProps {
 }
 
 export const FreeTimeStep = ({
+  selectedMood,
   selectedFreeTime,
   isCustomDuration,
   customDurationRange,
@@ -48,6 +27,9 @@ export const FreeTimeStep = ({
   onCustomDurationToggle,
   onCustomDurationChange,
 }: FreeTimeStepProps) => {
+
+  const mood = MOODS_ARRAY.find((mood) => mood.id === selectedMood);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -63,7 +45,7 @@ export const FreeTimeStep = ({
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {FREE_TIME_OPTIONS.map((option) => (
+        {FREE_TIME_OPTIONS.map((option, index) => (
           <motion.div
             key={option.id}
             whileHover={{ scale: 1.02 }}
@@ -78,7 +60,9 @@ export const FreeTimeStep = ({
               onClick={() => onFreeTimeSelect(option.id)}
             >
               <div className="flex flex-col items-center space-y-3">
-                <div className="rounded-full bg-orange-600 p-3 text-white">
+                <div
+                  className={`rounded-full p-3 text-white ${mood?.colorFreeTime[option.id]}`}
+                >
                   <option.icon size={24} />
                 </div>
                 <h3 className="text-lg font-semibold">{option.label}</h3>

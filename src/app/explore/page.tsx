@@ -164,6 +164,7 @@ export default function ExplorePage() {
       case 1:
         return (
           <FreeTimeStep
+            selectedMood={selectedMood}
             selectedFreeTime={selectedFreeTime}
             isCustomDuration={isCustomDuration}
             customDurationRange={customDurationRange}
