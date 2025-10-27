@@ -14,6 +14,7 @@ import {
   Search,
   X,
 } from "lucide-react";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
 
@@ -78,9 +79,7 @@ export default function Navigation() {
               className="flex cursor-pointer items-center space-x-2"
               onClick={() => handleNavigation("/")}
             >
-              <div className="from-primary flex size-8 items-center justify-center rounded-lg bg-linear-to-r to-orange-500">
-                <Film className="text-white" size={20} />
-              </div>
+              <Image src="/icon.svg" alt="REKO logo" width={32} height={32} />
               <span className="from-primary bg-linear-to-r to-orange-500 bg-clip-text text-xl font-bold text-transparent">
                 REKO
               </span>
