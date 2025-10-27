@@ -3,17 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { STEPS } from "@/constants/steps";
 import { useAppStore } from "@/store/useAppStore";
-import { FreeTime } from "@/types";
+import { classifyRange } from "@/utils/classifyRange";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-const classifyRange = (range: number[]): FreeTime => {
-  const [min, max] = range;
-  const center = (min + max) / 2;
-  if (center <= 120) return "short";
-  if (center <= 180) return "medium";
-  return "long";
-};
 
 export const StepNavigation = () => {
   const router = useRouter();

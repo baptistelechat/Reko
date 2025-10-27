@@ -3,7 +3,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { MOODS_CONFIG } from "@/constants/moods";
 import { useAppStore } from "@/store/useAppStore";
 import { Movie, TVShow } from "@/types";
 import { motion } from "framer-motion";
@@ -18,6 +17,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import ResultHeader from "./components/ResultHeader";
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -28,10 +28,8 @@ export default function ResultsPage() {
     isLoading,
     error,
     addToWatchlist,
-    removeFromWatchlist,
     isInWatchlist,
     addToFavorites,
-    removeFromFavorites,
     isInFavorites,
   } = useAppStore();
 
@@ -94,10 +92,6 @@ export default function ResultsPage() {
     return (rating / 2).toFixed(1);
   };
 
-  const getContentTypeLabel = (type: string) => {
-    return type === "movie" ? "Films" : "Séries";
-  };
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center">
@@ -145,40 +139,7 @@ export default function ResultsPage() {
     <div className="from-primary/5 min-h-screen bg-linear-to-br to-orange-600/5">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <Button
-            variant="ghost"
-            onClick={handleNewSearch}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft size={20} />
-            Nouvelle recherche
-          </Button>
-
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Vos recommandations
-            </h1>
-            <div className="mt-1 flex items-center justify-center gap-2">
-              <Badge className={MOODS_CONFIG[preferences.mood!]?.bgColor || ""}>
-                {MOODS_CONFIG[preferences.mood!]?.label || preferences.mood}
-              </Badge>
-              <Badge variant="secondary">
-                {getContentTypeLabel(preferences.contentType!)}
-              </Badge>
-            </div>
-          </div>
-
-          <Button
-            onClick={handleRefresh}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
-            <RefreshCw size={20} />
-            Actualiser
-          </Button>
-        </div>
-
+        <ResultHeader />
         {/* Résultats */}
         {recommendations.length === 0 ? (
           <div className="py-12 text-center">

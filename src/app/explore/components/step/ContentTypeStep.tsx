@@ -1,25 +1,9 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { CONTENT_OPTIONS } from "@/constants/contentType";
 import { useAppStore } from "@/store/useAppStore";
-import { ContentType } from "@/types";
 import { motion } from "framer-motion";
-import { Film, Tv } from "lucide-react";
-
-const CONTENT_TYPES = [
-  {
-    id: "movie" as ContentType,
-    label: "Films",
-    icon: Film,
-    description: "Histoires complètes en une séance",
-  },
-  {
-    id: "tv" as ContentType,
-    label: "Séries",
-    icon: Tv,
-    description: "Aventures à suivre épisode par épisode",
-  },
-];
 
 export const ContentTypeStep = () => {
   const { selectedContentType, setSelectedContentType } = useAppStore();
@@ -39,7 +23,7 @@ export const ContentTypeStep = () => {
       </div>
 
       <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 md:grid-cols-2">
-        {CONTENT_TYPES.map((type) => {
+        {CONTENT_OPTIONS.map((type) => {
           const Icon = type.icon;
           return (
             <motion.div
