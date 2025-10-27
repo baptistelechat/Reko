@@ -128,7 +128,7 @@ export default function MovieDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center">
+      <div className="mt-24 flex items-center justify-center">
         <div className="space-y-4 text-center">
           <div className="border-primary mx-auto size-12 animate-spin rounded-full border-b-2"></div>
           <p className="text-lg font-medium text-gray-700">
