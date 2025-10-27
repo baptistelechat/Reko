@@ -251,7 +251,10 @@ export default function FavoritesPage() {
                 >
                   <Card className="overflow-hidden border-2 border-red-100 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
                     {/* Poster */}
-                    <div className="relative aspect-2/3 overflow-hidden">
+                    <div
+                      className="relative aspect-2/3 cursor-pointer overflow-hidden"
+                      onClick={() => router.push(`/${item.type}/${item.id}`)}
+                    >
                       <img
                         src={getImageUrl(item.poster_path)}
                         alt={item.title}
@@ -267,7 +270,10 @@ export default function FavoritesPage() {
                         <Button
                           size="sm"
                           variant="destructive"
-                          onClick={() => handleRemove(item.id, item.type)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemove(item.id, item.type);
+                          }}
                           className="bg-red-500 hover:bg-red-600"
                         >
                           <Trash2 size={16} />
@@ -314,7 +320,10 @@ export default function FavoritesPage() {
 
                     {/* Informations */}
                     <div className="space-y-2 p-4">
-                      <h3 className="group-hover:text-primary line-clamp-2 text-sm font-semibold text-gray-900 transition-colors">
+                      <h3
+                        className="group-hover:text-primary line-clamp-2 cursor-pointer text-sm font-semibold text-gray-900 transition-colors"
+                        onClick={() => router.push(`/${item.type}/${item.id}`)}
+                      >
                         {item.title}
                       </h3>
 

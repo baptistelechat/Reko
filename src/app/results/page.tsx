@@ -182,7 +182,14 @@ export default function ResultsPage() {
                 >
                   <Card className="overflow-hidden bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
                     {/* Poster */}
-                    <div className="relative aspect-2/3 overflow-hidden">
+                    <div
+                      className="relative aspect-2/3 cursor-pointer overflow-hidden"
+                      onClick={() =>
+                        router.push(
+                          `/${isMovie ? "movie" : "tv"}/${content.id}`
+                        )
+                      }
+                    >
                       <img
                         src={getImageUrl(content.poster_path)}
                         alt={title}
@@ -199,7 +206,10 @@ export default function ResultsPage() {
                           <Button
                             size="sm"
                             variant="secondary"
-                            onClick={() => handleAddToWatchlist(content)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddToWatchlist(content);
+                            }}
                             disabled={isInWatchlist(
                               content.id,
                               "title" in content ? "movie" : "tv"
@@ -218,7 +228,10 @@ export default function ResultsPage() {
                           <Button
                             size="sm"
                             variant="secondary"
-                            onClick={() => handleAddToFavorites(content)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddToFavorites(content);
+                            }}
                             disabled={isInFavorites(
                               content.id,
                               "title" in content ? "movie" : "tv"
@@ -264,7 +277,14 @@ export default function ResultsPage() {
 
                     {/* Informations */}
                     <div className="space-y-2 p-4">
-                      <h3 className="group-hover:text-primary line-clamp-2 text-sm font-semibold text-gray-900 transition-colors">
+                      <h3
+                        className="group-hover:text-primary line-clamp-2 cursor-pointer text-sm font-semibold text-gray-900 transition-colors"
+                        onClick={() =>
+                          router.push(
+                            `/${isMovie ? "movie" : "tv"}/${content.id}`
+                          )
+                        }
+                      >
                         {title}
                       </h3>
 
