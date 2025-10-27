@@ -176,7 +176,7 @@ export default function TVShowDetailPage() {
   }
 
   return (
-    <div className="from-primary/5 min-h-screen bg-linear-to-br to-orange-600/5">
+    <div className="from-primary/5 min-h-screen bg-linear-to-br to-orange-600/5 pt-12">
       {/* Header avec image de fond */}
       <div
         className="relative h-96 bg-cover bg-center bg-no-repeat"

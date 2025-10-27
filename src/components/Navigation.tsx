@@ -71,7 +71,7 @@ export default function Navigation() {
   return (
     <>
       {/* Navigation Desktop */}
-      <nav className="fixed top-0 right-0 left-0 z-50 hidden border-b border-gray-200 bg-white/10 backdrop-blur-sm md:block">
+      <nav className="fixed top-0 right-0 left-0 z-50 hidden bg-white/80 shadow-sm backdrop-blur-sm md:block">
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
