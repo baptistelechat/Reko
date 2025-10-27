@@ -105,8 +105,7 @@ export default function MovieDetailPage() {
     path: string | null,
     size: "w500" | "w780" | "original" = "w500"
   ) => {
-    if (!path) return "/placeholder-poster.jpg";
-    return `https://image.tmdb.org/t/p/${size}${path}`;
+    return path ? `https://image.tmdb.org/t/p/${size}${path}` : "";
   };
 
   const formatDate = (dateString: string) => {
@@ -196,16 +195,18 @@ export default function MovieDetailPage() {
               className="flex flex-col items-end gap-6 md:flex-row"
             >
               {/* Poster */}
-              <div className="shrink-0">
-                <img
-                  src={getImageUrl(movie.poster_path)}
-                  alt={movie.title}
-                  className="h-72 w-48 rounded-lg object-cover shadow-2xl"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/placeholder-poster.jpg";
-                  }}
-                />
+              <div className="h-72 w-48 shrink-0 rounded-lg bg-linear-to-r from-violet-300 to-orange-300 shadow-2xl">
+                {movie.poster_path && (
+                  <img
+                    src={getImageUrl(movie.poster_path)}
+                    alt={movie.title}
+                    className="size-full rounded-lg object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = "none";
+                    }}
+                  />
+                )}
               </div>
 
               {/* Informations */}

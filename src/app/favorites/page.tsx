@@ -31,8 +31,7 @@ export default function FavoritesPage() {
   );
 
   const getImageUrl = (path: string | null) => {
-    if (!path) return "/placeholder-poster.jpg";
-    return `https://image.tmdb.org/t/p/w500${path}`;
+    return path ? `https://image.tmdb.org/t/p/w500${path}` : "";
   };
 
   const formatDate = (dateString: string) => {
@@ -252,18 +251,20 @@ export default function FavoritesPage() {
                   <Card className="overflow-hidden border-2 border-red-100 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
                     {/* Poster */}
                     <div
-                      className="relative aspect-2/3 cursor-pointer overflow-hidden"
+                      className="relative aspect-2/3 cursor-pointer overflow-hidden bg-linear-to-r from-violet-300 to-orange-300"
                       onClick={() => router.push(`/${item.type}/${item.id}`)}
                     >
-                      <img
-                        src={getImageUrl(item.poster_path)}
-                        alt={item.title}
-                        className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/placeholder-poster.jpg";
-                        }}
-                      />
+                      {item.poster_path && (
+                        <img
+                          src={getImageUrl(item.poster_path)}
+                          alt={item.title}
+                          className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = "none";
+                          }}
+                        />
+                      )}
 
                       {/* Overlay avec action de suppression */}
                       <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">

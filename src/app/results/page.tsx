@@ -80,8 +80,7 @@ export default function ResultsPage() {
   };
 
   const getImageUrl = (path: string | null) => {
-    if (!path) return "/placeholder-poster.jpg";
-    return `https://image.tmdb.org/t/p/w500${path}`;
+    return path ? `https://image.tmdb.org/t/p/w500${path}` : "";
   };
 
   const formatDate = (dateString: string) => {
@@ -180,25 +179,27 @@ export default function ResultsPage() {
                   whileHover={{ y: -5 }}
                   className="group"
                 >
-                  <Card className="overflow-hidden bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
+                  <Card className="flex h-[520px] flex-col overflow-hidden bg-white pt-0 pb-2 shadow-lg transition-all duration-300 hover:shadow-xl">
                     {/* Poster */}
                     <div
-                      className="relative aspect-2/3 cursor-pointer overflow-hidden"
+                      className="relative h-80 cursor-pointer overflow-hidden bg-linear-to-r from-violet-300 to-orange-300"
                       onClick={() =>
                         router.push(
                           `/${isMovie ? "movie" : "tv"}/${content.id}`
                         )
                       }
                     >
-                      <img
-                        src={getImageUrl(content.poster_path)}
-                        alt={title}
-                        className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/placeholder-poster.jpg";
-                        }}
-                      />
+                      {content.poster_path && (
+                        <img
+                          src={getImageUrl(content.poster_path)}
+                          alt={title}
+                          className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = "none";
+                          }}
+                        />
+                      )}
 
                       {/* Overlay avec actions */}
                       <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -276,9 +277,9 @@ export default function ResultsPage() {
                     </div>
 
                     {/* Informations */}
-                    <div className="space-y-2 p-4">
+                    <div className="shrink-0 space-y-2 p-4">
                       <h3
-                        className="group-hover:text-primary line-clamp-2 cursor-pointer text-sm font-semibold text-gray-900 transition-colors"
+                        className="group-hover:text-primary line-clamp-1 cursor-pointer text-sm font-semibold text-gray-900 transition-colors"
                         onClick={() =>
                           router.push(
                             `/${isMovie ? "movie" : "tv"}/${content.id}`
@@ -304,7 +305,7 @@ export default function ResultsPage() {
 
                       {/* Description courte */}
                       {content.overview && (
-                        <p className="line-clamp-3 text-xs text-gray-600">
+                        <p className="line-clamp-5 text-xs text-gray-600">
                           {content.overview}
                         </p>
                       )}
