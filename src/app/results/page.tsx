@@ -10,8 +10,8 @@ import {
   ArrowLeft,
   Calendar,
   Eye,
+  EyeOff,
   Heart,
-  Plus,
   RefreshCw,
   Star,
 } from "lucide-react";
@@ -28,8 +28,10 @@ export default function ResultsPage() {
     isLoading,
     error,
     addToWatchlist,
+    removeFromWatchlist,
     isInWatchlist,
     addToFavorites,
+    removeFromFavorites,
     isInFavorites,
   } = useAppStore();
 
@@ -77,6 +79,24 @@ export default function ResultsPage() {
       addedAt: new Date().toISOString(),
     };
     addToFavorites(favoriteItem);
+  };
+
+  const handleToggleWatchlist = (content: Movie | TVShow) => {
+    const type = "title" in content ? ("movie" as const) : ("tv" as const);
+    if (isInWatchlist(content.id, type)) {
+      removeFromWatchlist(content.id, type);
+    } else {
+      handleAddToWatchlist(content);
+    }
+  };
+
+  const handleToggleFavorites = (content: Movie | TVShow) => {
+    const type = "title" in content ? ("movie" as const) : ("tv" as const);
+    if (isInFavorites(content.id, type)) {
+      removeFromFavorites(content.id, type);
+    } else {
+      handleAddToFavorites(content);
+    }
   };
 
   const getImageUrl = (path: string | null) => {
@@ -209,21 +229,17 @@ export default function ResultsPage() {
                             variant="secondary"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleAddToWatchlist(content);
+                              handleToggleWatchlist(content);
                             }}
-                            disabled={isInWatchlist(
-                              content.id,
-                              "title" in content ? "movie" : "tv"
-                            )}
                             className="bg-white/90 text-gray-900 hover:bg-white"
                           >
                             {isInWatchlist(
                               content.id,
                               "title" in content ? "movie" : "tv"
                             ) ? (
-                              <Eye size={16} />
+                              <EyeOff size={16} />
                             ) : (
-                              <Plus size={16} />
+                              <Eye size={16} />
                             )}
                           </Button>
                           <Button
@@ -231,12 +247,8 @@ export default function ResultsPage() {
                             variant="secondary"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleAddToFavorites(content);
+                              handleToggleFavorites(content);
                             }}
-                            disabled={isInFavorites(
-                              content.id,
-                              "title" in content ? "movie" : "tv"
-                            )}
                             className="bg-white/90 text-gray-900 hover:bg-white"
                           >
                             <Heart
