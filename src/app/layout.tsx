@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,6 +42,16 @@ export default function RootLayout({
         <main className="min-h-screen bg-linear-to-br from-violet-50 via-white to-orange-50 pt-12">
           {children}
         </main>
+
+        {/* React Grab script - only in development */}
+        {process.env.NODE_ENV === "development" && (
+          <Script
+            src="//unpkg.com/react-grab/dist/index.global.js"
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+            data-enabled="true"
+          />
+        )}
       </body>
     </html>
   );
