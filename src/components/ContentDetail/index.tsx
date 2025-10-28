@@ -14,6 +14,11 @@ import ContentProviders from "./components/ContentProviders";
 import ContentSeasons from "./components/ContentSeasons";
 import ContentSynopsis from "./components/ContentSynopsis";
 import ContentWatchProviders from "./components/ContentWatchProviders";
+import ContentCredits from "./components/ContentCredits";
+import ContentExternalLinks from "./components/ContentExternalLinks";
+import ContentImages from "./components/ContentImages";
+import ContentKeywords from "./components/ContentKeywords";
+import ContentVideos from "./components/ContentVideos";
 
 type ContentDetailProps = {
   type: "movie" | "tv";
@@ -184,13 +189,21 @@ export default function ContentDetail({ type, id }: ContentDetailProps) {
             {/* Synopsis */}
             <ContentSynopsis type={type} data={data} />
 
+            {/* Credits (Cast & Crew) */}
+            <ContentCredits type={type} data={data} />
+
+            {/* Videos (Trailers, Teasers, etc.) */}
+            <ContentVideos type={type} data={data} />
+
+            {/* Images (Posters & Backdrops) */}
+            <ContentImages type={type} data={data} />
+
             {/* Seasons (TV only) */}
             {type === "tv" && <ContentSeasons data={data as TVShowDetails} />}
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-
             {/* Streaming Providers/Networks */}
             <ContentProviders type={type} data={data} />
 
@@ -202,10 +215,15 @@ export default function ContentDetail({ type, id }: ContentDetailProps) {
               data={data}
               getStatusLabel={getStatusLabel}
             />
-            
+
             {/* Production Companies */}
             <ContentProduction data={data} />
 
+            {/* Keywords */}
+            <ContentKeywords type={type} data={data} />
+
+            {/* External Links */}
+            <ContentExternalLinks type={type} data={data} />
           </div>
         </div>
       </div>

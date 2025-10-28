@@ -366,6 +366,122 @@ class TMDBService {
     );
   }
 
+  // Obtenir les images d'un film
+  async getMovieImages(movieId: number): Promise<{
+    backdrops: Array<{
+      aspect_ratio: number;
+      file_path: string;
+      height: number;
+      width: number;
+      vote_average: number;
+      vote_count: number;
+    }>;
+    posters: Array<{
+      aspect_ratio: number;
+      file_path: string;
+      height: number;
+      width: number;
+      vote_average: number;
+      vote_count: number;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/movie/${movieId}/images`);
+  }
+
+  // Obtenir les images d'une série TV
+  async getTVImages(tvId: number): Promise<{
+    backdrops: Array<{
+      aspect_ratio: number;
+      file_path: string;
+      height: number;
+      width: number;
+      vote_average: number;
+      vote_count: number;
+    }>;
+    posters: Array<{
+      aspect_ratio: number;
+      file_path: string;
+      height: number;
+      width: number;
+      vote_average: number;
+      vote_count: number;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/tv/${tvId}/images`);
+  }
+
+  // Obtenir les vidéos d'un film
+  async getMovieVideos(movieId: number): Promise<{
+    results: Array<{
+      id: string;
+      key: string;
+      name: string;
+      site: string;
+      type: string;
+      official: boolean;
+      published_at: string;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/movie/${movieId}/videos`);
+  }
+
+  // Obtenir les vidéos d'une série TV
+  async getTVVideos(tvId: number): Promise<{
+    results: Array<{
+      id: string;
+      key: string;
+      name: string;
+      site: string;
+      type: string;
+      official: boolean;
+      published_at: string;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/tv/${tvId}/videos`);
+  }
+
+  // Obtenir les mots-clés d'un film
+  async getMovieKeywords(movieId: number): Promise<{
+    keywords: Array<{
+      id: number;
+      name: string;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/movie/${movieId}/keywords`);
+  }
+
+  // Obtenir les mots-clés d'une série TV
+  async getTVKeywords(tvId: number): Promise<{
+    results: Array<{
+      id: number;
+      name: string;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/tv/${tvId}/keywords`);
+  }
+
+  // Obtenir les liens externes d'un film
+  async getMovieExternalIds(movieId: number): Promise<{
+    imdb_id: string | null;
+    facebook_id: string | null;
+    instagram_id: string | null;
+    twitter_id: string | null;
+    wikidata_id: string | null;
+  }> {
+    return this.fetchFromTMDB(`/movie/${movieId}/external_ids`);
+  }
+
+  // Obtenir les liens externes d'une série TV
+  async getTVExternalIds(tvId: number): Promise<{
+    imdb_id: string | null;
+    facebook_id: string | null;
+    instagram_id: string | null;
+    twitter_id: string | null;
+    wikidata_id: string | null;
+  }> {
+    return this.fetchFromTMDB(`/tv/${tvId}/external_ids`);
+  }
+
   getPosterUrl(path: string | null): string {
     return this.getImageUrl(path, "w500");
   }
