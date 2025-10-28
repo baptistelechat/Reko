@@ -2,12 +2,12 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CONTENT_OPTIONS } from "@/constants/contentType";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { formatDate } from "@/utils/formatDate";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
   Calendar,
   Clock,
   Eye,
@@ -17,7 +17,6 @@ import {
   Star,
   Tv,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 type ContentHeaderProps = {
   type: "movie" | "tv";
@@ -36,8 +35,6 @@ export default function ContentHeader({
   onAddToWatchlist,
   onAddToFavorites,
 }: ContentHeaderProps) {
-  const router = useRouter();
-
   // Data extraction
   const title =
     type === "movie"
@@ -83,6 +80,9 @@ export default function ContentHeader({
     return (statusLabels as Record<string, string>)[status] || status;
   };
 
+  // Obtenir l'icône de contenu
+  const ContentTypeIcon = CONTENT_OPTIONS.find((opt) => opt.id === type)?.icon;
+
   return (
     <div
       className="relative h-96 bg-cover bg-center bg-no-repeat"
@@ -96,18 +96,6 @@ export default function ContentHeader({
     >
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* Navigation */}
-      <div className="relative z-10 p-4">
-        <Button
-          variant="ghost"
-          onClick={() => router.back()}
-          className="text-white hover:bg-white/20"
-        >
-          <ArrowLeft size={20} className="mr-2" />
-          Retour
-        </Button>
-      </div>
-
       {/* Informations principales */}
       <div className="absolute right-0 bottom-0 left-0 p-6 text-white">
         <div className="container mx-auto">
@@ -117,8 +105,8 @@ export default function ContentHeader({
             className="flex flex-col items-end gap-6 md:flex-row"
           >
             {/* Poster */}
-            <div className="h-72 w-48 shrink-0 rounded-lg bg-linear-to-r from-violet-300 to-orange-300 shadow-2xl">
-              {poster && (
+            <div className="relative h-72 w-48 shrink-0 rounded-lg bg-linear-to-r from-violet-300 to-orange-300 shadow-2xl">
+              {poster ? (
                 <img
                   src={tmdbService.getPosterUrl(poster)}
                   alt={title || ""}
@@ -128,6 +116,12 @@ export default function ContentHeader({
                     target.style.display = "none";
                   }}
                 />
+              ) : (
+                ContentTypeIcon && (
+                  <div className="absolute top-3 left-3 rounded-full bg-black/70 p-2 backdrop-blur-sm">
+                    <ContentTypeIcon className="h-5 w-5 text-white" />
+                  </div>
+                )
               )}
             </div>
 
