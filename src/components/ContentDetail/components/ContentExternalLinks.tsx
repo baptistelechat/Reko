@@ -52,10 +52,10 @@ export default function ContentExternalLinks({ type, data }: ContentExternalLink
       >
         <Card className="p-6">
           <div className="animate-pulse space-y-4">
-            <div className="h-6 w-32 bg-gray-200 rounded"></div>
+            <div className="h-6 w-32 rounded bg-gray-200"></div>
             <div className="flex flex-wrap gap-3">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-10 w-24 bg-gray-200 rounded-lg"></div>
+                <div key={i} className="h-10 w-24 rounded-lg bg-gray-200"></div>
               ))}
             </div>
           </div>

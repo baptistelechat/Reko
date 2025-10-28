@@ -45,13 +45,13 @@ export default function ContentCredits({ type, data }: ContentCreditsProps) {
       >
         <Card className="p-6">
           <div className="animate-pulse space-y-4">
-            <div className="h-6 w-32 bg-gray-200 rounded"></div>
+            <div className="h-6 w-32 rounded bg-gray-200"></div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="space-y-2">
-                  <div className="aspect-[2/3] bg-gray-200 rounded-lg"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                  <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                  <div className="aspect-[2/3] rounded-lg bg-gray-200"></div>
+                  <div className="h-4 rounded bg-gray-200"></div>
+                  <div className="h-3 w-3/4 rounded bg-gray-200"></div>
                 </div>
               ))}
             </div>
@@ -149,11 +149,11 @@ export default function ContentCredits({ type, data }: ContentCreditsProps) {
                     </div>
                   )}
                 </div>
-                <h4 className="text-sm font-medium text-gray-900 line-clamp-2">
+                <h4 className="line-clamp-2 text-sm font-medium text-gray-900">
                   {actor.name}
                 </h4>
                 {actor.character && (
-                  <p className="text-xs text-gray-600 line-clamp-2">
+                  <p className="line-clamp-2 text-xs text-gray-600">
                     {actor.character}
                   </p>
                 )}
@@ -195,12 +195,12 @@ export default function ContentCredits({ type, data }: ContentCreditsProps) {
                             </div>
                           )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-gray-900">
                             {member.name}
                           </p>
                           {member.job && (
-                            <p className="text-xs text-gray-600 truncate">
+                            <p className="truncate text-xs text-gray-600">
                               {member.job}
                             </p>
                           )}

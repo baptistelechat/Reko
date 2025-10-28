@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
-import { Image as ImageIcon, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type ContentImagesProps = {
@@ -60,10 +60,10 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
       >
         <Card className="p-6">
           <div className="animate-pulse space-y-4">
-            <div className="h-6 w-32 bg-gray-200 rounded"></div>
+            <div className="h-6 w-32 rounded bg-gray-200"></div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="aspect-video bg-gray-200 rounded-lg"></div>
+                <div key={i} className="aspect-video rounded-lg bg-gray-200"></div>
               ))}
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
               >
                 <div className={`aspect-${activeTab === "backdrops" ? "video" : "[2/3]"}`}>
                   <img
-                    src={tmdbService.getImageUrl(image.file_path, "w500")}
+                    src={tmdbService.getPosterUrl(image.file_path)}
                     alt={`${activeTab === "backdrops" ? "Arrière-plan" : "Affiche"} ${index + 1}`}
                     className="h-full w-full object-cover transition-opacity group-hover:opacity-90"
                     loading="lazy"
@@ -137,9 +137,9 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
                   />
                   
                   {/* Overlay avec informations */}
-                  <div className="absolute inset-0 bg-black bg-opacity-0 transition-all group-hover:bg-opacity-30">
-                    <div className="absolute bottom-2 left-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
-                      <div className="rounded bg-black bg-opacity-75 px-2 py-1 text-xs text-white">
+                  <div className="bg-opacity-0 group-hover:bg-opacity-30 absolute inset-0 bg-black transition-all">
+                    <div className="absolute right-2 bottom-2 left-2 opacity-0 transition-opacity group-hover:opacity-100">
+                      <div className="bg-opacity-75 rounded bg-black px-2 py-1 text-xs text-white">
                         {image.width} × {image.height}
                         {image.vote_average > 0 && (
                           <span className="ml-2">
@@ -168,7 +168,7 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
       {/* Modal pour l'image agrandie */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
+          className="bg-opacity-90 fixed inset-0 z-50 flex items-center justify-center bg-black p-4"
           onClick={() => setSelectedImage(null)}
         >
           <div className="relative max-h-full max-w-full">
@@ -179,7 +179,7 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
               <X className="h-8 w-8" />
             </button>
             <img
-              src={tmdbService.getImageUrl(selectedImage, "original")}
+              src={tmdbService.getPosterUrl(selectedImage)}
               alt="Image agrandie"
               className="max-h-full max-w-full object-contain"
               onClick={(e) => e.stopPropagation()}

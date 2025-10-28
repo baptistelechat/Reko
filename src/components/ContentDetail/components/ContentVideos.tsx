@@ -58,13 +58,13 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
       >
         <Card className="p-6">
           <div className="animate-pulse space-y-4">
-            <div className="h-6 w-32 bg-gray-200 rounded"></div>
+            <div className="h-6 w-32 rounded bg-gray-200"></div>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="space-y-2">
-                  <div className="aspect-video bg-gray-200 rounded-lg"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                  <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                  <div className="aspect-video rounded-lg bg-gray-200"></div>
+                  <div className="h-4 rounded bg-gray-200"></div>
+                  <div className="h-3 w-3/4 rounded bg-gray-200"></div>
                 </div>
               ))}
             </div>
@@ -164,7 +164,7 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
                 />
                 
                 {/* Overlay de lecture */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 transition-opacity group-hover:bg-opacity-50">
+                <div className="bg-opacity-30 group-hover:bg-opacity-50 absolute inset-0 flex items-center justify-center bg-black transition-opacity">
                   <div className="rounded-full bg-red-600 p-3 text-white transition-transform group-hover:scale-110">
                     <Play className="h-6 w-6 fill-current" />
                   </div>
@@ -189,7 +189,7 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
 
               {/* Informations de la vidéo */}
               <div className="p-4">
-                <h4 className="mb-2 font-medium text-gray-900 line-clamp-2 group-hover:text-blue-600">
+                <h4 className="mb-2 line-clamp-2 font-medium text-gray-900 group-hover:text-blue-600">
                   {video.name}
                 </h4>
                 

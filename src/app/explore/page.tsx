@@ -10,9 +10,9 @@ import { useAppStore } from "@/store/useAppStore";
 import { Mood } from "@/types";
 import { AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
-export default function ExplorePage() {
+function ExploreContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -76,5 +76,13 @@ export default function ExplorePage() {
       {/* Navigation */}
       <StepNavigation />
     </div>
+  );
+}
+
+export default function ExplorePage() {
+  return (
+    <Suspense fallback={<div className="p-8">Chargement…</div>}>
+      <ExploreContent />
+    </Suspense>
   );
 }
