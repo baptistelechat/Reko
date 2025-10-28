@@ -2,7 +2,13 @@
 
 import { Card } from "@/components/ui/card";
 import tmdbService from "@/services/tmdb";
-import { MovieDetails, TVShowDetails, WatchProvider, WatchProvidersResponse } from "@/types";
+import {
+  MovieDetails,
+  TVShowDetails,
+  WatchProvider,
+  WatchProvidersResponse,
+} from "@/types";
+import { getProviderUrl } from "@/utils/getProviderUrl";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -17,25 +23,50 @@ function ProviderSection({ title, providers }: ProviderSectionProps) {
     <div>
       <h4 className="mb-2 text-sm font-semibold text-gray-600">{title}</h4>
       <div className="flex flex-wrap gap-2">
-        {providers.map((provider) => (
-          <div
-            key={provider.provider_id}
-            className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2"
-          >
-            <img
-              src={tmdbService.getCompanyLogoUrl(provider.logo_path)}
-              alt={provider.provider_name}
-              className="h-6 w-6 rounded object-contain"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = "none";
-              }}
-            />
-            <span className="text-sm font-medium text-gray-700">
-              {provider.provider_name}
-            </span>
-          </div>
-        ))}
+        {providers.map((provider) => {
+          const providerUrl = getProviderUrl(provider.provider_id);
+
+          const content = (
+            <>
+              <img
+                src={tmdbService.getCompanyLogoUrl(provider.logo_path)}
+                alt={provider.provider_name}
+                className="h-6 w-6 rounded object-contain"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = "none";
+                }}
+              />
+              <span className="text-sm font-medium text-gray-700">
+                {provider.provider_name}
+              </span>
+            </>
+          );
+
+          if (providerUrl) {
+            return (
+              <a
+                key={provider.provider_id}
+                href={providerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 transition-all hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm"
+                title={`Ouvrir ${provider.provider_name}`}
+              >
+                {content}
+              </a>
+            );
+          }
+
+          return (
+            <div
+              key={provider.provider_id}
+              className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2"
+            >
+              {content}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
