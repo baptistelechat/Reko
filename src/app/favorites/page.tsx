@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useAppStore } from "@/store/useAppStore";
 import { ContentType } from "@/types";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -29,10 +30,6 @@ export default function FavoritesPage() {
   const [sortBy, setSortBy] = useState<"added" | "rating" | "title" | "date">(
     "added"
   );
-
-  const getImageUrl = (path: string | null) => {
-    return path ? `https://image.tmdb.org/t/p/w500${path}` : "";
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).getFullYear().toString();

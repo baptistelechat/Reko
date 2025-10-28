@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useAppStore } from "@/store/useAppStore";
 import { Movie, TVShow } from "@/types";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -97,10 +98,6 @@ export default function ResultsPage() {
     } else {
       handleAddToFavorites(content);
     }
-  };
-
-  const getImageUrl = (path: string | null) => {
-    return path ? `https://image.tmdb.org/t/p/w500${path}` : "";
   };
 
   const formatDate = (dateString: string) => {

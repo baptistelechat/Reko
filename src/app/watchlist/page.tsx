@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useAppStore } from "@/store/useAppStore";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -27,10 +28,6 @@ export default function WatchlistPage() {
   const [sortBy, setSortBy] = useState<"added" | "rating" | "title" | "year">(
     "added"
   );
-
-  const getImageUrl = (path: string | null) => {
-    return path ? `https://image.tmdb.org/t/p/w500${path}` : "";
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).getFullYear().toString();
