@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
-import { Tv } from "lucide-react";
 
 type ContentProvidersProps = {
   type: "movie" | "tv";
@@ -31,7 +30,6 @@ export default function ContentProviders({
       >
         <Card className="p-6">
           <h3 className="mb-4 flex items-center gap-2 text-xl font-bold text-gray-900">
-            <Tv size={20} />
             Diffuseurs
           </h3>
           <div className="space-y-3">

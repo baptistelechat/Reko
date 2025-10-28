@@ -13,6 +13,7 @@ import ContentProduction from "./components/ContentProduction";
 import ContentProviders from "./components/ContentProviders";
 import ContentSeasons from "./components/ContentSeasons";
 import ContentSynopsis from "./components/ContentSynopsis";
+import ContentWatchProviders from "./components/ContentWatchProviders";
 
 type ContentDetailProps = {
   type: "movie" | "tv";
@@ -189,17 +190,22 @@ export default function ContentDetail({ type, id }: ContentDetailProps) {
 
           {/* Sidebar */}
           <div className="space-y-6">
+
+            {/* Streaming Providers/Networks */}
+            <ContentProviders type={type} data={data} />
+
+            {/* Watch Providers (SVOD Platforms) */}
+            <ContentWatchProviders type={type} data={data} />
+
             <ContentInfo
               type={type}
               data={data}
               getStatusLabel={getStatusLabel}
             />
-
+            
             {/* Production Companies */}
             <ContentProduction data={data} />
 
-            {/* Streaming Providers/Networks */}
-            <ContentProviders type={type} data={data} />
           </div>
         </div>
       </div>

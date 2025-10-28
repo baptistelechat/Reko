@@ -11,6 +11,7 @@ import {
   TMDBResponse,
   TVShow,
   TVShowDetails,
+  WatchProvidersResponse,
 } from "@/types";
 
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
@@ -347,6 +348,22 @@ class TMDBService {
     return this.fetchFromTMDB<TMDBResponse<TVShow>>("/tv/on_the_air", {
       page: page.toString(),
     });
+  }
+
+  // Obtenir les plateformes de streaming pour un film
+  async getMovieWatchProviders(
+    movieId: number
+  ): Promise<WatchProvidersResponse> {
+    return this.fetchFromTMDB<WatchProvidersResponse>(
+      `/movie/${movieId}/watch/providers`
+    );
+  }
+
+  // Obtenir les plateformes de streaming pour une série TV
+  async getTVWatchProviders(tvId: number): Promise<WatchProvidersResponse> {
+    return this.fetchFromTMDB<WatchProvidersResponse>(
+      `/tv/${tvId}/watch/providers`
+    );
   }
 
   getPosterUrl(path: string | null): string {
