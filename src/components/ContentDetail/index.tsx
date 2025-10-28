@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ContentHeader from "./components/ContentHeader";
 import ContentInfo from "./components/ContentInfo";
+import ContentProduction from "./components/ContentProduction";
+import ContentProviders from "./components/ContentProviders";
 import ContentSeasons from "./components/ContentSeasons";
 import ContentSynopsis from "./components/ContentSynopsis";
 
@@ -192,6 +194,12 @@ export default function ContentDetail({ type, id }: ContentDetailProps) {
               data={data}
               getStatusLabel={getStatusLabel}
             />
+
+            {/* Production Companies */}
+            <ContentProduction data={data} />
+
+            {/* Streaming Providers/Networks */}
+            <ContentProviders type={type} data={data} />
           </div>
         </div>
       </div>
