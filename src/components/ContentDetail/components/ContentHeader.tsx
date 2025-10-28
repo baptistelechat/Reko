@@ -9,8 +9,8 @@ import { motion } from "framer-motion";
 import {
   ArrowLeft,
   Calendar,
-  Check,
   Clock,
+  Eye,
   Heart,
   Plus,
   Share2,
@@ -22,43 +22,66 @@ import { useRouter } from "next/navigation";
 type ContentHeaderProps = {
   type: "movie" | "tv";
   data: MovieDetails | TVShowDetails;
-  title: string;
-  backdrop: string | null;
-  poster: string | null;
-  genres: { id: number; name: string }[];
-  voteAverage: number;
-  voteCount: number;
-  primaryDate: string | undefined;
   inWatchlist: boolean;
   inFavorites: boolean;
   onAddToWatchlist: () => void;
   onAddToFavorites: () => void;
-  formatRating: (rating: number) => string;
-  formatRuntime: (minutes: number) => string;
-  formatEpisodeRuntime: (runtimes: number[]) => string;
-  getStatusLabel: (status: string) => string;
 };
 
 export default function ContentHeader({
   type,
   data,
-  title,
-  backdrop,
-  poster,
-  genres,
-  voteAverage,
-  voteCount,
-  primaryDate,
   inWatchlist,
   inFavorites,
   onAddToWatchlist,
   onAddToFavorites,
-  formatRating,
-  formatRuntime,
-  formatEpisodeRuntime,
-  getStatusLabel,
 }: ContentHeaderProps) {
   const router = useRouter();
+
+  // Data extraction
+  const title =
+    type === "movie"
+      ? (data as MovieDetails).title
+      : (data as TVShowDetails).name;
+  const backdrop = data.backdrop_path;
+  const poster = data.poster_path;
+  const genres = data.genres;
+  const voteAverage = data.vote_average;
+  const voteCount = data.vote_count;
+  const primaryDate =
+    type === "movie"
+      ? (data as MovieDetails).release_date
+      : (data as TVShowDetails).first_air_date;
+
+  // Utility functions
+  const formatRating = (rating: number) => {
+    return (rating / 2).toFixed(1);
+  };
+
+  const formatRuntime = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours}h${remainingMinutes > 0 ? ` ${remainingMinutes}min` : ""}`;
+  };
+
+  const formatEpisodeRuntime = (runtimes: number[]) => {
+    if (!runtimes || runtimes.length === 0) return "Non spécifié";
+    const avgRuntime = Math.round(
+      runtimes.reduce((a, b) => a + b, 0) / runtimes.length
+    );
+    return `~${avgRuntime} min/épisode`;
+  };
+
+  const getStatusLabel = (status: string) => {
+    const statusLabels = {
+      "Returning Series": "En cours",
+      Ended: "Terminée",
+      Canceled: "Annulée",
+      "In Production": "En production",
+      Pilot: "Pilote",
+    } as const;
+    return (statusLabels as Record<string, string>)[status] || status;
+  };
 
   return (
     <div
@@ -159,8 +182,8 @@ export default function ContentHeader({
                 {genres.map((genre) => (
                   <Badge
                     key={genre.id}
-                    variant="secondary"
-                    className="bg-white/20 text-white"
+                    variant="outline"
+                    className="border border-white bg-transparent text-white"
                   >
                     {genre.name}
                   </Badge>
@@ -199,26 +222,23 @@ export default function ContentHeader({
                   variant={inWatchlist ? "secondary" : "default"}
                   className="flex items-center gap-2"
                 >
-                  {inWatchlist ? <Check size={20} /> : <Plus size={20} />}
+                  {inWatchlist ? <Eye size={20} /> : <Plus size={20} />}
                   {inWatchlist ? "Dans la watchlist" : "Ajouter à la watchlist"}
                 </Button>
 
                 <Button
                   onClick={onAddToFavorites}
-                  variant={inFavorites ? "secondary" : "outline"}
-                  className="flex items-center gap-2 border-white/20 bg-white/10 text-white hover:bg-white/20"
+                  variant="secondary"
+                  className="flex items-center gap-2"
                 >
                   <Heart
                     size={20}
-                    className={inFavorites ? "fill-current" : ""}
+                    className={inFavorites ? "fill-red-500 text-red-500" : ""}
                   />
-                  {inFavorites ? "Favori" : "Favoris"}
+                  {inFavorites ? "Favori" : "Ajouter aux Favoris"}
                 </Button>
 
-                <Button
-                  variant="outline"
-                  className="border-white/20 bg-white/10 text-white hover:bg-white/20"
-                >
+                <Button variant="secondary">
                   <Share2 size={20} />
                 </Button>
               </div>

@@ -58,24 +58,6 @@ export default function ContentDetail({ type, id }: ContentDetailProps) {
 
     if (id) fetchDetails();
   }, [id, type]);
-  
-  const formatRating = (rating: number) => {
-    return (rating / 2).toFixed(1);
-  };
-
-  const formatRuntime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    return `${hours}h${remainingMinutes > 0 ? ` ${remainingMinutes}min` : ""}`;
-  };
-
-  const formatEpisodeRuntime = (runtimes: number[]) => {
-    if (!runtimes || runtimes.length === 0) return "Non spécifié";
-    const avgRuntime = Math.round(
-      runtimes.reduce((a, b) => a + b, 0) / runtimes.length
-    );
-    return `~${avgRuntime} min/épisode`;
-  };
 
   const getStatusLabel = (status: string) => {
     const statusLabels = {
@@ -88,20 +70,15 @@ export default function ContentDetail({ type, id }: ContentDetailProps) {
     return (statusLabels as Record<string, string>)[status] || status;
   };
 
-  // Data extraction
+  // Data extraction for other components
   const title =
     type === "movie"
       ? (data as MovieDetails | null)?.title
       : (data as TVShowDetails | null)?.name;
-  const backdrop =
-    (data as MovieDetails | TVShowDetails | null)?.backdrop_path ?? null;
   const poster =
     (data as MovieDetails | TVShowDetails | null)?.poster_path ?? null;
-  const genres = (data as MovieDetails | TVShowDetails | null)?.genres ?? [];
   const voteAverage =
     (data as MovieDetails | TVShowDetails | null)?.vote_average ?? 0;
-  const voteCount =
-    (data as MovieDetails | TVShowDetails | null)?.vote_count ?? 0;
   const primaryDate =
     type === "movie"
       ? (data as MovieDetails | null)?.release_date
@@ -190,21 +167,10 @@ export default function ContentDetail({ type, id }: ContentDetailProps) {
       <ContentHeader
         type={type}
         data={data}
-        title={title || ""}
-        backdrop={backdrop}
-        poster={poster}
-        genres={genres}
-        voteAverage={voteAverage}
-        voteCount={voteCount}
-        primaryDate={primaryDate}
         inWatchlist={inWatchlist}
         inFavorites={inFavorites}
         onAddToWatchlist={handleAddToWatchlist}
         onAddToFavorites={handleAddToFavorites}
-        formatRating={formatRating}
-        formatRuntime={formatRuntime}
-        formatEpisodeRuntime={formatEpisodeRuntime}
-        getStatusLabel={getStatusLabel}
       />
 
       {/* Content Section */}
@@ -216,11 +182,7 @@ export default function ContentDetail({ type, id }: ContentDetailProps) {
             <ContentSynopsis type={type} data={data} />
 
             {/* Seasons (TV only) */}
-            {type === "tv" && (
-              <ContentSeasons
-                data={data as TVShowDetails}
-              />
-            )}
+            {type === "tv" && <ContentSeasons data={data as TVShowDetails} />}
           </div>
 
           {/* Sidebar */}
