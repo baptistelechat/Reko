@@ -3,9 +3,9 @@
 import { Card } from "@/components/ui/card";
 import { TVShowDetails } from "@/types";
 import { formatDate } from "@/utils/formatDate";
-import { getImageUrl } from "@/utils/getImageUrl";
 import { motion } from "framer-motion";
 import { Tv } from "lucide-react";
+import { tmdbService } from "@/services/tmdb";
 
 type ContentSeasonsProps = {
   data: TVShowDetails;
@@ -38,10 +38,10 @@ export default function ContentSeasons({ data }: ContentSeasonsProps) {
               >
                 <div className="relative h-24 w-16 overflow-hidden rounded bg-linear-to-r from-violet-300 to-orange-300">
                   {season.poster_path && (
-                    <img
-                      src={getImageUrl(season.poster_path)}
-                      alt={season.name}
-                      className="size-full object-cover"
+                      <img
+                        src={tmdbService.getPosterUrl(season.poster_path)}
+                        alt={season.name}
+                        className="size-full object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.style.display = "none";

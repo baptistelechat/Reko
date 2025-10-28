@@ -4,9 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { tmdbService } from "@/services/tmdb";
 import { useAppStore } from "@/store/useAppStore";
 import { ContentType } from "@/types";
-import { getImageUrl } from "@/utils/getImageUrl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -253,7 +253,7 @@ export default function FavoritesPage() {
                     >
                       {item.poster_path && (
                         <img
-                          src={getImageUrl(item.poster_path)}
+                          src={tmdbService.getPosterUrl(item.poster_path)}
                           alt={item.title}
                           className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
                           onError={(e) => {

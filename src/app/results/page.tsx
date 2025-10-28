@@ -3,9 +3,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import tmdbService from "@/services/tmdb";
 import { useAppStore } from "@/store/useAppStore";
 import { Movie, TVShow } from "@/types";
-import { getImageUrl } from "@/utils/getImageUrl";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -208,8 +208,8 @@ export default function ResultsPage() {
                     >
                       {content.poster_path && (
                         <img
-                          src={getImageUrl(content.poster_path)}
-                          alt={title}
+                          src={tmdbService.getPosterUrl(content.poster_path)}
+                          alt={tmdbService.getContentTitle(content)}
                           className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;

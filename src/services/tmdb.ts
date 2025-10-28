@@ -12,7 +12,6 @@ import {
   TVShow,
   TVShowDetails,
 } from "@/types";
-import { getImageUrl } from "@/utils/getImageUrl";
 
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
@@ -24,6 +23,14 @@ class TMDBService {
     if (!this.apiKey) {
       console.warn("TMDB API key is not configured");
     }
+  }
+
+  // Fonction utilitaire pour générer les URLs d'images TMDB
+  private getImageUrl(
+    path: string | null,
+    size: "w300" | "w500" | "w780" | "original" = "w500"
+  ): string {
+    return path ? `https://image.tmdb.org/t/p/${size}${path}` : "";
   }
 
   private async fetchFromTMDB<T>(
@@ -342,16 +349,16 @@ class TMDBService {
     });
   }
 
-  getPosterUrl(path: string | null): string | null {
-    return getImageUrl(path, "w500");
+  getPosterUrl(path: string | null): string {
+    return this.getImageUrl(path, "w500");
   }
 
-  getBackdropUrl(path: string | null): string | null {
-    return getImageUrl(path, "w780");
+  getBackdropUrl(path: string | null): string {
+    return this.getImageUrl(path, "w780");
   }
 
-  getProfileUrl(path: string | null): string | null {
-    return getImageUrl(path, "w300");
+  getProfileUrl(path: string | null): string {
+    return this.getImageUrl(path, "w300");
   }
 
   // Obtenir le titre d'un contenu (film ou série)

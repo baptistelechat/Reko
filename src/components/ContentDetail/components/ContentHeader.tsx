@@ -2,9 +2,9 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { formatDate } from "@/utils/formatDate";
-import { getImageUrl } from "@/utils/getImageUrl";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -65,9 +65,8 @@ export default function ContentHeader({
       className="relative h-96 bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: backdrop
-          ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(${getImageUrl(
-              backdrop,
-              "original"
+          ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(${tmdbService.getBackdropUrl(
+              backdrop
             )})`
           : "linear-gradient(135deg, #8B5CF6, #1E293B)",
       }}
@@ -98,7 +97,7 @@ export default function ContentHeader({
             <div className="h-72 w-48 shrink-0 rounded-lg bg-linear-to-r from-violet-300 to-orange-300 shadow-2xl">
               {poster && (
                 <img
-                  src={getImageUrl(poster)}
+                  src={tmdbService.getPosterUrl(poster)}
                   alt={title || ""}
                   className="size-full rounded-lg object-cover"
                   onError={(e) => {
