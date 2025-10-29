@@ -1,10 +1,11 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
-import { Play, ExternalLink, Calendar } from "lucide-react";
+import { Calendar, ExternalLink, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type ContentVideosProps = {
@@ -85,30 +86,38 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
       // Prioriser les vidéos officielles
       if (a.official && !b.official) return -1;
       if (!a.official && b.official) return 1;
-      
+
       // Prioriser par type (Trailer > Teaser > Clip > etc.)
-      const typeOrder = ["Trailer", "Teaser", "Clip", "Featurette", "Behind the Scenes"];
+      const typeOrder = [
+        "Trailer",
+        "Teaser",
+        "Clip",
+        "Featurette",
+        "Behind the Scenes",
+      ];
       const aIndex = typeOrder.indexOf(a.type);
       const bIndex = typeOrder.indexOf(b.type);
-      
+
       if (aIndex !== -1 && bIndex !== -1) {
         return aIndex - bIndex;
       }
       if (aIndex !== -1) return -1;
       if (bIndex !== -1) return 1;
-      
+
       // Trier par date de publication (plus récent en premier)
-      return new Date(b.published_at).getTime() - new Date(a.published_at).getTime();
+      return (
+        new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+      );
     });
 
   const getVideoTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
-      "Trailer": "Bande-annonce",
-      "Teaser": "Teaser",
-      "Clip": "Extrait",
-      "Featurette": "Making-of",
+      Trailer: "Bande-annonce",
+      Teaser: "Teaser",
+      Clip: "Extrait",
+      Featurette: "Making-of",
       "Behind the Scenes": "Coulisses",
-      "Bloopers": "Bêtisier",
+      Bloopers: "Bêtisier",
       "Opening Credits": "Générique d'ouverture",
     };
     return labels[type] || type;
@@ -116,10 +125,10 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
 
   const getVideoTypeColor = (type: string) => {
     const colors: Record<string, string> = {
-      "Trailer": "bg-red-100 text-red-800",
-      "Teaser": "bg-orange-100 text-orange-800",
-      "Clip": "bg-blue-100 text-blue-800",
-      "Featurette": "bg-green-100 text-green-800",
+      Trailer: "bg-red-100 text-red-800",
+      Teaser: "bg-orange-100 text-orange-800",
+      Clip: "bg-blue-100 text-blue-800",
+      Featurette: "bg-green-100 text-green-800",
       "Behind the Scenes": "bg-purple-100 text-purple-800",
     };
     return colors[type] || "bg-gray-100 text-gray-800";
@@ -162,9 +171,9 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
                     target.src = `https://img.youtube.com/vi/${video.key}/hqdefault.jpg`;
                   }}
                 />
-                
+
                 {/* Overlay de lecture */}
-                <div className="bg-opacity-30 group-hover:bg-opacity-50 absolute inset-0 flex items-center justify-center bg-black transition-opacity">
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-opacity">
                   <div className="rounded-full bg-red-600 p-3 text-white transition-transform group-hover:scale-110">
                     <Play className="h-6 w-6 fill-current" />
                   </div>
@@ -172,33 +181,33 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
 
                 {/* Badge du type de vidéo */}
                 <div className="absolute top-2 left-2">
-                  <span className={`rounded-full px-2 py-1 text-xs font-medium ${getVideoTypeColor(video.type)}`}>
+                  <span
+                    className={`rounded-full px-2 py-1 text-xs font-medium ${getVideoTypeColor(
+                      video.type
+                    )}`}
+                  >
                     {getVideoTypeLabel(video.type)}
                   </span>
                 </div>
 
                 {/* Badge officiel */}
                 {video.official && (
-                  <div className="absolute top-2 right-2">
-                    <span className="rounded-full bg-green-600 px-2 py-1 text-xs font-medium text-white">
-                      Officiel
-                    </span>
-                  </div>
+                  <Badge variant="secondary" className="absolute top-2 right-2">
+                    Officiel
+                  </Badge>
                 )}
               </div>
 
               {/* Informations de la vidéo */}
               <div className="p-4">
-                <h4 className="mb-2 line-clamp-2 font-medium text-gray-900 group-hover:text-blue-600">
-                  {video.name}
-                </h4>
-                
+                <h4 className="mb-2 line-clamp-2 font-medium">{video.name}</h4>
+
                 <div className="flex items-center justify-between text-sm text-gray-600">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
                     {new Date(video.published_at).toLocaleDateString("fr-FR")}
                   </div>
-                  
+
                   <div className="flex items-center gap-1 text-red-600">
                     <ExternalLink className="h-4 w-4" />
                     YouTube

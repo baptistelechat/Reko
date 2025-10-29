@@ -7,18 +7,18 @@ import { MovieDetails, TVShowDetails } from "@/types";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ContentCredits from "./components/ContentCredits";
+import ContentExternalLinks from "./components/ContentExternalLinks";
 import ContentHeader from "./components/ContentHeader";
+import ContentImages from "./components/ContentImages";
 import ContentInfo from "./components/ContentInfo";
+import ContentKeywords from "./components/ContentKeywords";
 import ContentProduction from "./components/ContentProduction";
 import ContentProviders from "./components/ContentProviders";
 import ContentSeasons from "./components/ContentSeasons";
 import ContentSynopsis from "./components/ContentSynopsis";
-import ContentWatchProviders from "./components/ContentWatchProviders";
-import ContentCredits from "./components/ContentCredits";
-import ContentExternalLinks from "./components/ContentExternalLinks";
-import ContentImages from "./components/ContentImages";
-import ContentKeywords from "./components/ContentKeywords";
 import ContentVideos from "./components/ContentVideos";
+import ContentWatchProviders from "./components/ContentWatchProviders";
 
 type ContentDetailProps = {
   type: "movie" | "tv";
@@ -219,11 +219,11 @@ export default function ContentDetail({ type, id }: ContentDetailProps) {
             {/* Production Companies */}
             <ContentProduction data={data} />
 
-            {/* Keywords */}
-            <ContentKeywords type={type} data={data} />
-
             {/* External Links */}
             <ContentExternalLinks type={type} data={data} />
+
+            {/* Keywords */}
+            <ContentKeywords type={type} data={data} />
           </div>
         </div>
       </div>

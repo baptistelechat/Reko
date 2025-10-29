@@ -1,6 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
@@ -29,7 +30,6 @@ type ImagesResponse = {
 export default function ContentImages({ type, data }: ContentImagesProps) {
   const [images, setImages] = useState<ImagesResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"backdrops" | "posters">("backdrops");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -63,7 +63,10 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
             <div className="h-6 w-32 rounded bg-gray-200"></div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="aspect-video rounded-lg bg-gray-200"></div>
+                <div
+                  key={i}
+                  className="aspect-video rounded-lg bg-gray-200"
+                ></div>
               ))}
             </div>
           </div>
@@ -76,8 +79,6 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
     return null;
   }
 
-  const currentImages = activeTab === "backdrops" ? images.backdrops : images.posters;
-
   return (
     <>
       <motion.div
@@ -87,88 +88,68 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
       >
         <Card className="p-6">
           <div className="mb-6">
-            <h3 className="mb-4 text-xl font-bold text-gray-900">
-              Images
-            </h3>
-            
-            {/* Onglets */}
-            <div className="flex space-x-1 rounded-lg bg-gray-100 p-1">
-              <button
-                onClick={() => setActiveTab("backdrops")}
-                className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                  activeTab === "backdrops"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Arrière-plans ({images.backdrops?.length || 0})
-              </button>
-              <button
-                onClick={() => setActiveTab("posters")}
-                className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                  activeTab === "posters"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Affiches ({images.posters?.length || 0})
-              </button>
-            </div>
-          </div>
+            <h3 className="mb-4 text-xl font-bold text-gray-900">Images</h3>
 
-          {/* Grille d'images */}
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {currentImages.slice(0, 12).map((image, index) => (
-              <div
-                key={`${image.file_path}-${index}`}
-                className="group relative cursor-pointer overflow-hidden rounded-lg bg-gray-100 transition-transform hover:scale-105"
-                onClick={() => setSelectedImage(image.file_path)}
-              >
-                <div className={`aspect-${activeTab === "backdrops" ? "video" : "[2/3]"}`}>
-                  <img
-                    src={tmdbService.getPosterUrl(image.file_path)}
-                    alt={`${activeTab === "backdrops" ? "Arrière-plan" : "Affiche"} ${index + 1}`}
-                    className="h-full w-full object-cover transition-opacity group-hover:opacity-90"
-                    loading="lazy"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = "none";
-                    }}
-                  />
-                  
-                  {/* Overlay avec informations */}
-                  <div className="bg-opacity-0 group-hover:bg-opacity-30 absolute inset-0 bg-black transition-all">
-                    <div className="absolute right-2 bottom-2 left-2 opacity-0 transition-opacity group-hover:opacity-100">
-                      <div className="bg-opacity-75 rounded bg-black px-2 py-1 text-xs text-white">
-                        {image.width} × {image.height}
-                        {image.vote_average > 0 && (
-                          <span className="ml-2">
-                            ⭐ {image.vote_average.toFixed(1)}
-                          </span>
-                        )}
+            <Tabs defaultValue="backdrops" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="backdrops">
+                  Arrière-plans ({images.backdrops?.length || 0})
+                </TabsTrigger>
+                <TabsTrigger value="posters">
+                  Affiches ({images.posters?.length || 0})
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="backdrops" className="mt-6">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                  {images.backdrops?.slice(0, 12).map((image, index) => (
+                    <div
+                      key={`${image.file_path}-${index}`}
+                      className="group relative cursor-pointer overflow-hidden rounded-lg bg-gray-100 transition-transform hover:scale-105"
+                      onClick={() => setSelectedImage(image.file_path)}
+                    >
+                      <div className="aspect-video">
+                        <img
+                          src={tmdbService.getBackdropUrl(image.file_path)}
+                          alt="Arrière-plan"
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              </div>
-            ))}
-          </div>
+              </TabsContent>
 
-          {/* Afficher plus d'images si disponible */}
-          {currentImages.length > 12 && (
-            <div className="mt-4 text-center">
-              <p className="text-sm text-gray-600">
-                {currentImages.length - 12} image(s) supplémentaire(s) disponible(s)
-              </p>
-            </div>
-          )}
+              <TabsContent value="posters" className="mt-6">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                  {images.posters?.slice(0, 12).map((image, index) => (
+                    <div
+                      key={`${image.file_path}-${index}`}
+                      className="group relative cursor-pointer overflow-hidden rounded-lg bg-gray-100 transition-transform hover:scale-105"
+                      onClick={() => setSelectedImage(image.file_path)}
+                    >
+                      <div className="aspect-2/3">
+                        <img
+                          src={tmdbService.getPosterUrl(image.file_path)}
+                          alt="Affiche"
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
         </Card>
       </motion.div>
 
       {/* Modal pour l'image agrandie */}
       {selectedImage && (
         <div
-          className="bg-opacity-90 fixed inset-0 z-50 flex items-center justify-center bg-black p-4"
+          className="bg-opacity-90 fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
           onClick={() => setSelectedImage(null)}
         >
           <div className="relative max-h-full max-w-full">
