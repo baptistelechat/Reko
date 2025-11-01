@@ -1,11 +1,12 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { ImageZoom } from "@/components/ui/shadcn-io/image-zoom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type ContentImagesProps = {
@@ -30,7 +31,6 @@ type ImagesResponse = {
 export default function ContentImages({ type, data }: ContentImagesProps) {
   const [images, setImages] = useState<ImagesResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -90,84 +90,64 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
           <div className="mb-6">
             <h3 className="mb-4 text-xl font-bold text-gray-900">Images</h3>
 
-            <Tabs defaultValue="backdrops" className="w-full">
+            <Tabs defaultValue="posters" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="backdrops">
-                  Arrière-plans ({images.backdrops?.length || 0})
-                </TabsTrigger>
                 <TabsTrigger value="posters">
                   Affiches ({images.posters?.length || 0})
                 </TabsTrigger>
+                <TabsTrigger value="backdrops">
+                  Arrière-plans ({images.backdrops?.length || 0})
+                </TabsTrigger>
               </TabsList>
-
-              <TabsContent value="backdrops" className="mt-6">
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                  {images.backdrops?.slice(0, 12).map((image, index) => (
-                    <div
-                      key={`${image.file_path}-${index}`}
-                      className="group relative cursor-pointer overflow-hidden rounded-lg bg-gray-100 transition-transform hover:scale-105"
-                      onClick={() => setSelectedImage(image.file_path)}
-                    >
-                      <div className="aspect-video">
-                        <img
-                          src={tmdbService.getBackdropUrl(image.file_path)}
-                          alt="Arrière-plan"
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </TabsContent>
 
               <TabsContent value="posters" className="mt-6">
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                  {images.posters?.slice(0, 12).map((image, index) => (
-                    <div
+                  {images.posters?.map((image, index) => (
+                    <ImageZoom
                       key={`${image.file_path}-${index}`}
-                      className="group relative cursor-pointer overflow-hidden rounded-lg bg-gray-100 transition-transform hover:scale-105"
-                      onClick={() => setSelectedImage(image.file_path)}
+                      backdropClassName={cn(
+                        '[&_[data-rmiz-modal-overlay="visible"]]:bg-black/80'
+                      )}
                     >
                       <div className="aspect-2/3">
                         <img
                           src={tmdbService.getPosterUrl(image.file_path)}
                           alt="Affiche"
-                          className="h-full w-full object-cover"
+                          className="h-full w-full cursor-zoom-in object-cover"
                           loading="lazy"
                         />
                       </div>
-                    </div>
+                    </ImageZoom>
                   ))}
                 </div>
               </TabsContent>
+
+              <TabsContent value="backdrops" className="mt-6">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                  {images.backdrops?.map((image, index) => (
+                    <ImageZoom
+                      key={`${image.file_path}-${index}`}
+                      backdropClassName={cn(
+                        '[&_[data-rmiz-modal-overlay="visible"]]:bg-black/80'
+                      )}
+                    >
+                      <div className="aspect-video">
+                        <img
+                          src={tmdbService.getBackdropUrl(image.file_path)}
+                          alt="Arrière-plan"
+                          className="h-full w-full cursor-zoom-in object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    </ImageZoom>
+                  ))}
+                </div>
+              </TabsContent>
+
             </Tabs>
           </div>
         </Card>
       </motion.div>
-
-      {/* Modal pour l'image agrandie */}
-      {selectedImage && (
-        <div
-          className="bg-opacity-90 fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div className="relative max-h-full max-w-full">
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300"
-            >
-              <X className="h-8 w-8" />
-            </button>
-            <img
-              src={tmdbService.getPosterUrl(selectedImage)}
-              alt="Image agrandie"
-              className="max-h-full max-w-full object-contain"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 }
