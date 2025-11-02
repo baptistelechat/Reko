@@ -19,6 +19,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
 import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 
+const DISABLE_TOGGLE = false
+
 type Link = {
   label: string;
   href: string;
@@ -116,7 +118,7 @@ export default function Navigation() {
               })}
 
               {/* Theme Toggler */}
-              <AnimatedThemeToggler />
+              {!DISABLE_TOGGLE && <AnimatedThemeToggler />}
             </div>
           </div>
         </div>
@@ -141,7 +143,7 @@ export default function Navigation() {
 
             {/* Menu Button */}
             <div className="flex items-center space-x-2">
-              <AnimatedThemeToggler />
+              {!DISABLE_TOGGLE && <AnimatedThemeToggler />}
               <Button
                 variant="ghost"
                 size="sm"

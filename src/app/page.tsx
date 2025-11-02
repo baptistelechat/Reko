@@ -55,7 +55,7 @@ const LandingPage = () => {
         >
           <h1 className="mb-6 text-5xl font-bold md:text-7xl">
             Découvrez votre{" "}
-            <span className="bg-linear-to-r from-violet-300 to-orange-300 bg-clip-text text-transparent">
+            <span className="from-primary bg-linear-to-r to-orange-600 bg-clip-text text-transparent">
               prochaine obsession
             </span>
           </h1>

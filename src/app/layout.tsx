@@ -47,7 +47,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
         <Navigation />
-        <main className="min-h-screen bg-linear-to-br from-violet-50 via-white to-orange-50 pt-12">
+        <main className="min-h-screen bg-linear-to-br from-violet-100 via-white to-orange-100 pt-12">
           {children}
         </main>
 
