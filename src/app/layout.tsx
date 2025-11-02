@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,9 +36,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+      <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
         <Navigation />
         <main className="min-h-screen bg-linear-to-br from-violet-50 via-white to-orange-50 pt-12">
           {children}
@@ -52,6 +60,7 @@ export default function RootLayout({
             data-enabled="true"
           />
         )}
+          </ThemeProvider>
       </body>
     </html>
   );

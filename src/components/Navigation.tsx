@@ -17,6 +17,7 @@ import {
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
+import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 
 type Link = {
   label: string;
@@ -113,6 +114,9 @@ export default function Navigation() {
                   </Button>
                 );
               })}
+
+              {/* Theme Toggler */}
+              <AnimatedThemeToggler />
             </div>
           </div>
         </div>
@@ -136,14 +140,17 @@ export default function Navigation() {
             </div>
 
             {/* Menu Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </Button>
+            <div className="flex items-center space-x-2">
+              <AnimatedThemeToggler />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </Button>
+            </div>
           </div>
         </header>
 

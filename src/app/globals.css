@@ -117,3 +117,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Styles pour les transitions de thème animées */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
