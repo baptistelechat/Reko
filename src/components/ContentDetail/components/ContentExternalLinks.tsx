@@ -4,7 +4,14 @@ import { Card } from "@/components/ui/card";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
-import { ExternalLink, Globe } from "lucide-react";
+import {
+  BookOpen,
+  ExternalLink,
+  Facebook,
+  Film,
+  Instagram,
+  Twitter,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 type ContentExternalLinksProps = {
@@ -20,7 +27,10 @@ type ExternalIds = {
   wikidata_id: string | null;
 };
 
-export default function ContentExternalLinks({ type, data }: ContentExternalLinksProps) {
+export default function ContentExternalLinks({
+  type,
+  data,
+}: ContentExternalLinksProps) {
   const [externalIds, setExternalIds] = useState<ExternalIds | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -73,44 +83,58 @@ export default function ContentExternalLinks({ type, data }: ContentExternalLink
     {
       id: "imdb",
       name: "IMDb",
-      url: externalIds.imdb_id ? `https://www.imdb.com/title/${externalIds.imdb_id}` : null,
-      icon: "🎬",
-      color: "bg-yellow-50 text-yellow-700 hover:bg-yellow-100",
-      description: "Internet Movie Database"
+      url: externalIds.imdb_id
+        ? `https://www.imdb.com/title/${externalIds.imdb_id}`
+        : null,
+      icon: Film,
+      color:
+        "bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border border-yellow-200",
+      description: "Internet Movie Database",
     },
     {
       id: "facebook",
       name: "Facebook",
-      url: externalIds.facebook_id ? `https://www.facebook.com/${externalIds.facebook_id}` : null,
-      icon: "📘",
-      color: "bg-blue-50 text-blue-700 hover:bg-blue-100",
-      description: "Page Facebook officielle"
+      url: externalIds.facebook_id
+        ? `https://www.facebook.com/${externalIds.facebook_id}`
+        : null,
+      icon: Facebook,
+      color:
+        "bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200",
+      description: "Page Facebook officielle",
     },
     {
       id: "instagram",
       name: "Instagram",
-      url: externalIds.instagram_id ? `https://www.instagram.com/${externalIds.instagram_id}` : null,
-      icon: "📷",
-      color: "bg-pink-50 text-pink-700 hover:bg-pink-100",
-      description: "Compte Instagram officiel"
+      url: externalIds.instagram_id
+        ? `https://www.instagram.com/${externalIds.instagram_id}`
+        : null,
+      icon: Instagram,
+      color:
+        "bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200",
+      description: "Compte Instagram officiel",
     },
     {
       id: "twitter",
       name: "Twitter",
-      url: externalIds.twitter_id ? `https://twitter.com/${externalIds.twitter_id}` : null,
-      icon: "🐦",
-      color: "bg-sky-50 text-sky-700 hover:bg-sky-100",
-      description: "Compte Twitter officiel"
+      url: externalIds.twitter_id
+        ? `https://twitter.com/${externalIds.twitter_id}`
+        : null,
+      icon: Twitter,
+      color: "bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200",
+      description: "Compte Twitter officiel",
     },
     {
       id: "wikidata",
       name: "Wikidata",
-      url: externalIds.wikidata_id ? `https://www.wikidata.org/wiki/${externalIds.wikidata_id}` : null,
-      icon: "📚",
-      color: "bg-gray-50 text-gray-700 hover:bg-gray-100",
-      description: "Base de données Wikidata"
-    }
-  ].filter(link => link.url); // Filtrer seulement les liens disponibles
+      url: externalIds.wikidata_id
+        ? `https://www.wikidata.org/wiki/${externalIds.wikidata_id}`
+        : null,
+      icon: BookOpen,
+      color:
+        "bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200",
+      description: "Base de données Wikidata",
+    },
+  ].filter((link) => link.url); // Filtrer seulement les liens disponibles
 
   if (externalLinks.length === 0) {
     return null;
@@ -123,33 +147,32 @@ export default function ContentExternalLinks({ type, data }: ContentExternalLink
       transition={{ delay: 0.8 }}
     >
       <Card className="p-6">
-        <h3 className="mb-4 flex items-center gap-2 text-xl font-bold text-gray-900">
-          <Globe className="h-5 w-5" />
-          Liens externes
-        </h3>
-
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
-          {externalLinks.map((link) => (
-            <a
-              key={link.id}
-              href={link.url!}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`group flex flex-col items-center rounded-lg p-4 text-center transition-colors ${link.color}`}
-              title={link.description}
-            >
-              <div className="mb-2 text-2xl">{link.icon}</div>
-              <div className="flex items-center gap-1">
-                <span className="text-sm font-medium">{link.name}</span>
-                <ExternalLink className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
-              </div>
-            </a>
-          ))}
+        <div className="mb-4 flex items-center gap-2">
+          <ExternalLink className="h-5 w-5 text-blue-600" />
+          <h3 className="text-lg font-semibold">Liens externes</h3>
         </div>
 
-        {/* Information supplémentaire */}
-        <div className="mt-4 text-xs text-gray-500">
-          Liens vers les pages officielles et bases de données externes
+        <div className="flex flex-wrap gap-3">
+          {externalLinks.map((link, index) => {
+            const IconComponent = link.icon;
+            return (
+              <motion.a
+                key={link.id}
+                href={link.url ?? "" }
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center gap-2 rounded-lg px-4 py-2 transition-all duration-200 ${link.color}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <IconComponent className="h-4 w-4" />
+                <span className="text-sm font-medium">{link.name}</span>
+              </motion.a>
+            );
+          })}
         </div>
       </Card>
     </motion.div>
