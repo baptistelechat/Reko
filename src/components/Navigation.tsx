@@ -1,20 +1,32 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useAppStore } from '@/store/useAppStore';
-import { 
-  Home, 
-  Search, 
-  Heart, 
-  Eye, 
-  Menu, 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useAppStore } from "@/store/useAppStore";
+import { motion } from "framer-motion";
+import {
+  Eye,
+  Film,
+  Heart,
+  Home,
+  LucideProps,
+  Menu,
+  Search,
   X,
-  Film
-} from 'lucide-react';
+} from "lucide-react";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
+
+type Link = {
+  label: string;
+  href: string;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
+  active: boolean;
+  badge?: number;
+};
 
 export default function Navigation() {
   const router = useRouter();
@@ -22,33 +34,33 @@ export default function Navigation() {
   const { watchlist, favorites } = useAppStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navigationItems = [
+  const navigationItems: Link[] = [
     {
-      label: 'Accueil',
-      href: '/',
+      label: "Accueil",
+      href: "/",
       icon: Home,
-      active: pathname === '/'
+      active: pathname === "/",
     },
     {
-      label: 'Explorer',
-      href: '/explore',
+      label: "Explorer",
+      href: "/explore",
       icon: Search,
-      active: pathname === '/explore' || pathname === '/results'
+      active: pathname === "/explore" || pathname === "/results",
     },
     {
-      label: 'Watchlist',
-      href: '/watchlist',
+      label: "Watchlist",
+      href: "/watchlist",
       icon: Eye,
-      active: pathname === '/watchlist',
-      badge: watchlist.length
+      active: pathname === "/watchlist",
+      badge: watchlist.length,
     },
     {
-      label: 'Favoris',
-      href: '/favorites',
+      label: "Favoris",
+      href: "/favorites",
       icon: Heart,
-      active: pathname === '/favorites',
-      badge: favorites.length
-    }
+      active: pathname === "/favorites",
+      badge: favorites.length,
+    },
   ];
 
   const handleNavigation = (href: string) => {
@@ -59,18 +71,16 @@ export default function Navigation() {
   return (
     <>
       {/* Navigation Desktop */}
-      <nav className="hidden md:block fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+      <nav className="fixed top-0 right-0 left-0 z-50 hidden bg-white/80 shadow-sm backdrop-blur-sm md:block">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <div 
-              className="flex items-center space-x-2 cursor-pointer"
-              onClick={() => handleNavigation('/')}
+            <div
+              className="flex cursor-pointer items-center space-x-2"
+              onClick={() => handleNavigation("/")}
             >
-              <div className="w-8 h-8 bg-gradient-to-r from-reko-primary to-reko-secondary rounded-lg flex items-center justify-center">
-                <Film className="text-white" size={20} />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-reko-primary to-reko-secondary bg-clip-text text-transparent">
+              <Image src="/icon.svg" alt="REKO logo" width={32} height={32} />
+              <span className="from-primary bg-linear-to-r to-orange-500 bg-clip-text text-xl font-bold text-transparent">
                 REKO
               </span>
             </div>
@@ -82,20 +92,20 @@ export default function Navigation() {
                 return (
                   <Button
                     key={item.href}
-                    variant={item.active ? 'default' : 'ghost'}
+                    variant={item.active ? "default" : "ghost"}
                     onClick={() => handleNavigation(item.href)}
                     className={`relative flex items-center gap-2 ${
-                      item.active 
-                        ? 'bg-gradient-to-r from-reko-primary to-reko-secondary text-white' 
-                        : 'hover:bg-gray-100'
+                      item.active
+                        ? "from-primary bg-linear-to-r to-orange-500 text-white"
+                        : "hover:bg-gray-100"
                     }`}
                   >
                     <Icon size={18} />
                     <span className="hidden lg:block">{item.label}</span>
                     {item.badge && item.badge > 0 && (
-                      <Badge 
-                        variant="secondary" 
-                        className="ml-1 bg-reko-secondary text-white text-xs"
+                      <Badge
+                        variant="secondary"
+                        className="ml-1 bg-orange-500 text-xs text-white"
                       >
                         {item.badge}
                       </Badge>
@@ -107,21 +117,20 @@ export default function Navigation() {
           </div>
         </div>
       </nav>
-
       {/* Navigation Mobile */}
       <div className="md:hidden">
         {/* Header Mobile */}
-        <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
-          <div className="flex items-center justify-between h-16 px-4">
+        <header className="fixed top-0 right-0 left-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur-sm">
+          <div className="flex h-16 items-center justify-between px-4">
             {/* Logo */}
-            <div 
-              className="flex items-center space-x-2 cursor-pointer"
-              onClick={() => handleNavigation('/')}
+            <div
+              className="flex cursor-pointer items-center space-x-2"
+              onClick={() => handleNavigation("/")}
             >
-              <div className="w-8 h-8 bg-gradient-to-r from-reko-primary to-reko-secondary rounded-lg flex items-center justify-center">
+              <div className="from-primary flex size-8 items-center justify-center rounded-lg bg-linear-to-r to-orange-500">
                 <Film className="text-white" size={20} />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-reko-primary to-reko-secondary bg-clip-text text-transparent">
+              <span className="from-primary bg-linear-to-r to-orange-500 bg-clip-text text-xl font-bold text-transparent">
                 REKO
               </span>
             </div>
@@ -151,33 +160,35 @@ export default function Navigation() {
 
         {/* Menu Mobile */}
         <motion.div
-          initial={{ x: '100%' }}
-          animate={{ x: isMenuOpen ? 0 : '100%' }}
-          transition={{ type: 'tween', duration: 0.3 }}
+          initial={{ x: "100%" }}
+          animate={{ x: isMenuOpen ? 0 : "100%" }}
+          transition={{ type: "tween", duration: 0.3 }}
           className="fixed top-16 right-0 bottom-0 z-50 w-80 bg-white shadow-xl"
         >
-          <div className="p-6 space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">Navigation</h2>
-            
+          <div className="space-y-4 p-6">
+            <h2 className="mb-6 text-lg font-semibold text-gray-900">
+              Navigation
+            </h2>
+
             {navigationItems.map((item) => {
               const Icon = item.icon;
               return (
                 <Button
                   key={item.href}
-                  variant={item.active ? 'default' : 'ghost'}
+                  variant={item.active ? "default" : "ghost"}
                   onClick={() => handleNavigation(item.href)}
-                  className={`w-full justify-start gap-3 h-12 ${
-                    item.active 
-                      ? 'bg-gradient-to-r from-reko-primary to-reko-secondary text-white' 
-                      : 'hover:bg-gray-100'
+                  className={`h-12 w-full justify-start gap-3 ${
+                    item.active
+                      ? "from-primary bg-linear-to-r to-orange-500 text-white"
+                      : "hover:bg-gray-100"
                   }`}
                 >
                   <Icon size={20} />
                   <span className="flex-1 text-left">{item.label}</span>
                   {item.badge && item.badge > 0 && (
-                    <Badge 
-                      variant="secondary" 
-                      className="bg-reko-secondary text-white"
+                    <Badge
+                      variant="secondary"
+                      className="bg-orange-500 text-white"
                     >
                       {item.badge}
                     </Badge>
@@ -187,15 +198,21 @@ export default function Navigation() {
             })}
 
             {/* Statistiques */}
-            <div className="mt-8 pt-6 border-t border-gray-200 space-y-3">
-              <h3 className="text-sm font-medium text-gray-700">Statistiques</h3>
+            <div className="mt-8 space-y-3 border-t border-gray-200 pt-6">
+              <h3 className="text-sm font-medium text-gray-700">
+                Statistiques
+              </h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <div className="text-lg font-semibold text-reko-primary">{watchlist.length}</div>
+                <div className="rounded-lg bg-gray-50 p-3 text-center">
+                  <div className="text-primary text-lg font-semibold">
+                    {watchlist.length}
+                  </div>
                   <div className="text-xs text-gray-600">À regarder</div>
                 </div>
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <div className="text-lg font-semibold text-reko-secondary">{favorites.length}</div>
+                <div className="rounded-lg bg-gray-50 p-3 text-center">
+                  <div className="text-lg font-semibold text-orange-500">
+                    {favorites.length}
+                  </div>
                   <div className="text-xs text-gray-600">Favoris</div>
                 </div>
               </div>
@@ -203,41 +220,36 @@ export default function Navigation() {
           </div>
         </motion.div>
       </div>
-
       {/* Bottom Navigation Mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200">
-        <div className="grid grid-cols-4 h-16">
+      <nav className="fixed right-0 bottom-0 left-0 z-40 border-t border-gray-200 bg-white md:hidden">
+        <div className="grid h-16 grid-cols-4">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             return (
               <button
                 key={item.href}
                 onClick={() => handleNavigation(item.href)}
-                className={`flex flex-col items-center justify-center space-y-1 relative ${
-                  item.active 
-                    ? 'text-reko-primary' 
-                    : 'text-gray-500 hover:text-gray-700'
+                className={`relative flex flex-col items-center justify-center space-y-1 ${
+                  item.active
+                    ? "text-primary"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 <Icon size={20} />
                 <span className="text-xs font-medium">{item.label}</span>
                 {item.badge && item.badge > 0 && (
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-reko-secondary text-white text-xs rounded-full flex items-center justify-center">
-                    {item.badge > 99 ? '99+' : item.badge}
+                  <div className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-orange-500 text-xs text-white">
+                    {item.badge > 99 ? "99+" : item.badge}
                   </div>
                 )}
                 {item.active && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-reko-primary to-reko-secondary rounded-b-full" />
+                  <div className="from-primary absolute top-0 left-1/2 h-1 w-8 -translate-x-1/2 transform rounded-b-full bg-linear-to-r to-orange-500" />
                 )}
               </button>
             );
           })}
         </div>
       </nav>
-
-      {/* Spacer pour le contenu */}
-      <div className="h-16 md:h-16" />
-      <div className="h-16 md:h-0" /> {/* Bottom nav spacer mobile only */}
     </>
   );
 }

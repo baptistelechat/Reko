@@ -45,6 +45,25 @@ export interface TMDBResponse<T> {
   total_results: number;
 }
 
+export interface WatchProvider {
+  display_priority: number;
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+}
+
+export interface WatchProvidersResponse {
+  id: number;
+  results: {
+    FR?: {
+      flatrate?: WatchProvider[];
+      buy?: WatchProvider[];
+      rent?: WatchProvider[];
+      link: string;
+    };
+  };
+}
+
 // Types pour les crédits (casting)
 export interface CastMember {
   id: number;
@@ -129,16 +148,17 @@ export interface TVShowDetails extends TVShow {
 }
 
 // Types pour l'application
-export type ContentType = 'movie' | 'tv';
+export type ContentType = "movie" | "tv";
 
-export type Mood = 
-  | 'happy' 
-  | 'sad' 
-  | 'excited' 
-  | 'romantic' 
-  | 'chill';
+export type Mood =
+  | "happy"
+  | "sad"
+  | "excited"
+  | "romantic"
+  | "chill"
+  | "thriller";
 
-export type FreeTime = 'short' | 'medium' | 'long';
+export type FreeTime = "short" | "medium" | "long";
 
 export interface UserPreferences {
   mood: Mood | null;
@@ -172,12 +192,16 @@ export const MOOD_TO_GENRES: Record<Mood, number[]> = {
   sad: [18, 10749], // Drama, Romance
   excited: [28, 12, 53], // Action, Adventure, Thriller
   romantic: [10749, 35], // Romance, Comedy
-  chill: [99, 10402, 10770] // Documentary, Music, TV Movie
+  chill: [99, 10402, 10770], // Documentary, Music, TV Movie
+  thriller: [27, 53, 9648], // Horror, Thriller, Mystery
 };
 
 // Mapping du temps libre vers la durée
-export const FREE_TIME_TO_DURATION: Record<FreeTime, { min: number; max: number }> = {
-  'short': { min: 0, max: 120 },
-  'medium': { min: 120, max: 180 },
-  'long': { min: 180, max: 999 }
+export const FREE_TIME_TO_DURATION: Record<
+  FreeTime,
+  { min: number; max: number }
+> = {
+  short: { min: 0, max: 120 },
+  medium: { min: 120, max: 180 },
+  long: { min: 180, max: 999 },
 };

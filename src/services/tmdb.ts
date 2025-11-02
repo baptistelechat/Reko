@@ -1,140 +1,180 @@
-import { 
-  Movie, 
-  TVShow, 
-  MovieDetails, 
-  TVShowDetails, 
-  TMDBResponse, 
-  Genre,
+import {
   ContentType,
-  Mood,
-  FreeTime,
-  MOOD_TO_GENRES,
+  Credits,
   FREE_TIME_TO_DURATION,
-  Credits
-} from '@/types';
+  FreeTime,
+  Genre,
+  Mood,
+  MOOD_TO_GENRES,
+  Movie,
+  MovieDetails,
+  TMDBResponse,
+  TVShow,
+  TVShowDetails,
+  WatchProvidersResponse,
+} from "@/types";
 
-const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
+const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
 class TMDBService {
   private apiKey: string;
 
   constructor() {
-    this.apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY || '';
+    this.apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY || "";
     if (!this.apiKey) {
-      console.warn('TMDB API key is not configured');
+      console.warn("TMDB API key is not configured");
     }
   }
 
-  private async fetchFromTMDB<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
+  // Fonction utilitaire pour générer les URLs d'images TMDB
+  private getImageUrl(
+    path: string | null,
+    size: "w92" | "w300" | "w500" | "w780" | "original" = "w500"
+  ): string {
+    return path ? `https://image.tmdb.org/t/p/${size}${path}` : "";
+  }
+
+  private async fetchFromTMDB<T>(
+    endpoint: string,
+    params: Record<string, string> = {}
+  ): Promise<T> {
     const url = new URL(`${TMDB_BASE_URL}${endpoint}`);
-    url.searchParams.append('api_key', this.apiKey);
-    url.searchParams.append('language', 'fr-FR');
-    
+    // Utilisation de l'en-tête Authorization au lieu du paramètre api_key
+    url.searchParams.append("language", "fr-FR");
+
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.append(key, value);
     });
 
     try {
-      const response = await fetch(url.toString());
-      
+      const response = await fetch(url.toString(), {
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json",
+        },
+      });
+
       if (!response.ok) {
-        throw new Error(`TMDB API error: ${response.status} ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({}));
+        console.error("TMDB API error details:", errorData);
+        throw new Error(
+          `TMDB API error: ${response.status} ${response.statusText}`
+        );
       }
 
       return await response.json();
     } catch (error) {
-      console.error('Error fetching from TMDB:', error);
+      console.error("Error fetching from TMDB:", error);
       throw error;
     }
   }
 
   // Obtenir les genres pour les films
   async getMovieGenres(): Promise<Genre[]> {
-    const response = await this.fetchFromTMDB<{ genres: Genre[] }>('/genre/movie/list');
+    const response = await this.fetchFromTMDB<{ genres: Genre[] }>(
+      "/genre/movie/list"
+    );
     return response.genres;
   }
 
   // Obtenir les genres pour les séries TV
   async getTVGenres(): Promise<Genre[]> {
-    const response = await this.fetchFromTMDB<{ genres: Genre[] }>('/genre/tv/list');
+    const response = await this.fetchFromTMDB<{ genres: Genre[] }>(
+      "/genre/tv/list"
+    );
     return response.genres;
   }
 
   // Rechercher des films populaires
   async getPopularMovies(page: number = 1): Promise<TMDBResponse<Movie>> {
-    return this.fetchFromTMDB<TMDBResponse<Movie>>('/movie/popular', {
-      page: page.toString()
+    return this.fetchFromTMDB<TMDBResponse<Movie>>("/movie/popular", {
+      page: page.toString(),
     });
   }
 
   // Rechercher des séries TV populaires
   async getPopularTVShows(page: number = 1): Promise<TMDBResponse<TVShow>> {
-    return this.fetchFromTMDB<TMDBResponse<TVShow>>('/tv/popular', {
-      page: page.toString()
+    return this.fetchFromTMDB<TMDBResponse<TVShow>>("/tv/popular", {
+      page: page.toString(),
     });
   }
 
   // Découvrir des films avec des filtres
-  async discoverMovies(params: {
-    genres?: number[];
-    minRuntime?: number;
-    maxRuntime?: number;
-    sortBy?: string;
-    page?: number;
-  } = {}): Promise<TMDBResponse<Movie>> {
+  async discoverMovies(
+    params: {
+      genres?: number[];
+      minRuntime?: number;
+      maxRuntime?: number;
+      sortBy?: string;
+      page?: number;
+    } = {}
+  ): Promise<TMDBResponse<Movie>> {
     const queryParams: Record<string, string> = {
-      sort_by: params.sortBy || 'popularity.desc',
-      page: (params.page || 1).toString()
+      sort_by: params.sortBy || "popularity.desc",
+      page: (params.page || 1).toString(),
     };
 
     if (params.genres && params.genres.length > 0) {
-      queryParams.with_genres = params.genres.join(',');
+      queryParams.with_genres = params.genres.join(",");
     }
 
     if (params.minRuntime) {
-      queryParams['with_runtime.gte'] = params.minRuntime.toString();
+      queryParams["with_runtime.gte"] = params.minRuntime.toString();
     }
 
     if (params.maxRuntime) {
-      queryParams['with_runtime.lte'] = params.maxRuntime.toString();
+      queryParams["with_runtime.lte"] = params.maxRuntime.toString();
     }
 
-    return this.fetchFromTMDB<TMDBResponse<Movie>>('/discover/movie', queryParams);
+    return this.fetchFromTMDB<TMDBResponse<Movie>>(
+      "/discover/movie",
+      queryParams
+    );
   }
 
   // Découvrir des séries TV avec des filtres
-  async discoverTVShows(params: {
-    genres?: number[];
-    sortBy?: string;
-    page?: number;
-  } = {}): Promise<TMDBResponse<TVShow>> {
+  async discoverTVShows(
+    params: {
+      genres?: number[];
+      sortBy?: string;
+      page?: number;
+    } = {}
+  ): Promise<TMDBResponse<TVShow>> {
     const queryParams: Record<string, string> = {
-      sort_by: params.sortBy || 'popularity.desc',
-      page: (params.page || 1).toString()
+      sort_by: params.sortBy || "popularity.desc",
+      page: (params.page || 1).toString(),
     };
 
     if (params.genres && params.genres.length > 0) {
-      queryParams.with_genres = params.genres.join(',');
+      queryParams.with_genres = params.genres.join(",");
     }
 
-    return this.fetchFromTMDB<TMDBResponse<TVShow>>('/discover/tv', queryParams);
+    return this.fetchFromTMDB<TMDBResponse<TVShow>>(
+      "/discover/tv",
+      queryParams
+    );
   }
 
   // Obtenir les détails d'un film avec crédits
-  async getMovieDetails(movieId: number, includeCredits: boolean = false): Promise<MovieDetails> {
+  async getMovieDetails(
+    movieId: number,
+    includeCredits: boolean = false
+  ): Promise<MovieDetails> {
     const params: Record<string, string> = {};
     if (includeCredits) {
-      params.append_to_response = 'credits';
+      params.append_to_response = "credits";
     }
     return this.fetchFromTMDB<MovieDetails>(`/movie/${movieId}`, params);
   }
 
   // Obtenir les détails d'une série TV avec crédits
-  async getTVShowDetails(tvId: number, includeCredits: boolean = false): Promise<TVShowDetails> {
+  async getTVShowDetails(
+    tvId: number,
+    includeCredits: boolean = false
+  ): Promise<TVShowDetails> {
     const params: Record<string, string> = {};
     if (includeCredits) {
-      params.append_to_response = 'credits';
+      params.append_to_response = "credits";
     }
     return this.fetchFromTMDB<TVShowDetails>(`/tv/${tvId}`, params);
   }
@@ -150,54 +190,84 @@ class TMDBService {
   }
 
   // Obtenir des films similaires
-  async getSimilarMovies(movieId: number, page: number = 1): Promise<TMDBResponse<Movie>> {
-    return this.fetchFromTMDB<TMDBResponse<Movie>>(`/movie/${movieId}/similar`, {
-      page: page.toString()
-    });
+  async getSimilarMovies(
+    movieId: number,
+    page: number = 1
+  ): Promise<TMDBResponse<Movie>> {
+    return this.fetchFromTMDB<TMDBResponse<Movie>>(
+      `/movie/${movieId}/similar`,
+      {
+        page: page.toString(),
+      }
+    );
   }
 
   // Obtenir des séries TV similaires
-  async getSimilarTVShows(tvId: number, page: number = 1): Promise<TMDBResponse<TVShow>> {
+  async getSimilarTVShows(
+    tvId: number,
+    page: number = 1
+  ): Promise<TMDBResponse<TVShow>> {
     return this.fetchFromTMDB<TMDBResponse<TVShow>>(`/tv/${tvId}/similar`, {
-      page: page.toString()
+      page: page.toString(),
     });
   }
 
   // Obtenir des recommandations pour un film
-  async getMovieRecommendations(movieId: number, page: number = 1): Promise<TMDBResponse<Movie>> {
-    return this.fetchFromTMDB<TMDBResponse<Movie>>(`/movie/${movieId}/recommendations`, {
-      page: page.toString()
-    });
+  async getMovieRecommendations(
+    movieId: number,
+    page: number = 1
+  ): Promise<TMDBResponse<Movie>> {
+    return this.fetchFromTMDB<TMDBResponse<Movie>>(
+      `/movie/${movieId}/recommendations`,
+      {
+        page: page.toString(),
+      }
+    );
   }
 
   // Obtenir des recommandations pour une série TV
-  async getTVShowRecommendations(tvId: number, page: number = 1): Promise<TMDBResponse<TVShow>> {
-    return this.fetchFromTMDB<TMDBResponse<TVShow>>(`/tv/${tvId}/recommendations`, {
-      page: page.toString()
-    });
+  async getTVShowRecommendations(
+    tvId: number,
+    page: number = 1
+  ): Promise<TMDBResponse<TVShow>> {
+    return this.fetchFromTMDB<TMDBResponse<TVShow>>(
+      `/tv/${tvId}/recommendations`,
+      {
+        page: page.toString(),
+      }
+    );
   }
 
   // Rechercher du contenu
-  async searchMulti(query: string, page: number = 1): Promise<TMDBResponse<Movie | TVShow>> {
-    return this.fetchFromTMDB<TMDBResponse<Movie | TVShow>>('/search/multi', {
+  async searchMulti(
+    query: string,
+    page: number = 1
+  ): Promise<TMDBResponse<Movie | TVShow>> {
+    return this.fetchFromTMDB<TMDBResponse<Movie | TVShow>>("/search/multi", {
       query,
-      page: page.toString()
+      page: page.toString(),
     });
   }
 
   // Rechercher des films
-  async searchMovies(query: string, page: number = 1): Promise<TMDBResponse<Movie>> {
-    return this.fetchFromTMDB<TMDBResponse<Movie>>('/search/movie', {
+  async searchMovies(
+    query: string,
+    page: number = 1
+  ): Promise<TMDBResponse<Movie>> {
+    return this.fetchFromTMDB<TMDBResponse<Movie>>("/search/movie", {
       query,
-      page: page.toString()
+      page: page.toString(),
     });
   }
 
   // Rechercher des séries TV
-  async searchTVShows(query: string, page: number = 1): Promise<TMDBResponse<TVShow>> {
-    return this.fetchFromTMDB<TMDBResponse<TVShow>>('/search/tv', {
+  async searchTVShows(
+    query: string,
+    page: number = 1
+  ): Promise<TMDBResponse<TVShow>> {
+    return this.fetchFromTMDB<TMDBResponse<TVShow>>("/search/tv", {
       query,
-      page: page.toString()
+      page: page.toString(),
     });
   }
 
@@ -211,109 +281,246 @@ class TMDBService {
     const genres = MOOD_TO_GENRES[mood];
     const duration = FREE_TIME_TO_DURATION[freeTime];
 
-    if (contentType === 'movie') {
+    if (contentType === "movie") {
       return this.discoverMovies({
         genres,
         minRuntime: duration.min,
         maxRuntime: duration.max === 999 ? undefined : duration.max,
-        sortBy: 'vote_average.desc',
-        page
+        sortBy: "vote_average.desc",
+        page,
       });
     } else {
       return this.discoverTVShows({
         genres,
-        sortBy: 'vote_average.desc',
-        page
+        sortBy: "vote_average.desc",
+        page,
       });
     }
   }
 
   // Obtenir les films/séries tendances
-  async getTrending(mediaType: 'movie' | 'tv' | 'all' = 'all', timeWindow: 'day' | 'week' = 'week'): Promise<TMDBResponse<Movie | TVShow>> {
-    return this.fetchFromTMDB<TMDBResponse<Movie | TVShow>>(`/trending/${mediaType}/${timeWindow}`);
+  async getTrending(
+    mediaType: "movie" | "tv" | "all" = "all",
+    timeWindow: "day" | "week" = "week"
+  ): Promise<TMDBResponse<Movie | TVShow>> {
+    return this.fetchFromTMDB<TMDBResponse<Movie | TVShow>>(
+      `/trending/${mediaType}/${timeWindow}`
+    );
   }
 
   // Obtenir les films les mieux notés
   async getTopRatedMovies(page: number = 1): Promise<TMDBResponse<Movie>> {
-    return this.fetchFromTMDB<TMDBResponse<Movie>>('/movie/top_rated', {
-      page: page.toString()
+    return this.fetchFromTMDB<TMDBResponse<Movie>>("/movie/top_rated", {
+      page: page.toString(),
     });
   }
 
   // Obtenir les séries TV les mieux notées
   async getTopRatedTVShows(page: number = 1): Promise<TMDBResponse<TVShow>> {
-    return this.fetchFromTMDB<TMDBResponse<TVShow>>('/tv/top_rated', {
-      page: page.toString()
+    return this.fetchFromTMDB<TMDBResponse<TVShow>>("/tv/top_rated", {
+      page: page.toString(),
     });
   }
 
   // Obtenir les films à venir
   async getUpcomingMovies(page: number = 1): Promise<TMDBResponse<Movie>> {
-    return this.fetchFromTMDB<TMDBResponse<Movie>>('/movie/upcoming', {
-      page: page.toString()
+    return this.fetchFromTMDB<TMDBResponse<Movie>>("/movie/upcoming", {
+      page: page.toString(),
     });
   }
 
   // Obtenir les films actuellement au cinéma
   async getNowPlayingMovies(page: number = 1): Promise<TMDBResponse<Movie>> {
-    return this.fetchFromTMDB<TMDBResponse<Movie>>('/movie/now_playing', {
-      page: page.toString()
+    return this.fetchFromTMDB<TMDBResponse<Movie>>("/movie/now_playing", {
+      page: page.toString(),
     });
   }
 
   // Obtenir les séries TV diffusées aujourd'hui
   async getTVShowsAiringToday(page: number = 1): Promise<TMDBResponse<TVShow>> {
-    return this.fetchFromTMDB<TMDBResponse<TVShow>>('/tv/airing_today', {
-      page: page.toString()
+    return this.fetchFromTMDB<TMDBResponse<TVShow>>("/tv/airing_today", {
+      page: page.toString(),
     });
   }
 
   // Obtenir les séries TV diffusées cette semaine
   async getTVShowsOnTheAir(page: number = 1): Promise<TMDBResponse<TVShow>> {
-    return this.fetchFromTMDB<TMDBResponse<TVShow>>('/tv/on_the_air', {
-      page: page.toString()
+    return this.fetchFromTMDB<TMDBResponse<TVShow>>("/tv/on_the_air", {
+      page: page.toString(),
     });
   }
 
-  // Utilitaires pour les images
-  getImageUrl(path: string | null, size: 'w200' | 'w300' | 'w500' | 'w780' | 'original' = 'w500'): string | null {
-    if (!path) return null;
-    return `${TMDB_IMAGE_BASE_URL}/${size}${path}`;
+  // Obtenir les plateformes de streaming pour un film
+  async getMovieWatchProviders(
+    movieId: number
+  ): Promise<WatchProvidersResponse> {
+    return this.fetchFromTMDB<WatchProvidersResponse>(
+      `/movie/${movieId}/watch/providers`
+    );
   }
 
-  getPosterUrl(path: string | null): string | null {
-    return this.getImageUrl(path, 'w500');
+  // Obtenir les plateformes de streaming pour une série TV
+  async getTVWatchProviders(tvId: number): Promise<WatchProvidersResponse> {
+    return this.fetchFromTMDB<WatchProvidersResponse>(
+      `/tv/${tvId}/watch/providers`
+    );
   }
 
-  getBackdropUrl(path: string | null): string | null {
-    return this.getImageUrl(path, 'w780');
+  // Obtenir les images d'un film
+  async getMovieImages(movieId: number): Promise<{
+    backdrops: Array<{
+      aspect_ratio: number;
+      file_path: string;
+      height: number;
+      width: number;
+      vote_average: number;
+      vote_count: number;
+    }>;
+    posters: Array<{
+      aspect_ratio: number;
+      file_path: string;
+      height: number;
+      width: number;
+      vote_average: number;
+      vote_count: number;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/movie/${movieId}/images`);
   }
 
-  getProfileUrl(path: string | null): string | null {
-    return this.getImageUrl(path, 'w300');
+  // Obtenir les images d'une série TV
+  async getTVImages(tvId: number): Promise<{
+    backdrops: Array<{
+      aspect_ratio: number;
+      file_path: string;
+      height: number;
+      width: number;
+      vote_average: number;
+      vote_count: number;
+    }>;
+    posters: Array<{
+      aspect_ratio: number;
+      file_path: string;
+      height: number;
+      width: number;
+      vote_average: number;
+      vote_count: number;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/tv/${tvId}/images`);
+  }
+
+  // Obtenir les vidéos d'un film
+  async getMovieVideos(movieId: number): Promise<{
+    results: Array<{
+      id: string;
+      key: string;
+      name: string;
+      site: string;
+      type: string;
+      official: boolean;
+      published_at: string;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/movie/${movieId}/videos`);
+  }
+
+  // Obtenir les vidéos d'une série TV
+  async getTVVideos(tvId: number): Promise<{
+    results: Array<{
+      id: string;
+      key: string;
+      name: string;
+      site: string;
+      type: string;
+      official: boolean;
+      published_at: string;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/tv/${tvId}/videos`);
+  }
+
+  // Obtenir les mots-clés d'un film
+  async getMovieKeywords(movieId: number): Promise<{
+    keywords: Array<{
+      id: number;
+      name: string;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/movie/${movieId}/keywords`);
+  }
+
+  // Obtenir les mots-clés d'une série TV
+  async getTVKeywords(tvId: number): Promise<{
+    results: Array<{
+      id: number;
+      name: string;
+    }>;
+  }> {
+    return this.fetchFromTMDB(`/tv/${tvId}/keywords`);
+  }
+
+  // Obtenir les liens externes d'un film
+  async getMovieExternalIds(movieId: number): Promise<{
+    imdb_id: string | null;
+    facebook_id: string | null;
+    instagram_id: string | null;
+    twitter_id: string | null;
+    wikidata_id: string | null;
+  }> {
+    return this.fetchFromTMDB(`/movie/${movieId}/external_ids`);
+  }
+
+  // Obtenir les liens externes d'une série TV
+  async getTVExternalIds(tvId: number): Promise<{
+    imdb_id: string | null;
+    facebook_id: string | null;
+    instagram_id: string | null;
+    twitter_id: string | null;
+    wikidata_id: string | null;
+  }> {
+    return this.fetchFromTMDB(`/tv/${tvId}/external_ids`);
+  }
+
+  getPosterUrl(path: string | null): string {
+    return this.getImageUrl(path, "w500");
+  }
+
+  getBackdropUrl(path: string | null): string {
+    return this.getImageUrl(path, "w780");
+  }
+
+  getProfileUrl(path: string | null): string {
+    return this.getImageUrl(path, "w300");
+  }
+
+  getCompanyLogoUrl(path: string | null): string {
+    return this.getImageUrl(path, "w92");
   }
 
   // Obtenir le titre d'un contenu (film ou série)
   getContentTitle(content: Movie | TVShow): string {
-    return 'title' in content ? content.title : content.name;
+    return "title" in content ? content.title : content.name;
   }
 
   // Obtenir la date de sortie d'un contenu
   getContentReleaseDate(content: Movie | TVShow): string {
-    return 'release_date' in content ? content.release_date : content.first_air_date;
+    return "release_date" in content
+      ? content.release_date
+      : content.first_air_date;
   }
 
   // Formater la durée en heures et minutes
   formatRuntime(minutes: number): string {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    
+
     if (hours === 0) {
       return `${remainingMinutes}min`;
     }
-    
-    return remainingMinutes === 0 
-      ? `${hours}h` 
+
+    return remainingMinutes === 0
+      ? `${hours}h`
       : `${hours}h ${remainingMinutes}min`;
   }
 
