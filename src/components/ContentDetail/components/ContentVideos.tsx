@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
-import { Calendar, ExternalLink, Play } from "lucide-react";
+import { Calendar, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type ContentVideosProps = {
@@ -30,6 +30,7 @@ type VideosResponse = {
 export default function ContentVideos({ type, data }: ContentVideosProps) {
   const [videos, setVideos] = useState<VideosResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedVideo, setSelectedVideo] = useState<VideoData | null>(null);
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -81,7 +82,7 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
 
   // Filtrer et trier les vidéos par priorité
   const sortedVideos = videos.results
-    .filter((video) => video.site === "YouTube") // Seulement YouTube pour l'intégration
+    // Supprimer le filtre YouTube pour supporter plus de providers
     .sort((a, b) => {
       // Prioriser les vidéos officielles
       if (a.official && !b.official) return -1;
@@ -134,12 +135,120 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
     return colors[type] || "bg-gray-100 text-gray-800";
   };
 
-  const getYouTubeThumbnail = (key: string) => {
-    return `https://img.youtube.com/vi/${key}/maxresdefault.jpg`;
+  const getVideoThumbnail = (video: VideoData) => {
+    switch (video.site) {
+      case "YouTube":
+        return `https://img.youtube.com/vi/${video.key}/maxresdefault.jpg`;
+      case "Vimeo":
+        return `https://vumbnail.com/${video.key}.jpg`;
+      case "Dailymotion":
+        return `https://www.dailymotion.com/thumbnail/video/${video.key}`;
+      case "Facebook":
+        return null; // Facebook ne fournit pas de thumbnails publiques
+      case "Instagram":
+        return null; // Instagram ne fournit pas de thumbnails publiques
+      case "TikTok":
+        return null; // TikTok ne fournit pas de thumbnails publiques
+      case "Twitter":
+        return null; // Twitter ne fournit pas de thumbnails publiques
+      case "Twitch":
+        return `https://static-cdn.jtvnw.net/cf_vods/d2nvs31859zcd8/twitchvod/${video.key}/thumb/thumb0-320x240.jpg`;
+      case "Wistia":
+        return `https://embed-fastly.wistia.com/deliveries/${video.key}.jpg`;
+      case "JWPlayer":
+        return null; // JWPlayer nécessite une API key pour les thumbnails
+      default:
+        return null;
+    }
   };
 
-  const openVideo = (key: string) => {
-    window.open(`https://www.youtube.com/watch?v=${key}`, "_blank");
+  const getVideoEmbedUrl = (video: VideoData) => {
+    switch (video.site) {
+      case "YouTube":
+        return `https://www.youtube.com/embed/${video.key}?rel=0&modestbranding=1&fs=1`;
+      case "Vimeo":
+        return `https://player.vimeo.com/video/${video.key}?title=0&byline=0&portrait=0`;
+      case "Dailymotion":
+        return `https://www.dailymotion.com/embed/video/${video.key}?autoplay=0`;
+      case "Facebook":
+        return `https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/facebook/videos/${video.key}&show_text=0&width=560`;
+      case "Instagram":
+        return `https://www.instagram.com/p/${video.key}/embed/`;
+      case "TikTok":
+        return `https://www.tiktok.com/embed/v2/${video.key}`;
+      case "Twitter":
+        return `https://platform.twitter.com/embed/Tweet.html?id=${video.key}`;
+      case "Twitch":
+        return `https://player.twitch.tv/?video=${video.key}&parent=${window.location.hostname}`;
+      case "Wistia":
+        return `https://fast.wistia.net/embed/iframe/${video.key}`;
+      case "JWPlayer":
+        return `https://content.jwplatform.com/players/${video.key}.html`;
+      default:
+        return null;
+    }
+  };
+
+  const canPlayInApp = (video: VideoData) => {
+    return [
+      "YouTube",
+      "Vimeo",
+      "Dailymotion",
+      "Facebook",
+      "Instagram",
+      "TikTok",
+      "Twitter",
+      "Twitch",
+      "Wistia",
+      "JWPlayer",
+    ].includes(video.site);
+  };
+
+  const openVideo = (video: VideoData) => {
+    if (canPlayInApp(video)) {
+      setSelectedVideo(video);
+    } else {
+      // Fallback vers l'ouverture externe avec URLs appropriées pour chaque provider
+      let externalUrl = "";
+
+      switch (video.site) {
+        case "YouTube":
+          externalUrl = `https://www.youtube.com/watch?v=${video.key}`;
+          break;
+        case "Vimeo":
+          externalUrl = `https://vimeo.com/${video.key}`;
+          break;
+        case "Dailymotion":
+          externalUrl = `https://www.dailymotion.com/video/${video.key}`;
+          break;
+        case "Facebook":
+          externalUrl = `https://www.facebook.com/watch/?v=${video.key}`;
+          break;
+        case "Instagram":
+          externalUrl = `https://www.instagram.com/p/${video.key}/`;
+          break;
+        case "TikTok":
+          externalUrl = `https://www.tiktok.com/@user/video/${video.key}`;
+          break;
+        case "Twitter":
+          externalUrl = `https://twitter.com/i/status/${video.key}`;
+          break;
+        case "Twitch":
+          externalUrl = `https://www.twitch.tv/videos/${video.key}`;
+          break;
+        case "Wistia":
+          externalUrl = `https://wistia.com/medias/${video.key}`;
+          break;
+        case "JWPlayer":
+          externalUrl = `https://content.jwplatform.com/previews/${video.key}`;
+          break;
+        default:
+          console.warn(`Provider non supporté: ${video.site}`);
+          return;
+      }
+
+      window.open(externalUrl, "_blank");
+    }
   };
 
   return (
@@ -154,28 +263,28 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
         </h3>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {sortedVideos.slice(0, 6).map((video) => (
+          {sortedVideos.map((video) => (
             <div
               key={video.id}
-              className="group cursor-pointer overflow-hidden rounded-lg bg-gray-50 transition-transform hover:scale-105"
-              onClick={() => openVideo(video.key)}
+              className="group bg-primary/10 cursor-pointer overflow-hidden rounded-lg transition-transform"
+              onClick={() => openVideo(video)}
             >
               {/* Thumbnail avec overlay de lecture */}
               <div className="relative aspect-video overflow-hidden rounded-t-lg bg-gray-200">
                 <img
-                  src={getYouTubeThumbnail(video.key)}
+                  src={getVideoThumbnail(video) ?? ""}
                   alt={video.name}
-                  className="h-full w-full object-cover transition-opacity group-hover:opacity-90"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = `https://img.youtube.com/vi/${video.key}/hqdefault.jpg`;
-                  }}
+                  className="h-full w-full object-cover transition-all group-hover:scale-105 group-hover:opacity-90"
                 />
 
                 {/* Overlay de lecture */}
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-opacity">
-                  <div className="rounded-full bg-red-600 p-3 text-white transition-transform group-hover:scale-110">
-                    <Play className="h-6 w-6 fill-current" />
+                  <div
+                    className={`rounded-full p-3 text-white transition-transform group-hover:scale-110 ${
+                      canPlayInApp(video) ? "bg-primary" : "bg-gray-600"
+                    }`}
+                  >
+                    <Play className="size-6" />
                   </div>
                 </div>
 
@@ -196,6 +305,13 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
                     Officiel
                   </Badge>
                 )}
+
+                {/* Indicateur de provider */}
+                <div className="absolute right-2 bottom-2">
+                  <span className="rounded bg-black/70 px-2 py-1 text-xs text-white">
+                    {video.site}
+                  </span>
+                </div>
               </div>
 
               {/* Informations de la vidéo */}
@@ -207,26 +323,52 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
                     <Calendar className="h-4 w-4" />
                     {new Date(video.published_at).toLocaleDateString("fr-FR")}
                   </div>
-
-                  <div className="flex items-center gap-1 text-red-600">
-                    <ExternalLink className="h-4 w-4" />
-                    YouTube
-                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
-
-        {/* Afficher plus de vidéos si disponible */}
-        {sortedVideos.length > 6 && (
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              {sortedVideos.length - 6} vidéo(s) supplémentaire(s) disponible(s)
-            </p>
-          </div>
-        )}
       </Card>
+
+      {/* Modal Video Player intégré */}
+      {selectedVideo && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <div className="relative w-full max-w-4xl">
+            {/* Titre de la vidéo */}
+            <div className="mb-4 text-center">
+              <h3 className="text-xl font-bold text-white">
+                {selectedVideo.name}
+              </h3>
+              <p className="text-sm text-gray-300">
+                {getVideoTypeLabel(selectedVideo.type)}
+                {selectedVideo.official && " • Officiel"}
+                {" • "}
+                {new Date(selectedVideo.published_at).toLocaleDateString(
+                  "fr-FR"
+                )}
+              </p>
+            </div>
+
+            {/* Video Player */}
+            <div className="aspect-video w-full overflow-hidden rounded-lg bg-black">
+              <iframe
+                src={getVideoEmbedUrl(selectedVideo)!}
+                className="h-full w-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                title={selectedVideo.name}
+              />
+            </div>
+
+            {/* Informations supplémentaires */}
+            <div className="mt-4 text-center text-sm text-gray-300"></div>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }
