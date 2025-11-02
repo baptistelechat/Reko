@@ -6,6 +6,7 @@ import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
 import { Tag } from "lucide-react";
 import { useEffect, useState } from "react";
+import ContentTitle from "../ContentTitle";
 
 type ContentKeywordsProps = {
   type: "movie" | "tv";
@@ -84,16 +85,13 @@ export default function ContentKeywords({ type, data }: ContentKeywordsProps) {
       transition={{ delay: 0.7 }}
     >
       <Card className="p-6">
-        <h3 className="mb-4 flex items-center gap-2 text-xl font-bold text-gray-900">
-          <Tag className="h-5 w-5" />
-          Mots-clés ({keywordsList.length})
-        </h3>
+        <ContentTitle icon={Tag} title={`Mots-clés (${keywordsList.length})`} />
 
         <div className="flex flex-wrap gap-2">
           {keywordsList.map((keyword) => (
             <span
               key={keyword.id}
-              className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100"
+              className="inline-flex items-center rounded-full bg-violet-100 px-3 py-1 text-sm font-medium text-violet-700 transition-colors hover:bg-violet-200"
             >
               {keyword.name}
             </span>

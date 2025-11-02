@@ -1,11 +1,12 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { tmdbService } from "@/services/tmdb";
 import { TVShowDetails } from "@/types";
 import { formatDate } from "@/utils/formatDate";
 import { motion } from "framer-motion";
 import { Tv } from "lucide-react";
-import { tmdbService } from "@/services/tmdb";
+import ContentTitle from "../ContentTitle";
 
 type ContentSeasonsProps = {
   data: TVShowDetails;
@@ -23,10 +24,13 @@ export default function ContentSeasons({ data }: ContentSeasonsProps) {
       transition={{ delay: 0.3 }}
     >
       <Card className="p-6">
-        <h2 className="mb-4 flex items-center gap-2 text-2xl font-bold text-gray-900">
-          <Tv size={24} />
-          Saisons {data.number_of_seasons ? `(${data.number_of_seasons})` : ""}
-        </h2>
+        <ContentTitle
+          icon={Tv}
+          title={`Saisons ${
+            data.number_of_seasons ? `(${data.number_of_seasons})` : ""
+          }`}
+          level="h2"
+        />
         <div className="space-y-4">
           {data.seasons
             .filter((season) => season.season_number > 0)
@@ -38,10 +42,10 @@ export default function ContentSeasons({ data }: ContentSeasonsProps) {
               >
                 <div className="relative h-24 w-16 overflow-hidden rounded bg-linear-to-r from-violet-300 to-orange-300">
                   {season.poster_path && (
-                      <img
-                        src={tmdbService.getPosterUrl(season.poster_path)}
-                        alt={season.name}
-                        className="size-full object-cover"
+                    <img
+                      src={tmdbService.getPosterUrl(season.poster_path)}
+                      alt={season.name}
+                      className="size-full object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.style.display = "none";

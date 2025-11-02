@@ -7,6 +7,7 @@ import { Credits, MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
 import { Camera, Edit, Mic, Palette, Users } from "lucide-react";
 import { useEffect, useState } from "react";
+import ContentTitle from "../ContentTitle";
 
 type ContentCreditsProps = {
   type: "movie" | "tv";
@@ -99,9 +100,11 @@ export default function ContentCredits({ type, data }: ContentCreditsProps) {
     >
       <Card className="p-6">
         <div className="mb-6">
-          <h3 className="mb-4 text-xl font-bold text-gray-900">
-            Distribution et équipe
-          </h3>
+          <ContentTitle
+            icon={Users}
+            title={"Distribution et équipe"}
+            className="mb-4"
+          />
 
           <Tabs defaultValue="cast" className="w-full">
             <TabsList className="grid w-full grid-cols-2">

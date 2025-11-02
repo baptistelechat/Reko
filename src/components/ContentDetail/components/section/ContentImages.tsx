@@ -7,8 +7,9 @@ import { cn } from "@/lib/utils";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
-import { FileImage } from "lucide-react";
+import { FileImage, ImageIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import ContentTitle from "../ContentTitle";
 
 type ContentImagesProps = {
   type: "movie" | "tv";
@@ -89,7 +90,7 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
       >
         <Card className="p-6">
           <div className="mb-6">
-            <h3 className="mb-4 text-xl font-bold text-gray-900">Images</h3>
+            <ContentTitle icon={ImageIcon} title="Images" className="mb-4" />
 
             <Tabs defaultValue="posters" className="w-full">
               <TabsList className="grid w-full grid-cols-2">

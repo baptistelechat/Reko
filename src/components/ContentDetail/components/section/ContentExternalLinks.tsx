@@ -13,6 +13,7 @@ import {
   Twitter,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import ContentTitle from "../ContentTitle";
 
 type ContentExternalLinksProps = {
   type: "movie" | "tv";
@@ -147,10 +148,7 @@ export default function ContentExternalLinks({
       transition={{ delay: 0.8 }}
     >
       <Card className="p-6">
-        <div className="mb-4 flex items-center gap-2">
-          <ExternalLink className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-semibold">Liens externes</h3>
-        </div>
+        <ContentTitle icon={ExternalLink} title="Liens externes" />
 
         <div className="flex flex-wrap gap-3">
           {externalLinks.map((link, index) => {
@@ -158,7 +156,7 @@ export default function ContentExternalLinks({
             return (
               <motion.a
                 key={link.id}
-                href={link.url ?? "" }
+                href={link.url ?? ""}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`flex items-center gap-2 rounded-lg px-4 py-2 transition-all duration-200 ${link.color}`}

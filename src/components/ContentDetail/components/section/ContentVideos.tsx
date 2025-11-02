@@ -5,8 +5,9 @@ import { Card } from "@/components/ui/card";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
-import { Calendar, Play } from "lucide-react";
+import { Calendar, Film, Play } from "lucide-react";
 import { useEffect, useState } from "react";
+import ContentTitle from "../ContentTitle";
 
 type ContentVideosProps = {
   type: "movie" | "tv";
@@ -258,9 +259,7 @@ export default function ContentVideos({ type, data }: ContentVideosProps) {
       transition={{ delay: 0.6 }}
     >
       <Card className="p-6">
-        <h3 className="mb-6 text-xl font-bold text-gray-900">
-          Vidéos ({sortedVideos.length})
-        </h3>
+        <ContentTitle icon={Film} title={`Vidéos (${sortedVideos.length})`} />
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {sortedVideos.map((video) => (

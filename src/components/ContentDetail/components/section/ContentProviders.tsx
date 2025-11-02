@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
+import { Tv } from "lucide-react";
+import ContentTitle from "../ContentTitle";
 
 type ContentProvidersProps = {
   type: "movie" | "tv";
@@ -29,9 +31,7 @@ export default function ContentProviders({
         transition={{ delay: 0.6 }}
       >
         <Card className="p-6">
-          <h3 className="mb-4 flex items-center gap-2 text-xl font-bold text-gray-900">
-            Diffuseurs
-          </h3>
+          <ContentTitle icon={Tv} title="Diffuseurs" />
           <div className="space-y-3">
             {networks.slice(0, 5).map((network) => (
               <div key={network.id} className="flex items-center gap-3">
@@ -64,7 +64,5 @@ export default function ContentProviders({
     );
   }
 
-  // Pour les films, on pourrait ajouter les watch providers plus tard
-  // Pour l'instant, on retourne null pour les films
   return null;
 }

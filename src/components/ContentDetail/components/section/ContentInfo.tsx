@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { formatDate } from "@/utils/formatDate";
 import { motion } from "framer-motion";
+import { List } from "lucide-react";
+import ContentTitle from "../ContentTitle";
 
 type ContentInfoProps = {
   type: "movie" | "tv";
@@ -23,7 +25,8 @@ export default function ContentInfo({
       transition={{ delay: 0.4 }}
     >
       <Card className="p-6">
-        <h3 className="mb-4 text-xl font-bold text-gray-900">Informations</h3>
+        <ContentTitle icon={List} title="Informations" />
+
         <div className="space-y-3 text-sm">
           {type === "movie" ? (
             <>

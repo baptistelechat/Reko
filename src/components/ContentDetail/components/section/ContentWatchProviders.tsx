@@ -10,8 +10,9 @@ import {
 } from "@/types";
 import { getProviderUrl } from "@/utils/getProviderUrl";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Popcorn } from "lucide-react";
 import { useEffect, useState } from "react";
+import ContentTitle from "../ContentTitle";
 
 interface ProviderSectionProps {
   title: string;
@@ -145,11 +146,7 @@ export default function ContentWatchProviders({
       transition={{ delay: 0.6 }}
     >
       <Card className="p-6">
-        <div className="mb-4 flex items-center gap-2">
-          <h3 className="text-xl font-bold text-gray-900">
-            Disponible en France
-          </h3>
-        </div>
+        <ContentTitle icon={Popcorn} title="Disponible en France" />
 
         <div className="space-y-4">
           {frenchProviders.flatrate && frenchProviders.flatrate.length > 0 && (

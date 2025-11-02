@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
+import { Building2 } from "lucide-react";
+import ContentTitle from "../ContentTitle";
 
 type ContentProductionProps = {
   data: MovieDetails | TVShowDetails;
@@ -23,7 +25,7 @@ export default function ContentProduction({ data }: ContentProductionProps) {
       transition={{ delay: 0.5 }}
     >
       <Card className="p-6">
-        <h3 className="mb-4 text-xl font-bold text-gray-900">Production</h3>
+        <ContentTitle icon={Building2} title="Production" />
         <div className="space-y-3">
           {productionCompanies.slice(0, 5).map((company) => (
             <div key={company.id} className="flex items-center gap-3">

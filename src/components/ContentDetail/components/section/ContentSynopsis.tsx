@@ -3,6 +3,8 @@
 import { Card } from "@/components/ui/card";
 import { ContentType, MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
+import { FileText } from "lucide-react";
+import ContentTitle from "../ContentTitle";
 
 type ContentSynopsisProps = {
   type: ContentType;
@@ -22,7 +24,7 @@ export default function ContentSynopsis({ type, data }: ContentSynopsisProps) {
       transition={{ delay: 0.2 }}
     >
       <Card className="p-6">
-        <h2 className="mb-4 text-2xl font-bold text-gray-900">Synopsis</h2>
+        <ContentTitle icon={FileText} title="Synopsis" level="h2" />
         <p className="text-lg leading-relaxed text-gray-700">
           {overview || "Aucun synopsis disponible."}
         </p>
