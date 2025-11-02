@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import tmdbService from "@/services/tmdb";
 import { MovieDetails, TVShowDetails } from "@/types";
 import { motion } from "framer-motion";
+import { FileImage } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type ContentImagesProps = {
@@ -102,48 +103,87 @@ export default function ContentImages({ type, data }: ContentImagesProps) {
 
               <TabsContent value="posters" className="mt-6">
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                  {images.posters?.map((image, index) => (
-                    <ImageZoom
-                      key={`${image.file_path}-${index}`}
-                      backdropClassName={cn(
-                        '[&_[data-rmiz-modal-overlay="visible"]]:bg-black/80'
-                      )}
+                  {images.posters.length === 0 ? (
+                    <motion.div
+                      className="col-span-full flex flex-col items-center justify-center px-4 py-12"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <div className="aspect-2/3">
-                        <img
-                          src={tmdbService.getPosterUrl(image.file_path)}
-                          alt="Affiche"
-                          className="h-full w-full cursor-zoom-in object-cover"
-                          loading="lazy"
-                        />
+                      <div className="mb-4 rounded-full bg-gray-100 p-6">
+                        <FileImage className="h-12 w-12 text-gray-400" />
                       </div>
-                    </ImageZoom>
-                  ))}
+                      <h4 className="mb-2 text-lg font-medium text-gray-700">
+                        Aucune affiche disponible
+                      </h4>
+                      <p className="max-w-md text-center text-sm text-gray-500">
+                        Les affiches pour ce contenu ne sont pas encore
+                        disponibles dans notre base de données.
+                      </p>
+                    </motion.div>
+                  ) : (
+                    images.posters?.map((image, index) => (
+                      <ImageZoom
+                        key={`${image.file_path}-${index}`}
+                        backdropClassName={cn(
+                          '[&_[data-rmiz-modal-overlay="visible"]]:bg-black/80'
+                        )}
+                      >
+                        <div className="aspect-2/3">
+                          <img
+                            src={tmdbService.getPosterUrl(image.file_path)}
+                            alt="Affiche"
+                            className="h-full w-full cursor-zoom-in object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      </ImageZoom>
+                    ))
+                  )}
                 </div>
               </TabsContent>
 
               <TabsContent value="backdrops" className="mt-6">
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                  {images.backdrops?.map((image, index) => (
-                    <ImageZoom
-                      key={`${image.file_path}-${index}`}
-                      backdropClassName={cn(
-                        '[&_[data-rmiz-modal-overlay="visible"]]:bg-black/80'
-                      )}
+                  {images.backdrops.length === 0 ? (
+                    <motion.div
+                      className="col-span-full flex flex-col items-center justify-center px-4 py-12"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <div className="aspect-video">
-                        <img
-                          src={tmdbService.getBackdropUrl(image.file_path)}
-                          alt="Arrière-plan"
-                          className="h-full w-full cursor-zoom-in object-cover"
-                          loading="lazy"
-                        />
+                      <div className="mb-4 rounded-full bg-gray-100 p-6">
+                        <FileImage className="h-12 w-12 text-gray-400" />
                       </div>
-                    </ImageZoom>
-                  ))}
+                      <h4 className="mb-2 text-lg font-medium text-gray-700">
+                        Aucun arrière-plan disponible
+                      </h4>
+                      <p className="max-w-md text-center text-sm text-gray-500">
+                        Les images d'arrière-plan pour ce contenu ne sont pas
+                        encore disponibles dans notre base de données.
+                      </p>
+                    </motion.div>
+                  ) : (
+                    images.backdrops?.map((image, index) => (
+                      <ImageZoom
+                        key={`${image.file_path}-${index}`}
+                        backdropClassName={cn(
+                          '[&_[data-rmiz-modal-overlay="visible"]]:bg-black/80'
+                        )}
+                      >
+                        <div className="aspect-video">
+                          <img
+                            src={tmdbService.getBackdropUrl(image.file_path)}
+                            alt="Arrière-plan"
+                            className="h-full w-full cursor-zoom-in object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      </ImageZoom>
+                    ))
+                  )}
                 </div>
               </TabsContent>
-
             </Tabs>
           </div>
         </Card>
