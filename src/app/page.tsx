@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { AuroraText } from "@/components/ui/aurora-text";
 import { MOODS_ARRAY } from "@/constants/moods";
 import { motion } from "framer-motion";
 import { Clock, Film, Heart, Play, Sparkles, Star, Tv } from "lucide-react";
@@ -54,10 +55,10 @@ const LandingPage = () => {
           className="mx-auto max-w-4xl"
         >
           <h1 className="mb-6 text-5xl font-bold md:text-7xl">
-            Découvrez votre{" "}
-            <span className="from-primary bg-linear-to-r to-orange-600 bg-clip-text text-transparent">
+            Découvrez votre
+            <AuroraText colors={["#ea580c", "#C54989", "#7f22fe"]} speed={1.5}>
               prochaine obsession
-            </span>
+            </AuroraText>
           </h1>
 
           <p className="mx-auto mb-8 max-w-2xl text-xl text-gray-600 md:text-2xl">

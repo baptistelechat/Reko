@@ -19,7 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
 import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 
-const DISABLE_TOGGLE = false
+const DISABLE_TOGGLE = true
 
 type Link = {
   label: string;
