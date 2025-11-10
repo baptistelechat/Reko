@@ -22,7 +22,7 @@ interface ProviderSectionProps {
 function ProviderSection({ title, providers }: ProviderSectionProps) {
   return (
     <div>
-      <h4 className="mb-2 text-sm font-semibold text-gray-600">{title}</h4>
+<h4 className="mb-2 text-sm text-gray-600">{title}</h4>
       <div className="flex flex-wrap gap-2">
         {providers.map((provider) => {
           const providerUrl = getProviderUrl(provider.provider_id);

@@ -152,3 +152,24 @@
     }
   }
 }
+
+/* Titres: utiliser la police Gendy */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-gendy), system-ui, sans-serif;
+    font-style: normal;
+    font-synthesis: none;
+  }
+  /* Paragraphes: conserver Geist */
+  body {
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
+  }
+
+  .font-reko {
+  font-family: var(--font-gendy), system-ui, sans-serif;
+}
+}

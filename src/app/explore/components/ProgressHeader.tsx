@@ -76,7 +76,7 @@ export const ProgressHeader = ({ onBack }: ProgressHeaderProps) => {
           Retour
         </Button>
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Exploration</h1>
+<h1 className="text-2xl text-gray-900">Exploration</h1>
           <p className="text-gray-600">
             Étape {currentStep + 1} sur {totalSteps}
           </p>

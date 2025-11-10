@@ -54,7 +54,7 @@ export default function ContentSeasons({ data }: ContentSeasonsProps) {
                   )}
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold">{season.name}</h3>
+<h3>{season.name}</h3>
                   <p className="mb-2 text-sm text-gray-600">
                     {season.episode_count} épisode
                     {season.episode_count > 1 ? "s" : ""}

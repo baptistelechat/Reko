@@ -99,7 +99,7 @@ export default function FavoritesPage() {
           Accueil
         </Button>
         <div className="text-center">
-          <h1 className="flex items-center justify-center gap-2 text-2xl font-bold text-gray-900">
+<h1 className="flex items-center justify-center gap-2 text-2xl text-gray-900">
             <Heart className="fill-red-500 text-red-500" size={24} />
             Mes Favoris
           </h1>
@@ -208,7 +208,7 @@ export default function FavoritesPage() {
       {filteredAndSortedFavorites.length === 0 ? (
         <div className="py-12 text-center">
           <div className="mb-4 text-6xl text-gray-400">💖</div>
-          <h2 className="mb-2 text-xl font-semibold text-gray-700">
+<h2 className="mb-2 text-xl text-gray-700">
             {favorites.length === 0
               ? "Aucun favori pour le moment"
               : "Aucun résultat trouvé"}
@@ -318,8 +318,8 @@ export default function FavoritesPage() {
 
                     {/* Informations */}
                     <div className="space-y-2 p-4">
-                      <h3
-                        className="group-hover:text-primary line-clamp-2 cursor-pointer text-sm font-semibold text-gray-900 transition-colors"
+<h3
+                        className="group-hover:text-primary line-clamp-2 cursor-pointer text-sm text-gray-900 transition-colors"
                         onClick={() => router.push(`/${item.type}/${item.id}`)}
                       >
                         {item.title}

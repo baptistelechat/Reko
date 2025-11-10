@@ -129,7 +129,7 @@ export default function ResultsPage() {
       <div className="flex items-center justify-center">
         <div className="max-w-md space-y-4 text-center">
           <div className="text-6xl text-red-500">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900">
+<h2 className="text-2xl text-gray-900">
             Oups ! Une erreur est survenue
           </h2>
           <p className="text-gray-600">{error}</p>
@@ -160,7 +160,7 @@ export default function ResultsPage() {
         {recommendations.length === 0 ? (
           <div className="py-12 text-center">
             <div className="mb-4 text-6xl text-gray-400">🎬</div>
-            <h2 className="mb-2 text-xl font-semibold text-gray-700">
+<h2 className="mb-2 text-xl text-gray-700">
               Aucune recommandation trouvée
             </h2>
             <p className="mb-6 text-gray-500">
@@ -287,8 +287,8 @@ export default function ResultsPage() {
 
                     {/* Informations */}
                     <div className="shrink-0 space-y-2 p-4">
-                      <h3
-                        className="group-hover:text-primary line-clamp-1 cursor-pointer text-sm font-semibold text-gray-900 transition-colors"
+<h3
+                        className="group-hover:text-primary line-clamp-1 cursor-pointer text-sm text-gray-900 transition-colors"
                         onClick={() =>
                           router.push(
                             `/${isMovie ? "movie" : "tv"}/${content.id}`

@@ -42,7 +42,7 @@ export const FreeTimeStep = () => {
       className="space-y-6"
     >
       <div className="space-y-2 text-center">
-        <h2 className="text-3xl font-bold text-gray-900">
+<h2 className="text-3xl text-gray-900">
           Combien de temps avez-vous ?
         </h2>
         <p className="text-gray-600">Sélectionnez la durée qui vous convient</p>
@@ -71,7 +71,7 @@ export const FreeTimeStep = () => {
                 >
                   <option.icon size={24} />
                 </div>
-                <h3 className="text-lg font-semibold">{option.label}</h3>
+<h3 className="text-lg">{option.label}</h3>
                 <Badge variant="secondary">{option.duration}</Badge>
                 <p className="text-center text-sm text-gray-600">
                   {option.description}
@@ -90,7 +90,7 @@ export const FreeTimeStep = () => {
         }`}
         onClick={handleCustomDurationToggle}
       >
-        <h4 className="text-center font-semibold">
+<h4 className="text-center">
           {isCustomDuration
             ? "Durée personnalisée sélectionnée"
             : "Durée personnalisée"}

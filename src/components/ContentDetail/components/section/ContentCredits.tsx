@@ -159,7 +159,7 @@ export default function ContentCredits({ type, data }: ContentCreditsProps) {
                     .sort(([a], [b]) => a.localeCompare(b))
                     .map(([department, members]) => (
                       <div key={department}>
-                        <h4 className="mb-3 flex items-center gap-2 text-lg font-semibold text-gray-800">
+<h4 className="mb-3 flex items-center gap-2 text-lg text-gray-800">
                           {getDepartmentIcon(department)}
                           {department}
                         </h4>
