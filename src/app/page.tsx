@@ -1,14 +1,17 @@
 "use client";
 
+import { AuroraText } from "@/components/ui/aurora-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { AuroraText } from "@/components/ui/aurora-text";
 import { MOODS_ARRAY } from "@/constants/moods";
+import { getProviderLogoUrlByName } from "@/utils/getProviderLogo";
 import { motion } from "framer-motion";
 import { Clock, Film, Heart, Play, Sparkles, Star, Tv } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const LandingPage = () => {
   const router = useRouter();
@@ -241,6 +244,24 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Streaming Providers Section */}
+      <section className="mx-auto max-w-4xl py-8">
+        <div className="flex w-full gap-6">
+          <div className="w-3/4 space-y-6 text-left sm:mt-0">
+            <h2 className="text-3xl font-bold text-balance md:text-4xl">
+              Vos plateformes de streaming préférées
+            </h2>
+            <p className="text-muted-foreground">
+              Netflix, Prime Video, Disney+, Apple TV+, Canal+, Crunchyroll,...
+              pour des recommandations vraiment adaptées à vos abonnements.
+            </p>
+          </div>
+          <div className="flex items-center justify-center">
+            <ProvidersGrid />
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="container mx-auto px-4 py-16">
         <motion.div
@@ -288,6 +309,69 @@ const LandingPage = () => {
           </p>
         </motion.div>
       </footer>
+    </div>
+  );
+};
+
+// Composant local pour afficher les 6 logos via TMDB
+const ProviderLogoIcon = ({ name }: { name: string }) => {
+  const [logoUrl, setLogoUrl] = useState<string>("");
+
+  useEffect(() => {
+    let mounted = true;
+    getProviderLogoUrlByName(name, "movie", "FR")
+      .then((url) => {
+        if (mounted) setLogoUrl(url);
+      })
+      .catch(() => setLogoUrl(""));
+    return () => {
+      mounted = false;
+    };
+  }, [name]);
+
+  if (!logoUrl) {
+    return (
+      <Image
+        src="/icon.svg"
+        alt={name}
+        width={80}
+        height={80}
+        className="h-20 w-20 rounded-xl border border-black/20 object-contain p-3 shadow-md dark:border-white/25"
+      />
+    );
+  }
+  return (
+    <Image
+      src={logoUrl}
+      alt={name}
+      width={80}
+      height={80}
+      className="h-20 w-20 rounded-xl border border-black/20 object-contain p-3 shadow-md dark:border-white/25"
+    />
+  );
+};
+
+const ProvidersGrid = () => {
+  const providers = [
+    "Netflix",
+    "Amazon Prime",
+    "Disney+",
+    "Apple TV+",
+    "Canal+",
+    "Crunchyroll",
+  ];
+  return (
+    <div>
+      <div className="mx-auto mb-2 flex w-fit justify-center gap-3">
+        {providers.slice(0, 3).map((p) => (
+          <ProviderLogoIcon key={p} name={p} />
+        ))}
+      </div>
+      <div className="mx-auto mt-2 flex w-fit justify-center gap-3">
+        {providers.slice(3).map((p) => (
+          <ProviderLogoIcon key={p} name={p} />
+        ))}
+      </div>
     </div>
   );
 };
