@@ -16,7 +16,7 @@ export const MoodStep = () => {
       className="space-y-6"
     >
       <div className="space-y-2 text-center">
-        <h2 className="text-3xl font-bold text-gray-900">
+<h2 className="text-3xl text-gray-900">
           Comment vous sentez-vous ?
         </h2>
         <p className="text-gray-600">
@@ -45,7 +45,7 @@ export const MoodStep = () => {
                   <div className={`rounded-full p-3 ${mood.color} text-white`}>
                     <Icon size={24} />
                   </div>
-                  <h3 className="text-lg font-semibold">{mood.label}</h3>
+<h3 className="text-lg">{mood.label}</h3>
                   <p className="text-center text-sm text-gray-600">
                     {mood.description}
                   </p>

@@ -1,13 +1,17 @@
 "use client";
 
+import { AuroraText } from "@/components/ui/aurora-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { MOODS_ARRAY } from "@/constants/moods";
+import { getProviderLogoUrlByName } from "@/utils/getProviderLogo";
 import { motion } from "framer-motion";
 import { Clock, Film, Heart, Play, Sparkles, Star, Tv } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const LandingPage = () => {
   const router = useRouter();
@@ -53,11 +57,11 @@ const LandingPage = () => {
           transition={{ duration: 0.8 }}
           className="mx-auto max-w-4xl"
         >
-          <h1 className="mb-6 text-5xl font-bold md:text-7xl">
-            Découvrez votre{" "}
-            <span className="bg-linear-to-r from-violet-300 to-orange-300 bg-clip-text text-transparent">
+          <h1 className="mb-6 text-5xl md:text-7xl">
+            Découvrez votre
+            <AuroraText colors={["#ea580c", "#C54989", "#7f22fe"]} speed={1.5}>
               prochaine obsession
-            </span>
+            </AuroraText>
           </h1>
 
           <p className="mx-auto mb-8 max-w-2xl text-xl text-gray-600 md:text-2xl">
@@ -129,9 +133,7 @@ const LandingPage = () => {
           viewport={{ once: true }}
           className="mb-12 text-center"
         >
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl">
-            Comment ça marche ?
-          </h2>
+          <h2 className="mb-4 text-3xl md:text-4xl">Comment ça marche ?</h2>
           <p className="mx-auto max-w-2xl text-xl text-gray-600">
             Trois étapes simples pour découvrir votre prochaine pépite
             cinématographique
@@ -152,7 +154,7 @@ const LandingPage = () => {
                   <div className="from-primary mx-auto mb-4  flex size-16 items-center justify-center rounded-full bg-linear-to-br to-orange-500 text-white">
                     {feature.icon}
                   </div>
-                  <h3 className="mb-3 text-xl font-semibold">
+                  <h3 className="mb-3 text-xl">
                     {feature.title}
                   </h3>
                   <p className="text-gray-600">{feature.description}</p>
@@ -172,9 +174,7 @@ const LandingPage = () => {
           viewport={{ once: true }}
           className="mb-12 text-center"
         >
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl">
-            Films &amp; Séries
-          </h2>
+          <h2 className="mb-4 text-3xl md:text-4xl">Films &amp; Séries</h2>
           <p className="mx-auto max-w-2xl text-xl text-gray-600">
             Explorez une vaste collection de contenus adaptés à tous les goûts
           </p>
@@ -192,7 +192,7 @@ const LandingPage = () => {
               <CardContent className="h-hull pt-0">
                 <div className="mb-4 flex items-center">
                   <Film className="mr-3 size-8 text-violet-600" />
-                  <h3 className="text-2xl font-bold text-violet-800">Films</h3>
+                  <h3 className="text-2xl text-violet-800">Films</h3>
                 </div>
                 <p className="mb-4 text-violet-700">
                   Des blockbusters aux films d'auteur, découvrez des œuvres
@@ -220,7 +220,7 @@ const LandingPage = () => {
               <CardContent className="h-full pt-0">
                 <div className="mb-4 flex items-center">
                   <Tv className="mr-3 size-8 text-orange-500" />
-                  <h3 className="text-2xl font-bold text-orange-800">Séries</h3>
+                  <h3 className="text-2xl text-orange-800">Séries</h3>
                 </div>
                 <p className="mb-4 text-orange-500">
                   Plongez dans des univers captivants avec des séries
@@ -240,6 +240,36 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Streaming Providers Section */}
+      <section className="mx-auto max-w-4xl py-8">
+        <div className="flex w-full flex-col gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="space-y-6 text-center sm:mt-0"
+          >
+            <h2 className="text-3xl text-balance md:text-4xl">
+              Vos plateformes de streaming préférées
+            </h2>
+            <p className="mx-auto max-w-2xl text-xl text-gray-600">
+              Netflix, Prime Video, Disney+, Apple TV+, Canal+, Crunchyroll,...
+              pour des recommandations vraiment adaptées à vos abonnements.
+            </p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            viewport={{ once: true }}
+            className="flex items-center justify-center"
+          >
+            <ProvidersGrid />
+          </motion.div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="container mx-auto px-4 py-16">
         <motion.div
@@ -251,7 +281,7 @@ const LandingPage = () => {
         >
           <Card className="from-primary mx-auto max-w-2xl border-0  bg-linear-to-br to-orange-500 p-8 text-white shadow-2xl">
             <CardContent className="pt-0">
-              <h2 className="mb-4 text-3xl font-bold">
+              <h2 className="mb-4 text-3xl ">
                 Prêt à découvrir votre prochaine obsession ?
               </h2>
               <p className="mb-6 text-lg opacity-90">
@@ -287,6 +317,69 @@ const LandingPage = () => {
           </p>
         </motion.div>
       </footer>
+    </div>
+  );
+};
+
+// Composant local pour afficher les 6 logos via TMDB
+const ProviderLogoIcon = ({ name }: { name: string }) => {
+  const [logoUrl, setLogoUrl] = useState<string>("");
+
+  useEffect(() => {
+    let mounted = true;
+    getProviderLogoUrlByName(name, "movie", "FR")
+      .then((url) => {
+        if (mounted) setLogoUrl(url);
+      })
+      .catch(() => setLogoUrl(""));
+    return () => {
+      mounted = false;
+    };
+  }, [name]);
+
+  if (!logoUrl) {
+    return (
+      <Image
+        src="/icon.svg"
+        alt={name}
+        width={80}
+        height={80}
+        className="h-20 w-20 rounded-xl border border-black/20 object-contain p-3 shadow-md dark:border-white/25"
+      />
+    );
+  }
+  return (
+    <Image
+      src={logoUrl}
+      alt={name}
+      width={80}
+      height={80}
+      className="h-20 w-20 rounded-xl border border-black/20 object-contain p-3 shadow-md dark:border-white/25"
+    />
+  );
+};
+
+const ProvidersGrid = () => {
+  const providers = [
+    "Netflix",
+    "Amazon Prime",
+    "Disney+",
+    "Apple TV+",
+    "Canal+",
+    "Crunchyroll",
+  ];
+  return (
+    <div>
+      <div className="mx-auto mb-2 flex w-fit justify-center gap-3">
+        {providers.slice(0, 3).map((p) => (
+          <ProviderLogoIcon key={p} name={p} />
+        ))}
+      </div>
+      <div className="mx-auto mt-2 flex w-fit justify-center gap-3">
+        {providers.slice(3).map((p) => (
+          <ProviderLogoIcon key={p} name={p} />
+        ))}
+      </div>
     </div>
   );
 };

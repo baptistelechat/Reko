@@ -1,6 +1,8 @@
 import Navigation from "@/components/Navigation";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 
@@ -12,6 +14,18 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const gendyFont = localFont({
+  variable: "--font-gendy",
+  src: [
+    {
+      path: "../../public/Gendy.otf",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -36,22 +50,29 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${gendyFont.variable} antialiased`}
       >
-        <Navigation />
-        <main className="min-h-screen bg-linear-to-br from-violet-50 via-white to-orange-50 pt-12">
-          {children}
-        </main>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Navigation />
+          <main className="min-h-screen bg-linear-to-br from-violet-100 via-white to-orange-100 pt-12">
+            {children}
+          </main>
 
-        {/* React Grab script - only in development */}
-        {process.env.NODE_ENV === "development" && (
-          <Script
-            src="//unpkg.com/react-grab/dist/index.global.js"
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-            data-enabled="true"
-          />
-        )}
+          {/* React Grab script - only in development */}
+          {process.env.NODE_ENV === "development" && (
+            <Script
+              src="//unpkg.com/react-grab/dist/index.global.js"
+              crossOrigin="anonymous"
+              strategy="afterInteractive"
+              data-enabled="true"
+            />
+          )}
+        </ThemeProvider>
       </body>
     </html>
   );

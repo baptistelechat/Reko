@@ -17,6 +17,9 @@ import {
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
+import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
+
+const DISABLE_TOGGLE = true;
 
 type Link = {
   label: string;
@@ -80,8 +83,8 @@ export default function Navigation() {
               onClick={() => handleNavigation("/")}
             >
               <Image src="/icon.svg" alt="REKO logo" width={32} height={32} />
-              <span className="from-primary bg-linear-to-r to-orange-500 bg-clip-text text-xl font-bold text-transparent">
-                REKO
+              <span className="from-primary font-reko bg-linear-to-r to-orange-500 bg-clip-text text-3xl text-transparent">
+                Reko
               </span>
             </div>
 
@@ -102,17 +105,24 @@ export default function Navigation() {
                   >
                     <Icon size={18} />
                     <span className="hidden lg:block">{item.label}</span>
-                    {item.badge && item.badge > 0 && (
+                    {item.badge && item.badge > 0 ? (
                       <Badge
                         variant="secondary"
-                        className="ml-1 bg-orange-500 text-xs text-white"
+                        className={`ml-1 ${
+                          item.active ? "" : "bg-orange-500 text-white"
+                        } text-xs `}
                       >
                         {item.badge}
                       </Badge>
+                    ) : (
+                      <></>
                     )}
                   </Button>
                 );
               })}
+
+              {/* Theme Toggler */}
+              {!DISABLE_TOGGLE && <AnimatedThemeToggler />}
             </div>
           </div>
         </div>
@@ -130,20 +140,23 @@ export default function Navigation() {
               <div className="from-primary flex size-8 items-center justify-center rounded-lg bg-linear-to-r to-orange-500">
                 <Film className="text-white" size={20} />
               </div>
-              <span className="from-primary bg-linear-to-r to-orange-500 bg-clip-text text-xl font-bold text-transparent">
-                REKO
+              <span className="from-primary font-reko bg-linear-to-r to-orange-500 bg-clip-text text-3xl text-transparent">
+                Reko
               </span>
             </div>
 
             {/* Menu Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </Button>
+            <div className="flex items-center space-x-2">
+              {!DISABLE_TOGGLE && <AnimatedThemeToggler />}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </Button>
+            </div>
           </div>
         </header>
 
@@ -166,9 +179,7 @@ export default function Navigation() {
           className="fixed top-16 right-0 bottom-0 z-50 w-80 bg-white shadow-xl"
         >
           <div className="space-y-4 p-6">
-            <h2 className="mb-6 text-lg font-semibold text-gray-900">
-              Navigation
-            </h2>
+            <h2 className="mb-6 text-lg text-gray-900">Navigation</h2>
 
             {navigationItems.map((item) => {
               const Icon = item.icon;
@@ -185,13 +196,17 @@ export default function Navigation() {
                 >
                   <Icon size={20} />
                   <span className="flex-1 text-left">{item.label}</span>
-                  {item.badge && item.badge > 0 && (
+                  {item.badge && item.badge > 0 ? (
                     <Badge
                       variant="secondary"
-                      className="bg-orange-500 text-white"
+                      className={`ml-1 ${
+                        item.active ? "" : "bg-orange-500 text-white"
+                      } text-xs `}
                     >
                       {item.badge}
                     </Badge>
+                  ) : (
+                    <></>
                   )}
                 </Button>
               );

@@ -117,3 +117,59 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Styles pour les transitions de thème animées */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Aurora text animation */
+@theme inline {
+  --animate-aurora: aurora 8s ease-in-out infinite alternate;
+
+  @keyframes aurora {
+    0% {
+      background-position: 0% 50%;
+      transform: rotate(-5deg) scale(0.9);
+    }
+    25% {
+      background-position: 50% 100%;
+      transform: rotate(5deg) scale(1.1);
+    }
+    50% {
+      background-position: 100% 50%;
+      transform: rotate(-3deg) scale(0.95);
+    }
+    75% {
+      background-position: 50% 0%;
+      transform: rotate(3deg) scale(1.05);
+    }
+    100% {
+      background-position: 0% 50%;
+      transform: rotate(-5deg) scale(0.9);
+    }
+  }
+}
+
+/* Titres: utiliser la police Gendy */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-gendy), system-ui, sans-serif;
+    font-style: normal;
+    font-synthesis: none;
+  }
+  /* Paragraphes: conserver Geist */
+  body {
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
+  }
+
+  .font-reko {
+  font-family: var(--font-gendy), system-ui, sans-serif;
+}
+}

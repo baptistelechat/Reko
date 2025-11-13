@@ -366,6 +366,17 @@ class TMDBService {
     );
   }
 
+  // Lister le catalogue des plateformes par type de média (movie/tv)
+  async getWatchProvidersCatalog(
+    mediaType: "movie" | "tv" = "movie",
+    region: string = "FR"
+  ): Promise<Array<{ provider_name: string; logo_path: string | null }>> {
+    const res = await this.fetchFromTMDB<{
+      results: Array<{ provider_name: string; logo_path: string | null }>;
+    }>(`/watch/providers/${mediaType}`, { watch_region: region });
+    return res.results || [];
+  }
+
   // Obtenir les images d'un film
   async getMovieImages(movieId: number): Promise<{
     backdrops: Array<{

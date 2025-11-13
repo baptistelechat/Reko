@@ -16,7 +16,7 @@ export const ContentTypeStep = () => {
       className="space-y-6"
     >
       <div className="space-y-2 text-center">
-        <h2 className="text-3xl font-bold text-gray-900">
+<h2 className="text-3xl text-gray-900">
           Que voulez-vous regarder ?
         </h2>
         <p className="text-gray-600">Choisissez entre films et séries</p>
@@ -43,7 +43,7 @@ export const ContentTypeStep = () => {
                   <div className="from-primary rounded-full bg-linear-to-r to-orange-600 p-4 text-white">
                     <Icon size={32} />
                   </div>
-                  <h3 className="text-xl font-semibold">{type.label}</h3>
+<h3 className="text-xl">{type.label}</h3>
                   <p className="text-center text-gray-600">
                     {type.description}
                   </p>

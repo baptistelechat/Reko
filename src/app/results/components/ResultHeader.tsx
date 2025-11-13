@@ -85,7 +85,7 @@ const ResultHeader = () => {
       </Button>
 
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">
+<h1 className="text-2xl text-gray-900">
           Vos recommandations
         </h1>
         <div className="mt-1 flex items-center justify-center gap-2">

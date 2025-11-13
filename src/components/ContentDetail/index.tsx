@@ -153,7 +153,7 @@ export default function ContentDetail({ type, id }: ContentDetailProps) {
       <div className="flex items-center justify-center">
         <div className="max-w-md space-y-4 text-center">
           <div className="text-6xl text-red-500">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900">
+<h2 className="text-2xl text-gray-900">
             {type === "movie" ? "Film introuvable" : "Série introuvable"}
           </h2>
           <p className="text-gray-600">{error}</p>
