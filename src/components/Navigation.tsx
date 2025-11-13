@@ -211,60 +211,9 @@ export default function Navigation() {
                 </Button>
               );
             })}
-
-            {/* Statistiques */}
-            <div className="mt-8 space-y-3 border-t border-gray-200 pt-6">
-              <h3 className="text-sm font-medium text-gray-700">
-                Statistiques
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-lg bg-gray-50 p-3 text-center">
-                  <div className="text-primary text-lg font-semibold">
-                    {watchlist.length}
-                  </div>
-                  <div className="text-xs text-gray-600">À regarder</div>
-                </div>
-                <div className="rounded-lg bg-gray-50 p-3 text-center">
-                  <div className="text-lg font-semibold text-orange-500">
-                    {favorites.length}
-                  </div>
-                  <div className="text-xs text-gray-600">Favoris</div>
-                </div>
-              </div>
-            </div>
           </div>
         </motion.div>
       </div>
-      {/* Bottom Navigation Mobile */}
-      <nav className="fixed right-0 bottom-0 left-0 z-40 border-t border-gray-200 bg-white md:hidden">
-        <div className="grid h-16 grid-cols-4">
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.href}
-                onClick={() => handleNavigation(item.href)}
-                className={`relative flex flex-col items-center justify-center space-y-1 ${
-                  item.active
-                    ? "text-primary"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                <Icon size={20} />
-                <span className="text-xs font-medium">{item.label}</span>
-                {item.badge && item.badge > 0 && (
-                  <div className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-orange-500 text-xs text-white">
-                    {item.badge > 99 ? "99+" : item.badge}
-                  </div>
-                )}
-                {item.active && (
-                  <div className="from-primary absolute top-0 left-1/2 h-1 w-8 -translate-x-1/2 transform rounded-b-full bg-linear-to-r to-orange-500" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </nav>
     </>
   );
 }
