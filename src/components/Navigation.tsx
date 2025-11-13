@@ -105,13 +105,17 @@ export default function Navigation() {
                   >
                     <Icon size={18} />
                     <span className="hidden lg:block">{item.label}</span>
-                    {item.badge && item.badge > 0 && (
+                    {item.badge && item.badge > 0 ? (
                       <Badge
                         variant="secondary"
-                        className="ml-1 bg-orange-500 text-xs text-white"
+                        className={`ml-1 ${
+                          item.active ? "" : "bg-orange-500 text-white"
+                        } text-xs `}
                       >
                         {item.badge}
                       </Badge>
+                    ) : (
+                      <></>
                     )}
                   </Button>
                 );
@@ -192,13 +196,17 @@ export default function Navigation() {
                 >
                   <Icon size={20} />
                   <span className="flex-1 text-left">{item.label}</span>
-                  {item.badge && item.badge > 0 && (
+                  {item.badge && item.badge > 0 ? (
                     <Badge
                       variant="secondary"
-                      className="bg-orange-500 text-white"
+                      className={`ml-1 ${
+                        item.active ? "" : "bg-orange-500 text-white"
+                      } text-xs `}
                     >
                       {item.badge}
                     </Badge>
+                  ) : (
+                    <></>
                   )}
                 </Button>
               );
