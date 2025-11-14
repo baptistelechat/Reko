@@ -50,7 +50,7 @@ const LandingPage = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-16 text-center">
+      <section className="container mx-auto px-6 py-16 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -102,7 +102,7 @@ const LandingPage = () => {
           <p className="mb-6 text-gray-500">
             Choisissez votre humeur du moment
           </p>
-          <div className="mx-auto grid max-w-lg grid-cols-3 gap-3">
+          <div className="mx-auto grid max-w-lg grid-cols-2 gap-3 sm:grid-cols-3">
             {moods.map((mood, index) => (
               <motion.div
                 key={mood.name}
@@ -112,7 +112,7 @@ const LandingPage = () => {
               >
                 <Badge
                   variant="secondary"
-                  className={`${mood.color} w-full cursor-pointer justify-center px-4 py-2 text-sm transition-transform hover:scale-105`}
+                  className={`${mood.color} w-full cursor-pointer justify-center px-6 py-2 text-sm transition-transform hover:scale-105`}
                   onClick={() => handleMoodClick(mood.id)}
                 >
                   <span className="mr-2">{mood.emoji}</span>
@@ -125,7 +125,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="container mx-auto px-4 py-16">
+      <section className="container mx-auto px-6 py-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -150,13 +150,11 @@ const LandingPage = () => {
               viewport={{ once: true }}
             >
               <Card className="h-full border-0 p-6 text-center shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl">
-                <CardContent className="pt-6">
+                <CardContent>
                   <div className="from-primary mx-auto mb-4  flex size-16 items-center justify-center rounded-full bg-linear-to-br to-orange-500 text-white">
                     {feature.icon}
                   </div>
-                  <h3 className="mb-3 text-xl">
-                    {feature.title}
-                  </h3>
+                  <h3 className="mb-3 text-xl">{feature.title}</h3>
                   <p className="text-gray-600">{feature.description}</p>
                 </CardContent>
               </Card>
@@ -166,7 +164,7 @@ const LandingPage = () => {
       </section>
 
       {/* Content Types Section */}
-      <section className="container mx-auto px-4 py-16">
+      <section className="container mx-auto px-6 py-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -242,7 +240,7 @@ const LandingPage = () => {
 
       {/* Streaming Providers Section */}
       <section className="mx-auto max-w-4xl py-8">
-        <div className="flex w-full flex-col gap-6">
+        <div className="flex w-full flex-col gap-6 px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -271,7 +269,7 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="container mx-auto px-4 py-16">
+      <section className="container mx-auto px-6 py-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -280,7 +278,7 @@ const LandingPage = () => {
           className="text-center"
         >
           <Card className="from-primary mx-auto max-w-2xl border-0  bg-linear-to-br to-orange-500 p-8 text-white shadow-2xl">
-            <CardContent className="pt-0">
+            <CardContent className="p-0">
               <h2 className="mb-4 text-3xl ">
                 Prêt à découvrir votre prochaine obsession ?
               </h2>
@@ -304,7 +302,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="container mx-auto px-4 py-8 text-center text-gray-500">
+      <footer className="container mx-auto px-6 py-8 text-center text-gray-500">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
