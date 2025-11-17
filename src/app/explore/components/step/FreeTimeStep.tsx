@@ -8,6 +8,7 @@ import { MOODS_ARRAY } from "@/constants/moods";
 import { useAppStore } from "@/store/useAppStore";
 import { FreeTime } from "@/types";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 export const FreeTimeStep = () => {
   const {
@@ -21,6 +22,16 @@ export const FreeTimeStep = () => {
   } = useAppStore();
 
   const mood = MOODS_ARRAY.find((mood) => mood.id === selectedMood);
+
+  // Scroll to top when this step mounts
+  useEffect(() => {
+    const anchor = document.getElementById("explore-top");
+    if (anchor && typeof anchor.scrollIntoView === "function") {
+      anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, []);
 
   const handleFreeTimeSelect = (freeTimeId: string) => {
     setSelectedFreeTime(freeTimeId as FreeTime);

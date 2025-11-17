@@ -50,6 +50,13 @@ function ExploreContent() {
     resetExploreForm,
   ]);
 
+  // Scroll en haut de la page à chaque changement d'étape
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [currentStep]);
+
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 0:
@@ -64,13 +71,22 @@ function ExploreContent() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div id="explore-top" className="container mx-auto px-4 py-8">
       {/* Header avec progression */}
       <ProgressHeader onBack={() => router.push("/")} />
 
       {/* Contenu de l'étape */}
       <div className="mx-auto max-w-4xl">
-        <AnimatePresence mode="wait">{renderCurrentStep()}</AnimatePresence>
+        <AnimatePresence
+          mode="wait"
+          onExitComplete={() => {
+            if (typeof window !== "undefined") {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+        >
+          {renderCurrentStep()}
+        </AnimatePresence>
       </div>
 
       {/* Navigation */}

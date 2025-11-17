@@ -6,6 +6,7 @@ import { useAppStore } from "@/store/useAppStore";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface ProgressHeaderProps {
   onBack?: () => void;
@@ -64,8 +65,18 @@ export const ProgressHeader = ({ onBack }: ProgressHeaderProps) => {
       router.push("/");
     }
   };
+
+  useEffect(() => {
+    const header = document.getElementById("explore-header");
+    if (header && typeof header.scrollIntoView === "function") {
+      header.scrollIntoView({ behavior: "smooth", block: "start" });
+      header.focus();
+    } else if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [currentStep]);
   return (
-    <div className="mx-auto mb-8 max-w-4xl">
+    <div id="explore-header" tabIndex={-1} className="mx-auto mb-8 max-w-4xl">
       <div className="mb-6 flex items-center justify-between">
         <Button
           variant="ghost"
